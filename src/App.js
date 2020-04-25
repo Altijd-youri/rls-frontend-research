@@ -1,25 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TrainPicker from './page/trainpicker/TrainPicker';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Sidebar from './components/sidebar/Sidebar';
+import { PATH } from './utils/constants';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Sidebar />
+      <Switch>
+        <Route path={PATH.TRAINS} exact component={TrainPicker} />
+        {/* <Route path={PATH.TRAINDETAILS} exact component={TrainDetails} /> */}
+        <Redirect path={PATH.HOME} exact to={PATH.TRAINS} />
+      </Switch>
+    </>
   );
 }
 

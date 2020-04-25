@@ -1,0 +1,228 @@
+.inner {
+	flex: 1;
+	padding: 32px 40px;
+	overflow: auto;
+}
+
+.inner .search {
+	position: relative;
+	margin-bottom: 60px;
+}
+
+.inner .search label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 45px;
+	height: 45px;
+	color: #8f94b8;
+}
+
+.inner .search input {
+	width: 340px;
+	height: 44px;
+	border-radius: 44px;
+	background: rgba(202, 206, 231, 0.14);
+	font-size: 14px;
+	padding: 0 20px 0 50px;
+	box-sizing: border-box;
+}
+
+.inner .search input::placeholder {
+	color: #8f94b8;
+}
+
+.inner .inner-box {
+	margin-bottom: 60px;
+}
+
+.content-title h4 {
+	font-size: 20px;
+	color: #0e1b42;
+	font-weight: 500;
+}
+
+.content-title a {
+	font-size: 14px;
+	color: #8186ad;
+}
+
+.content-title a i {
+	font-size: 11px;
+	margin-left: 8px;
+}
+
+.inner .content-title {
+	padding-bottom: 6px;
+	display: flex;
+	border-bottom: 1px solid #f6f7fa;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	margin-bottom: 35px;
+}
+
+.inner .content-title::before {
+	content: "";
+	width: 38px;
+	height: 4px;
+	background: #c4e2e6;
+	border-radius: 4px;
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+}
+
+.inner .inner-box .projects {
+	display: flex;
+	margin: 0 -7px;
+}
+
+.inner .inner-box .box {
+	flex: 1;
+	margin: 0 7px;
+	height: 145px;
+	border-radius: 12px;
+	box-sizing: border-box;
+}
+
+.inner .inner-box .box.active {
+	background: #f7f8fb;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.inner .inner-box .box.active .box-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.inner .inner-box .box.active .box-top i {
+	color: #fbd199;
+	font-size: 24px;
+}
+
+.inner .inner-box .box.active .box-title {
+	display: flex;
+	flex-direction: column;
+	padding: 12px 0;
+}
+
+.inner .inner-box .box.active .box-title .train-type {
+	font-size: 14px;
+	font-weight: 500;
+	color: #0e1b42;
+	padding-bottom: 4px;
+}
+
+.inner .inner-box .box.active .box-title .departure-time {
+	font-size: 12px;
+	color: #8186ad;
+	margin-bottom: 12px;
+}
+
+.inner .inner-box .box.active .box-bar {
+	width: 100%;
+	height: 5px;
+	background: #dde2ef;
+	border-radius: 5px;
+}
+
+.inner .inner-box .box.active .box-bar span {
+	width: auto;
+	height: 5px;
+	background: var(--color);
+	border-radius: 5px;
+	position: relative;
+	display: block;
+}
+
+.inner .inner-box .box.active .box-bar span::before {
+	content: attr(title);
+	position: absolute;
+	top: -15px;
+	right: -6px;
+	font-size: 10px;
+	color: var(--color);
+}
+
+.inner .inner-box .box.empty {
+	border: 2px dashed #e4e8f6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.inner .inner-box .box.empty i {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: #f7f8fb;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 10px;
+	color: var(--color);
+}
+
+.inner .inner-box .recents ul li {
+	height: 64px;
+	display: flex;
+	align-items: center;
+	border-radius: 10px;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.inner .inner-box .recents ul li a {
+	flex: 1;
+	font-size: 14px;
+	color: #0e1b42;
+	display: flex;
+	align-items: center;
+}
+
+.inner .inner-box .recents ul li a i.fa-train {
+	font-size: 24px;
+	color: #c01f54;
+	/* color: #fbd199; */
+	margin-right: 10px;
+}
+
+.inner .inner-box .recents ul li .departure,
+.inner .inner-box .recents ul li .departure-time,
+.inner .inner-box .recents ul li .train-type,
+.inner .inner-box .recents ul li .more,
+.inner .inner-box .recents ul li .size {
+	font-size: 12px;
+	color: #8186ad;
+	width: 100px;
+	text-align: center;
+	flex: 1;
+}
+
+.inner .inner-box .recents ul li .more i {
+	cursor: pointer;
+}
+
+.inner .inner-box .recents ul li .more {
+	text-align: right;
+	opacity: 0;
+	font-size: 16px;
+	color: #b1b4ce;
+}
+
+.inner .inner-box .recents ul li:hover {
+	background: #f4f5fa;
+}
+
+.inner .inner-box .recents ul li:hover .more {
+	opacity: 1;
+}
