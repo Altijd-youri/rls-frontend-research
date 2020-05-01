@@ -8,17 +8,17 @@ export const defaultOptions = {
         }),
         method: 'PATCH'
     },
-    PUT: {
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        method: 'PUT'
-    },
     POST: {
         headers: new Headers({
             'Content-Type': 'application/json'
         }),
         method: 'POST'
+    },
+    PUT: {
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        method: 'PUT'
     },
     DELETE: {
         headers: new Headers({
@@ -28,7 +28,7 @@ export const defaultOptions = {
     }
 };
 
-export function fetchHelper(endpoint, type, body, callback) {
+export default function fetchHelper(endpoint, type, body, callback) {
     let options;
     if (body && Object.keys(body).length) {
         options = Object.assign({}, defaultOptions[type], { body: JSON.stringify(body) });
@@ -47,3 +47,16 @@ export function fetchHelper(endpoint, type, body, callback) {
             callback({ data: undefined, error: errorMessage })
         })
 }
+
+
+/*  Example
+
+fetchHelper(ENDPOINTS.account, 'POST', body, ({ data, error }) => {
+                    if (data) {
+
+                    } else {
+
+                    }
+                })
+
+*/

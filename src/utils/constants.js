@@ -4,6 +4,13 @@ export const PATH = {
     TRAINDETAILS: '/train/:trainid/details',
 }
 
+export const trainTypes = [
+    { id: "1", name: "Passenger" },
+    { id: "2", name: "Freight" },
+    { id: "3", name: "Light Engine" },
+    { id: "4", name: "Engineering" }
+]
+
 export const ENDPOINTS = {
     TRAINS: `${process.env.REACT_APP_ENDPOINT}/api/v1/trains`,
     LOCATIONS: `${process.env.REACT_APP_ENDPOINT}/api/v1/locations`,

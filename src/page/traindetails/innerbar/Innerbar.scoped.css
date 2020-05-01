@@ -1,0 +1,21 @@
+.td-wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	margin-bottom: 30px;
+	background: rgba(202, 206, 231, 0.14);
+	padding: 15px 20px 15px 50px;
+	box-sizing: border-box;
+}
+
+.td-wrapper label {
+	position: absolute;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 45px;
+	height: 45px;
+	color: #8f94b8;
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles.css';
+import './Sidebar.scoped.css';
 import logo from './logo-1.png'
 import { NavLink } from 'react-router-dom';
 import { PATH } from '../../utils/constants'

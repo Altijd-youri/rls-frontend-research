@@ -1,0 +1,17 @@
+.jp-header {
+    border-bottom: #e6e5e6 solid 1px;
+    width: 100%;
+    height: 50px;
+}
+
+.jp-body {
+    border-bottom: lightgrey solid 1px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.jp-header h5 {
+    margin-bottom: 0;
+}

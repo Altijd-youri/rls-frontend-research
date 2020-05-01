@@ -1,0 +1,77 @@
+.inner {
+	flex: 1;
+	padding: 32px 40px;
+	overflow: auto;
+}
+
+.inner .header {
+	position: relative;
+	margin-bottom: 60px;
+}
+
+.inner .header span {
+	font-size: 14px;
+	color: #8186ad;
+}
+
+.inner .header span i {
+	font-size: 11px;
+	margin-left: 8px;
+}
+
+.inner .header label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 45px;
+	height: 45px;
+	color: #8f94b8;
+}
+
+.inner .header input {
+	width: 340px;
+	height: 44px;
+	border-radius: 44px;
+	background: rgba(202, 206, 231, 0.14);
+	font-size: 14px;
+	padding: 0 20px 0 50px;
+	box-sizing: border-box;
+}
+
+.inner .header input::placeholder {
+	color: #8f94b8;
+}
+
+.inner .inner-box {
+	margin-bottom: 60px;
+}
+
+.content-title h4 {
+	font-size: 20px;
+	color: #0e1b42;
+	font-weight: 500;
+}
+
+.inner .content-title {
+	padding-bottom: 6px;
+	display: flex;
+	border-bottom: 1px solid #f6f7fa;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	margin-bottom: 35px;
+}
+
+.inner .content-title::before {
+	content: "";
+	width: 38px;
+	height: 4px;
+	background: #c4e2e6;
+	border-radius: 4px;
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+}

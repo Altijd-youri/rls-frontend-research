@@ -1,0 +1,80 @@
+.rightbar {
+    overflow: auto;
+    width: 360px;
+    padding: 32px 40px;
+    border-left: 1px solid #f6f7fa;
+}
+
+.rightbar .top {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.rightbar .top h4 {
+    font-size: 20px;
+    color: #0e1b42;
+    font-weight: 500;
+}
+
+.rightbar .form-wrapper button,
+.rightbar .form-wrapper input {
+    width: 100%;
+    height: 44px;
+    border-radius: 44px;
+    background: rgba(202, 206, 231, 0.14);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.rightbar .form-wrapper input {
+    padding: 0 20px 0 50px;
+}
+
+.rightbar .form-wrapper .btn-submit button {
+    font-weight: 500;
+    background-color: rgb(166, 157, 224);
+    color: white;
+}
+
+.rightbar .form-wrapper .label-pos{
+    position: relative;
+}
+
+.rightbar .form-wrapper .ct-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    color: #8f94b8;
+}
+
+.rightbar .form-wrapper input::placeholder {
+    color: #8f94b8;
+}
+
+.rightbar .form-wrapper .label-pos {
+    margin: 20px 0 20px;
+}
+
+
+.rightbar .form-wrapper .label-pos {
+    position: relative;
+    margin: 20px 0 20px;
+}
+
+
+
+.rightbar .form-wrapper .label-checkbox {
+    display: inline-flex;
+}
+
+
+.rightbar .form-wrapper .label-checkbox label {
+    position: relative !important;
+}
