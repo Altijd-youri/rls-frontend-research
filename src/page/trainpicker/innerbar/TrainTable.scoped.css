@@ -1,49 +1,30 @@
-.recents ul li {
-    height: 64px;
-    display: flex;
-    align-items: center;
-    border-radius: 10px;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.recents ul li span {
-    flex: 1;
-    font-size: 14px;
-    color: #0e1b42;
-    display: flex;
-    align-items: center;
-}
-
-.recents ul li span i.fa-train {
-    font-size: 24px;
-    color: #c01f54;
-    /* color: #fbd199; */
-    margin-right: 10px;
-}
-
-.recents ul li .departure,
-.recents ul li .departure-time,
-.recents ul li .train-type,
-.recents ul li .edit,
-.recents ul li .size {
-    font-size: 12px;
+table tr{
+    font-size: 15px;
     color: #8186ad;
-    width: 100px;
-    text-align: center;
-    flex: 1;
 }
 
-.recents ul li .edit i {
-    cursor: pointer;
-}
-
-.recents ul li .edit {
-    text-align: right;
+table tbody tr .edit {
     font-size: 16px;
     color: #b1b4ce;
 }
 
-.recents ul li:hover {
+table tbody tr:hover {
     background: #f4f5fa;
+}
+
+table tbody tr {
+    cursor: pointer
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+    bottom: .5em;
 }
