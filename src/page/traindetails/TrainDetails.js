@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import Innerbar from './innerbar/Innerbar'
 import { useParams } from 'react-router-dom';
-import fetchHelper from '../../utils/fetchHelper';
-import { ENDPOINTS } from '../../utils/constants';
 import Spinner from 'react-bootstrap/Spinner';
-import { useSelector, useDispatch } from 'react-redux';
-import {locationsRequest} from "../../actions/locations";
-import CreateTrain from "../trainpicker/createTrain/CreateTrain";
 import CreateJourney from "./innerbar/journeys/createjourney/CreateJourney";
+import TrainService from '../../api/trains';
 import './TrainDetails.scoped.css';
+import EditJourney from './innerbar/journeys/editjourney/EditJourney';
 
 export default function TrainDetails() {
+    // Fetch train state
     const [train, setTrain] = useState();
-    const dispatch = useDispatch();
-    const [isLoading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [fetchingTrain, setFetchingTrain] = useState(false);
+    const [fetchingTrainError, setFetchingTrainError] = useState('');
 
     /* state for create/edit journey  */
     const [showCreateJourney, setShowCreateJourney] = useState(false);
@@ -22,34 +19,37 @@ export default function TrainDetails() {
     const [selectedJourney, setSelectedJourney] = useState();
 
     const { trainid } = useParams();
-    const { locations } = useSelector(state => ({
-        locations: state.locationsStore.locations,
-    }))
-
-    function setTrainHandler(train) {
-        setTrain(train);
-    }
 
     useEffect(() => {
-        setLoading(true);
-        fetchHelper(`${ENDPOINTS.TRAINS}/${trainid}`, 'GET', null, ({ data, error }) => {
-            if (data) {
-                setTrain(data.data);
-            } else {
-                setError(error);
-            }
-        })
-        dispatch(locationsRequest())
-        setLoading(false);
+        getTrain(trainid);
     }, [trainid])
 
-    if (error) {
+    const getTrain = async (trainid) => {
+        setFetchingTrain(true);
+        const { data, error } = await TrainService.getTrain(trainid);
+        if (data) {
+            setTrain(data);
+        } else {
+            setFetchingTrainError(error);
+        }
+        setFetchingTrain(false);
+    }
+
+    function showEditJourneyHandler(selectedJourney) {
+        if (selectedJourney) {
+            console.log("TrainDetails: ", selectedJourney)
+            setSelectedJourney(selectedJourney);
+            setShowEditJourney(true);
+        }
+    }
+
+    if (fetchingTrainError) {
         return (<div className="d-flex justify-content-center align-items-center w-100">
-            {error}
+            {fetchingTrainError}
         </div>)
     }
 
-    if (isLoading) {
+    if (fetchingTrain) {
         return (
             <div className="d-flex justify-content-center align-items-center w-100" >
                 <Spinner animation="border" role="status">
@@ -61,19 +61,28 @@ export default function TrainDetails() {
 
     return (
         <div className="content overflow-auto">
-            {!isLoading && train &&
+            {!fetchingTrain && train &&
                 <Innerbar
-                    locations={locations}
                     train={train}
                     setShowCreateJourney={setShowCreateJourney}
+                    setShowEditJourney={showEditJourneyHandler}
                 />
             }
 
             {showCreateJourney &&
                 <CreateJourney
                     train={train}
-                    locations={locations}
                     onHide={() => setShowCreateJourney(false)}
+                    setTrain={setTrain}
+                />
+            }
+
+            {showEditJourney &&
+                <EditJourney
+                    train={train}
+                    selectedJourney={selectedJourney}
+                    onHide={() => setShowEditJourney(false)}
+                    setTrain={setTrain}
                 />
             }
 

@@ -7,6 +7,9 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 import { trainTypes, ENDPOINTS } from '../../../utils/constants';
 import fetchHelper from '../../../utils/fetchHelper';
 import '../createTrain/Typeahead.css';
+import DatePicker from "react-datepicker";
+import Spinner from 'react-bootstrap/Spinner';
+import { errorAlert } from '../../../utils/Alerts';
 
 export default function EditTrain({ onHide, train, onUpdateTrain }) {
     const { locations } = useSelector(state => ({
@@ -16,14 +19,14 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
     const [isSaving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [departure, setDeparture] = useState([]);
-    const [departureTime, setDepartureTime] = useState([]);
+    const [departureTime, setDepartureTime] = useState(new Date());
     const [trainType, setTrainType] = useState([]);
     const [trainNumber, setTrainNumber] = useState([]);
     const dispatch = useDispatch();
 
     useEffect(() => {
         setTrainNumber(train.operationalTrainNumber);
-        const departureDatetime = new Date(train.scheduledTimeAtHandover).toISOString().slice(0, -8);
+        const departureDatetime = new Date(train.scheduledTimeAtHandover)
         setDepartureTime(departureDatetime)
         const trainType = trainTypes.find((x) => {
             return x.id === String(train.trainType);
@@ -52,7 +55,8 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
             if (data) {
                 onUpdateTrain(data.data);
             } else {
-                setError(error)
+                setError(error);
+                errorAlert(error);
             }
         })
         setSaving(false);
@@ -63,11 +67,9 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
     }, [dispatch])
 
     function validateForm() {
-        const validTrainNumber = trainNumber.length;
         const validTrainType = trainType.length;
         const validDeparture = departure.length;
-        const validDepartureDate = departureTime.length
-        if (validTrainNumber && validTrainType && validDeparture && validDepartureDate) {
+        if (trainNumber && validTrainType && validDeparture && departureTime) {
             return false;
         }
         return true;
@@ -127,19 +129,34 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
                 </div>
 
                 <div className="departure-time">
-                    <input type="datetime-local" id="departureTime" value={departureTime}
-                        onChange={(event) => setDepartureTime(event.target.value)} />
-                    <label htmlFor="departureTime">
-                        <li className="fas fa-clock"></li>
-                    </label>
+                    <DatePicker
+                        className="form-input"
+                        selected={departureTime}
+                        onChange={date => setDepartureTime(date)}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        timeCaption="time"
+                        dateFormat="MMMM d, yyyy h:mm aa"
+                    />
                 </div>
 
-                <div className="btn-submit">
-                    <button disabled={validateForm()}
-                        type="submit">
-                        SAVE
+                {isSaving ?
+                    <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>
+                    :
+                    <div className="btn-submit">
+                        <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm()}
+                            type="submit">
+                            SAVE
                     </button>
-                </div>
+                    </div>
+                }
+
+                {error && <div>{error}</div>}
+
+
             </form>
         </div>
     )

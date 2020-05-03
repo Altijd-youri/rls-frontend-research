@@ -1,26 +1,46 @@
 .rbt input {
-    padding-left: 40px !important;
-    width: 100%;
-    height: 44px;
-    border-radius: 44px;
-    background: rgba(202, 206, 231, 0.14);
-    font-size: 14px;
-    box-sizing: border-box;
+	padding-left: 40px !important;
+	width: 100%;
+	height: 44px;
+	border-radius: 44px;
+	background: rgba(202, 206, 231, 0.14);
+	font-size: 14px;
+	box-sizing: border-box;
 }
 
 .activites-input .rbt-input-multi {
-    height: 200px;
+	height: 200px;
 }
 
 .activites-input .rbt-input-multi {
-    height: 200px;
+	height: 200px;
 }
 
 .has-aux .rbt-input {
-    padding-left: 40px;
-    overflow-y: auto;
+	padding-left: 40px;
+	overflow-y: auto;
 }
 
-.rightbar .form-wrapper .label-pos .activites-input .rbt-input-main input::placeholder {
-    padding-left: 40px !important;
+.rightbar
+	.form-wrapper
+	.label-pos
+	.activites-input
+	.rbt-input-main
+	input::placeholder {
+	padding-left: 40px !important;
+}
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+	width: 100%;
+}
+
+.react-datepicker__input-container input {
+	width: 100%;
+	height: 44px;
+	border-radius: 44px;
+	background: rgba(202, 206, 231, 0.14);
+	font-size: 14px;
+	box-sizing: border-box;
+	padding: 0 20px 0 50px;
 }

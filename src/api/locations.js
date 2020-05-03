@@ -8,6 +8,13 @@ class LocationsService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+
+    getLocationsByHateoas(url) {
+        return super
+            .fetch(`${url}`, 'GET')
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 }
 
 export default new LocationsService();

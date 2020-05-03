@@ -3,11 +3,7 @@ import { TRAIN_TYPES } from '../../../utils/constants'
 import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
 
-export default function Innerbar({ train, locations, setShowCreateJourney }) {
-
-    function setJourney(journey) {
-
-    }
+export default function Innerbar({ train, setShowCreateJourney, setShowEditJourney }) {
 
     return (
         <div className="d-flex flex-column" style={{ flex: 1, overflow: "auto", padding: "32px 40px" }}>
@@ -20,12 +16,16 @@ export default function Innerbar({ train, locations, setShowCreateJourney }) {
                 <span>{new Date(train.scheduledTimeAtHandover).toLocaleString()}</span>
             </div>
 
-            <div style={{marginBottom: "30px"}} className="td-journeyspicker">
+            <div style={{ marginBottom: "30px" }} className="td-journeyspicker">
                 <JourneysPicker
                     train={train}
-                    locations={locations}
                     setShowCreateJourney={setShowCreateJourney}
+                    setShowEditJourney={setShowEditJourney}
                 />
+            </div>
+
+            <div style={{ width: "300px" }}>
+
             </div>
         </div >
     )

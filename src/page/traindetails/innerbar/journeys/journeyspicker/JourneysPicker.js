@@ -1,11 +1,20 @@
-import React, { useState, Fragment } from 'react'
-import './styles.css';
-import './styles.scss';
-import CreateJourney from "../createjourney/CreateJourney";
-import EditJourney from "../editjourney/EditJourney";
+import React, { useState, Fragment, useEffect } from 'react'
+import './JourneysPicker.css';
+import './JourneysPicker.scss';
+import Button from 'react-bootstrap/Button'
 
-export default function JourneysPicker({ train, setShowCreateJourney }) {
+export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney }) {
     const [selectedJourney, setSelectedJourney] = useState();
+    const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
+
+    useEffect(() => {
+        let listOfJourneys = train?.journeySections;
+        listOfJourneys.sort((a, b) => a.id - b.id);
+        setTrainWithSortedJourneys(prevState => {
+            return { ...prevState, journeySections: listOfJourneys }
+        })
+    }, [train])
+
 
     function getDepartureName(journey) {
         const departure = journey.links.find(link => link.rel === "journeySectionOrigin")
@@ -57,20 +66,19 @@ export default function JourneysPicker({ train, setShowCreateJourney }) {
         <>
             <div className="jp-header d-flex w-100 align-items-center justify-content-between pl-4 pr-4">
                 <h5>Journeys</h5>
-                {selectedJourney && <button
-                    type="button"
-                    className="btn btn-outline-dark btn-sm"
-                    value=""
-                    onClick={() => {}}
+                {selectedJourney && <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => setShowEditJourney(selectedJourney)}
                 >
-                    {/*<FontAwesomeIcon icon="edit" /> EDIT*/}
-                </button>}
+                    EDIT
+                </Button>}
             </div>
 
             <div style={{ overflow: "auto" }} className="partcontainer">
-                {train.journeySections.map((journey, index) => renderPart(journey, index))}
-                {train.journeySections.length > 0 &&
-                    createPart("part2 disabled", true, true, getDestinationName(train.journeySections[train.journeySections.length - 1]), () => { })
+                {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
+                {trainWithSortedJourneys.journeySections.length > 0 &&
+                    createPart("part2 disabled", true, true, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
                 }
                 {createPart("part2 create", true, false, 'Add destination', () => setShowCreateJourney(true))}
             </div>

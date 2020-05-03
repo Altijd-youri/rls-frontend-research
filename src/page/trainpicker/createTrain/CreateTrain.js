@@ -1,23 +1,26 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
+import "react-datepicker/dist/react-datepicker.css";
 import './CreateTrain.scoped.css'
-import {useDispatch, useSelector} from 'react-redux';
-import {locationsRequest} from '../../../actions/locations';
-import {Typeahead} from "react-bootstrap-typeahead"; // ES2015
+import { useDispatch, useSelector } from 'react-redux';
+import { locationsRequest } from '../../../actions/locations';
+import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import {saveTrainRequest} from '../../../actions/trains';
-import {trainTypes} from '../../../utils/constants';
+import { trainTypes } from '../../../utils/constants';
 import TrainService from '../../../api/trains'
-import {errorAlert, succeedAlert} from "../../../utils/Alerts";
+import { errorAlert, succeedAlert } from "../../../utils/Alerts";
+import DatePicker from "react-datepicker";
 
-export default function CreateTrain({onHide, setTrains}) {
-    const {locations} = useSelector(state => ({
+export default function CreateTrain({ onHide, setTrains }) {
+    const { locations } = useSelector(state => ({
         locations: state.locationsStore.locations,
     }))
 
     const [departure, setDeparture] = useState([]);
-    const [departureTime, setDepartureTime] = useState('');
+    const [departureTime, setDepartureTime] = useState(new Date());
     const [trainType, setTrainType] = useState([]);
     const [trainNumber, setTrainNumber] = useState('');
+    const [error, setError] = useState('');
+
     const dispatch = useDispatch();
 
     const submitForm = (event) => {
@@ -32,7 +35,7 @@ export default function CreateTrain({onHide, setTrains}) {
         };
 
         const saveTrain = async () => {
-            const {data, error} = await TrainService.saveTrain(body)
+            const { data, error } = await TrainService.saveTrain(body)
             if (data) {
                 // Update train list
                 setTrains(prevState => ([...prevState, data]))
@@ -42,16 +45,15 @@ export default function CreateTrain({onHide, setTrains}) {
                 clearForm()
             } else {
                 errorAlert(error)
+                setError(error);
             }
         }
-
         saveTrain()
-
     }
 
     function clearForm() {
         setDeparture([])
-        setDepartureTime('')
+        setDepartureTime(new Date())
         setTrainNumber('')
         setTrainType([])
     }
@@ -80,7 +82,7 @@ export default function CreateTrain({onHide, setTrains}) {
                     Create Train
                 </h4>
                 <span onClick={onHide}>
-                    <li className="fa fa-times"/>
+                    <li className="fa fa-times" />
                 </span>
             </div>
 
@@ -88,7 +90,7 @@ export default function CreateTrain({onHide, setTrains}) {
 
                 <div className="train-number">
                     <input value={trainNumber} onChange={setTrainNumberHandler} placeholder="Train number.."
-                           type="number" pattern="[0-9]{6}" name="trainNumber" maxLength="6" required/>
+                        type="number" pattern="[0-9]{6}" name="trainNumber" maxLength="6" required />
                     <label className="ct-label" htmlFor="trainNumber">
                         <li className="fa fa-fingerprint"></li>
                     </label>
@@ -128,19 +130,28 @@ export default function CreateTrain({onHide, setTrains}) {
                 </div>
 
                 <div className="departure-time">
-                    <input value={departureTime} type="datetime-local" id="departureTime"
-                           onChange={(event) => setDepartureTime(event.target.value)}/>
-                    <label className="ct-label" htmlFor="departureTime">
-                        <li className="fas fa-clock"></li>
-                    </label>
+                    <DatePicker
+                        className="form-input"
+                        selected={departureTime}
+                        onChange={date => setDepartureTime(date)}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        timeCaption="time"
+                        dateFormat="MMMM d, yyyy h:mm aa"
+                    />
                 </div>
 
+
+
                 <div className="btn-submit">
-                    <button disabled={validateForm()}
-                            type="submit">
+                    <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm()}
+                        type="submit">
                         ADD
                     </button>
                 </div>
+
+                {error && <div>{error}</div>}
             </form>
         </div>
     )

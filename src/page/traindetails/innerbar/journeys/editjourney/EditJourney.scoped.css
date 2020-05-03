@@ -1,4 +1,5 @@
 .rightbar {
+	overflow: auto;
 	width: 360px;
 	padding: 32px 40px;
 	border-left: 1px solid #f6f7fa;
@@ -37,24 +38,11 @@
 	color: white;
 }
 
-.rightbar .form-wrapper .train-types select {
-	width: 340px;
-	height: 44px;
-	border-radius: 44px;
-	background: rgba(202, 206, 231, 0.14);
-	font-size: 14px;
-	padding: 0 20px 0 50px;
-	box-sizing: border-box;
-}
-
-.rightbar .form-wrapper .train-types,
-.rightbar .form-wrapper .departure,
-.rightbar .form-wrapper .train-number {
+.rightbar .form-wrapper .label-pos {
 	position: relative;
-	margin: 20px 0 20px;
 }
 
-.rightbar .form-wrapper label {
+.rightbar .form-wrapper .ct-label {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -70,6 +58,19 @@
 	color: #8f94b8;
 }
 
-.rightbar .form-wrapper .departure-time {
+.rightbar .form-wrapper .label-pos {
 	margin: 20px 0 20px;
+}
+
+.rightbar .form-wrapper .label-pos {
+	position: relative;
+	margin: 20px 0 20px;
+}
+
+.rightbar .form-wrapper .label-checkbox {
+	display: inline-flex;
+}
+
+.rightbar .form-wrapper .label-checkbox label {
+	position: relative !important;
 }
