@@ -52,7 +52,12 @@ export default function TrainDetails() {
     }
     const selectedJourneyHandler = (selectedJourney) => {
         setSelectedJourney(selectedJourney);
-        setTrain(prevState => ({ ...prevState, journeySections: [...prevState.journeySections, selectedJourney] }))
+        setTrain(prevState => {
+            const newJourneySectionsList = prevState.journeySections.filter(item => item.id !== selectedJourney.id)
+            newJourneySectionsList.push(selectedJourney);
+            newJourneySectionsList.sort((a, b) => a.id - b.id)
+            return ({ ...prevState, journeySections: newJourneySectionsList })
+        })
     }
 
     if (fetchingTrainError) {
