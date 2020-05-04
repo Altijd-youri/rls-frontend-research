@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Statistics from './statistics/Statistics'
+import DnD from './draggable/DnD'
 
 export default function Composition({ train, selectedJourney, setShowCreateTraction, setShowCreateWagon }) {
 
@@ -24,9 +25,19 @@ export default function Composition({ train, selectedJourney, setShowCreateTract
                 </Button></>}
             </div>
 
-            <div style={{ overflow: "auto" }}>
-                <Statistics selectedJourney={selectedJourney} />
-            </div>
+            {selectedJourney &&
+                <>
+                    <div style={{ overflow: "auto" }}>
+                        <Statistics selectedJourney={selectedJourney} />
+                    </div>
+                    <div>
+                        <DnD selectedJourney={selectedJourney} />
+                    </div>
+
+                </>
+            }
+
+
         </>
     )
 }

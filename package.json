@@ -13,6 +13,7 @@
     "faker": "^4.1.0",
     "node-sass": "^4.14.0",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-bootstrap": "^1.0.1",
     "react-bootstrap-typeahead": "^4.2.2",
     "react-data-table-component": "^6.9.1",
