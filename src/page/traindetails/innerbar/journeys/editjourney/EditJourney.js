@@ -47,26 +47,6 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
 
-    //
-
-    // const fetchLocation = async (url, callback) => {
-
-    // }
-
-    function fetchLocation(url, callback) {
-        fetch(url)
-            .then(async response => {
-                const data = await response.json();
-                if (!response.ok) {
-                    const error = (data && data.message) || response.status;
-                    return Promise.reject(error);
-                }
-                callback(data);
-            }).catch(error => {
-                this.setState({ errorMessage: error, isFetching: false });
-            });
-    }
-
     useEffect(() => {
         fetchLocations();
         fetchActivities();

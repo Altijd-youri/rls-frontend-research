@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ConnectedRouter } from 'connected-react-router';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 import configureStore, { history } from './store';
 

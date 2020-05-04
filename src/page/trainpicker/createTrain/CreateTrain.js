@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import "react-datepicker/dist/react-datepicker.css";
 import './CreateTrain.scoped.css'
-import { useDispatch, useSelector } from 'react-redux';
-import { locationsRequest } from '../../../actions/locations';
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { trainTypes } from '../../../utils/constants';
 import TrainService from '../../../api/trains'
 import { errorAlert, succeedAlert } from "../../../utils/Alerts";
 import DatePicker from "react-datepicker";
+import LocationsService from '../../../api/locations'
 
 export default function CreateTrain({ onHide, setTrains }) {
-    const { locations } = useSelector(state => ({
-        locations: state.locationsStore.locations,
-    }))
-
     const [departure, setDeparture] = useState([]);
     const [departureTime, setDepartureTime] = useState(new Date());
     const [trainType, setTrainType] = useState([]);
     const [trainNumber, setTrainNumber] = useState('');
     const [error, setError] = useState('');
 
-    const dispatch = useDispatch();
+    const [locations, setLocations] = useState([]);
+    const [fetchingLocations, setFetchingLocations] = useState(false);
+    const [fetchingLocationsError, setFetchingLocationsError] = useState('');
+
+    useEffect(() => {
+        fetchLocations();
+    }, [])
 
     const submitForm = (event) => {
         event.preventDefault();
@@ -37,11 +38,8 @@ export default function CreateTrain({ onHide, setTrains }) {
         const saveTrain = async () => {
             const { data, error } = await TrainService.saveTrain(body)
             if (data) {
-                // Update train list
                 setTrains(prevState => ([...prevState, data]))
-                // Show success
                 succeedAlert()
-                // Clear form
                 clearForm()
             } else {
                 errorAlert(error)
@@ -58,9 +56,18 @@ export default function CreateTrain({ onHide, setTrains }) {
         setTrainType([])
     }
 
-    useEffect(() => {
-        dispatch(locationsRequest())
-    }, [dispatch])
+
+
+    const fetchLocations = async () => {
+        setFetchingLocations(true);
+        const { data, error } = await LocationsService.getLocations();
+        if (data) {
+            setLocations(data)
+        } else {
+            setFetchingLocationsError(error);
+        }
+        setFetchingLocations(false);
+    }
 
     function validateForm() {
         const validTrainType = trainType.length;
@@ -123,6 +130,7 @@ export default function CreateTrain({ onHide, setTrains }) {
                         placeholder="Choose a location..."
                         selected={departure}
                         filterBy={['code', 'primaryLocationName']}
+                        isLoading={fetchingLocations}
                     />
                     <label className="ct-label" htmlFor="basic-typeahead-example">
                         <li className="fas fa-location-arrow"></li>
@@ -152,6 +160,7 @@ export default function CreateTrain({ onHide, setTrains }) {
                 </div>
 
                 {error && <div>{error}</div>}
+                {fetchingLocationsError && <div>{fetchingLocationsError}</div>}
             </form>
         </div>
     )

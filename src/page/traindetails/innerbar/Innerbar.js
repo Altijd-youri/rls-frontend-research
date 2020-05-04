@@ -2,6 +2,7 @@ import React from 'react'
 import { TRAIN_TYPES } from '../../../utils/constants'
 import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
+import Composition from './composition/Composition';
 
 export default function Innerbar({ train, setShowCreateJourney, setShowEditJourney }) {
 
@@ -24,9 +25,14 @@ export default function Innerbar({ train, setShowCreateJourney, setShowEditJourn
                 />
             </div>
 
-            <div style={{ width: "300px" }}>
-
+            <div style={{ marginBottom: "30px" }} className="td-journeyspicker">
+                <Composition
+                    train={train}
+                    setShowCreateJourney={setShowCreateJourney}
+                    setShowEditJourney={setShowEditJourney}
+                />
             </div>
+
         </div >
     )
 }

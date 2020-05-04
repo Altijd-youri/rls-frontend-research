@@ -1,28 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import './EditTrain.scoped.css'
-import { useDispatch, useSelector } from 'react-redux';
-import { locationsRequest } from '../../../actions/locations';
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import { trainTypes, ENDPOINTS } from '../../../utils/constants';
-import fetchHelper from '../../../utils/fetchHelper';
+import { trainTypes } from '../../../utils/constants';
 import '../createTrain/Typeahead.css';
 import DatePicker from "react-datepicker";
 import Spinner from 'react-bootstrap/Spinner';
-import { errorAlert } from '../../../utils/Alerts';
+import { errorAlert, succeedAlert } from '../../../utils/Alerts';
+import LocationsService from '../../../api/locations'
+import TrainService from '../../../api/trains'
 
 export default function EditTrain({ onHide, train, onUpdateTrain }) {
-    const { locations } = useSelector(state => ({
-        locations: state.locationsStore.locations,
-    }))
-
     const [isSaving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [departure, setDeparture] = useState([]);
     const [departureTime, setDepartureTime] = useState(new Date());
     const [trainType, setTrainType] = useState([]);
     const [trainNumber, setTrainNumber] = useState([]);
-    const dispatch = useDispatch();
+
+    const [locations, setLocations] = useState([]);
+    const [fetchingLocations, setFetchingLocations] = useState(false);
+    const [fetchingLocationsError, setFetchingLocationsError] = useState('');
+
+    useEffect(() => {
+        fetchLocations();
+    }, [])
+
+    const fetchLocations = async () => {
+        setFetchingLocations(true);
+        const { data, error } = await LocationsService.getLocations();
+        if (data) {
+            setLocations(data)
+        } else {
+            setFetchingLocationsError(error);
+        }
+        setFetchingLocations(false);
+    }
 
     useEffect(() => {
         setTrainNumber(train.operationalTrainNumber);
@@ -51,20 +64,19 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
         };
 
         setSaving(true);
-        fetchHelper(`${ENDPOINTS.TRAINS}/${train.id}`, 'PUT', body, ({ data, error }) => {
+        const editTrain = async (trainid, body) => {
+            const { data, error } = await TrainService.editTrain(trainid, body);
             if (data) {
-                onUpdateTrain(data.data);
+                onUpdateTrain(data);
+                succeedAlert()
             } else {
                 setError(error);
                 errorAlert(error);
             }
-        })
-        setSaving(false);
+            setSaving(false);
+        }
+        editTrain(train.id, body);
     }
-
-    useEffect(() => {
-        dispatch(locationsRequest())
-    }, [dispatch])
 
     function validateForm() {
         const validTrainType = trainType.length;
@@ -105,7 +117,7 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
                         placeholder="Choose a train type..."
                         selected={trainType}
                         filterBy={['name']}
-                        required={true}
+                        isLoading={fetchingLocations}
                     />
                     <label htmlFor="basic-typeahead-example">
                         <li className="fas fa-text-height"></li>
@@ -155,6 +167,7 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
                 }
 
                 {error && <div>{error}</div>}
+                {fetchingLocationsError && <div>{fetchingLocationsError}</div>}
 
 
             </form>
