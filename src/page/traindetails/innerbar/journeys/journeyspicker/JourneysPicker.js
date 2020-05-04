@@ -3,8 +3,8 @@ import './JourneysPicker.css';
 import './JourneysPicker.scss';
 import Button from 'react-bootstrap/Button'
 
-export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney }) {
-    const [selectedJourney, setSelectedJourney] = useState();
+export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler }) {
+    // const [selectedJourney, setSelectedJourney] = useState();
     const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
             className += " selected";
         }
         return <Fragment key={index}>
-            {createPart(className, index !== 0, index !== -2, getDepartureName(journey), () => setSelectedJourney(journey))}
+            {createPart(className, index !== 0, index !== -2, getDepartureName(journey), () => selectedJourneyHandler(journey))}
         </Fragment>
     }
 

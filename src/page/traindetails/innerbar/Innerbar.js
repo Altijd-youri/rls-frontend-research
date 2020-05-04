@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { TRAIN_TYPES } from '../../../utils/constants'
 import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
 import Composition from './composition/Composition';
 
 export default function Innerbar({ train, setShowCreateJourney, setShowEditJourney }) {
+
+    const [selectedJourney, setSelectedJourney] = useState();
+
+    const selectedJourneyHandler = (selectedJourney) => {
+        setSelectedJourney(selectedJourney)
+    }
 
     return (
         <div className="d-flex flex-column" style={{ flex: 1, overflow: "auto", padding: "32px 40px" }}>
@@ -22,14 +28,15 @@ export default function Innerbar({ train, setShowCreateJourney, setShowEditJourn
                     train={train}
                     setShowCreateJourney={setShowCreateJourney}
                     setShowEditJourney={setShowEditJourney}
+                    selectedJourney={selectedJourney}
+                    selectedJourneyHandler={selectedJourneyHandler}
                 />
             </div>
 
             <div style={{ marginBottom: "30px" }} className="td-journeyspicker">
                 <Composition
                     train={train}
-                    setShowCreateJourney={setShowCreateJourney}
-                    setShowEditJourney={setShowEditJourney}
+                    selectedJourney={selectedJourney}
                 />
             </div>
 

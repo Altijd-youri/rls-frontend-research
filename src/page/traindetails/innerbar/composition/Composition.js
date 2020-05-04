@@ -1,7 +1,8 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
+import Statistics from './statistics/Statistics'
 
-export default function Composition({ selectedJourney }) {
+export default function Composition({ train, selectedJourney }) {
 
 
     return (
@@ -13,18 +14,18 @@ export default function Composition({ selectedJourney }) {
                     variant="outline-secondary"
                     size="sm"
                     onClick={() => { }}>
-                    ADD WAGON
+                    ADD TRACTION
                 </Button>
                 <Button
                     variant="outline-secondary"
                     size="sm"
                     onClick={() => { }}>
-                    ADD TRACTION
+                    ADD WAGON
                 </Button>
             </div>
 
             <div style={{ overflow: "auto" }}>
-
+                <Statistics selectedJourney={selectedJourney} />
             </div>
         </>
     )
