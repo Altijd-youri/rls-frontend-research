@@ -10,15 +10,9 @@ import DatePicker from "react-datepicker";
 import LocationsService from '../../../api/locations'
 
 export default function CreateTrain({ onHide, setTrains }) {
-    const [departure, setDeparture] = useState([]);
-    const [departureTime, setDepartureTime] = useState(new Date());
-    const [trainType, setTrainType] = useState([]);
-    const [trainNumber, setTrainNumber] = useState('');
-    const [error, setError] = useState('');
-
-    const [locations, setLocations] = useState([]);
-    const [fetchingLocations, setFetchingLocations] = useState(false);
-    const [fetchingLocationsError, setFetchingLocationsError] = useState('');
+    const initForm = { trainNumber: '', trainType: [], departure: [], departureTime: new Date(), isSubmitting: false, error: '' };
+    const [form, setForm] = useState(initForm)
+    const [locations, setLocation] = useState({ locations: [], isFetching: false, error: '' })
 
     useEffect(() => {
         fetchLocations();
@@ -26,13 +20,14 @@ export default function CreateTrain({ onHide, setTrains }) {
 
     const submitForm = (event) => {
         event.preventDefault();
+        setForm(prevState => ({ ...prevState, isSubmitting: true }));
 
         let body = {
-            transferPoint: departure[0].links[0].href,
-            operationalTrainNumber: trainNumber,
-            scheduledDateTimeAtTransfer: departureTime,
-            scheduledTimeAtHandover: departureTime,
-            trainType: trainType[0].id
+            transferPoint: form.departure[0].links[0].href,
+            operationalTrainNumber: form.trainNumber,
+            scheduledDateTimeAtTransfer: form.departureTime,
+            scheduledTimeAtHandover: form.departureTime,
+            trainType: form.trainType[0].id
         };
 
         const saveTrain = async () => {
@@ -40,46 +35,36 @@ export default function CreateTrain({ onHide, setTrains }) {
             if (data) {
                 setTrains(prevState => ([...prevState, data]))
                 succeedAlert()
-                clearForm()
+                setForm(initForm);
             } else {
                 errorAlert(error)
-                setError(error);
+                setForm(prevState => ({ ...prevState, isSubmitting: false, error }))
             }
         }
         saveTrain()
     }
 
-    function clearForm() {
-        setDeparture([])
-        setDepartureTime(new Date())
-        setTrainNumber('')
-        setTrainType([])
-    }
-
-
-
     const fetchLocations = async () => {
-        setFetchingLocations(true);
+        setLocation(prevState => ({ ...prevState, isFetching: true }))
         const { data, error } = await LocationsService.getLocations();
         if (data) {
-            setLocations(data)
+            setLocation(prevState => ({ ...prevState, isFetching: false, locations: data }))
         } else {
-            setFetchingLocationsError(error);
+            setLocation(prevState => ({ ...prevState, isFetching: false, error }))
         }
-        setFetchingLocations(false);
     }
 
     function validateForm() {
-        const validTrainType = trainType.length;
-        const validDeparture = departure.length;
-        if (trainNumber && validTrainType && validDeparture && departureTime) {
+        const validTrainType = form.trainType.length;
+        const validDeparture = form.departure.length;
+        if (form.trainNumber && validTrainType && validDeparture && form.departureTime && !form.isSubmitting) {
             return false;
         }
         return true;
     }
 
-    function setTrainNumberHandler(event) {
-        setTrainNumber(event.target.value)
+    function setTrainNumberHandler({ target }) {
+        setForm(prevState => ({ ...prevState, trainNumber: target.value }))
     }
 
     return (
@@ -96,7 +81,7 @@ export default function CreateTrain({ onHide, setTrains }) {
             <form onSubmit={submitForm} className="form-wrapper">
 
                 <div className="train-number">
-                    <input value={trainNumber} onChange={setTrainNumberHandler} placeholder="Train number.."
+                    <input value={form.trainNumber} onChange={setTrainNumberHandler} placeholder="Train number.."
                         type="number" pattern="[0-9]{6}" name="trainNumber" maxLength="6" required />
                     <label className="ct-label" htmlFor="trainNumber">
                         <li className="fa fa-fingerprint"></li>
@@ -108,10 +93,10 @@ export default function CreateTrain({ onHide, setTrains }) {
                         clearButton
                         id="basic-typeahead-example"
                         labelKey={option => `${option.name}`}
-                        onChange={setTrainType}
+                        onChange={value => setForm(prevState => ({ ...prevState, trainType: value }))}
                         options={trainTypes}
                         placeholder="Choose a train type..."
-                        selected={trainType}
+                        selected={form.trainType}
                         filterBy={['name']}
                         required={true}
                     />
@@ -125,12 +110,12 @@ export default function CreateTrain({ onHide, setTrains }) {
                         clearButton
                         id="basic-typeahead-example"
                         labelKey={option => `${option.code} - ${option.primaryLocationName}`}
-                        onChange={setDeparture}
-                        options={locations}
-                        placeholder="Choose a location..."
-                        selected={departure}
+                        onChange={value => setForm(prevState => ({ ...prevState, departure: value }))}
+                        options={locations.locations}
+                        placeholder="Choose a departure..."
+                        selected={form.departure}
                         filterBy={['code', 'primaryLocationName']}
-                        isLoading={fetchingLocations}
+                        isLoading={locations.isFetching}
                     />
                     <label className="ct-label" htmlFor="basic-typeahead-example">
                         <li className="fas fa-location-arrow"></li>
@@ -140,8 +125,8 @@ export default function CreateTrain({ onHide, setTrains }) {
                 <div className="departure-time">
                     <DatePicker
                         className="form-input"
-                        selected={departureTime}
-                        onChange={date => setDepartureTime(date)}
+                        selected={form.departureTime}
+                        onChange={date => setForm(prevState => ({ ...prevState, departureTime: date }))}
                         showTimeSelect
                         timeFormat="HH:mm"
                         timeIntervals={15}
@@ -159,8 +144,8 @@ export default function CreateTrain({ onHide, setTrains }) {
                     </button>
                 </div>
 
-                {error && <div>{error}</div>}
-                {fetchingLocationsError && <div>{fetchingLocationsError}</div>}
+                {locations.error && <div>{locations.error}</div>}
+                {form.error && <div>{form.error}</div>}
             </form>
         </div>
     )
