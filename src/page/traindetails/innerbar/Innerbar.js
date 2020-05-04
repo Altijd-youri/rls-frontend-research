@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { TRAIN_TYPES } from '../../../utils/constants'
 import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
@@ -35,7 +35,7 @@ export default function Innerbar({ train, setShowCreateJourney, setShowEditJourn
                     train={train}
                     selectedJourney={selectedJourney}
                     setShowCreateTraction={setShowCreateTraction}
-                    setShowCreateWagon={() => { }}
+                    setShowCreateWagon={setShowCreateWagon}
                 />
             </div>
 

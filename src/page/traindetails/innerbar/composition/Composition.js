@@ -19,7 +19,7 @@ export default function Composition({ train, selectedJourney, setShowCreateTract
                     <Button
                         variant="outline-secondary"
                         size="sm"
-                        onClick={() => { }}>
+                        onClick={setShowCreateWagon}>
                         ADD WAGON
                 </Button></>}
             </div>

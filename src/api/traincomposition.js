@@ -8,6 +8,13 @@ class TrainCompositionService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+
+    saveWagon(trainCompositionId, body) {
+        return super
+            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/wagons`, 'POST', body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 }
 
 export default new TrainCompositionService();

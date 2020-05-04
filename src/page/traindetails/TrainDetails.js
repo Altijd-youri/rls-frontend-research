@@ -7,6 +7,7 @@ import TrainService from '../../api/trains';
 import './TrainDetails.scoped.css';
 import EditJourney from './innerbar/journeys/editjourney/EditJourney';
 import CreateTraction from './innerbar/composition/createTraction/CreateTraction';
+import CreateWagon from './innerbar/composition/createWagon/CreateWagon';
 
 export default function TrainDetails() {
     // Fetch train state
@@ -40,10 +41,18 @@ export default function TrainDetails() {
         setFetchingTrain(false);
     }
 
-    function selectedJourneyHandler(selectedJourney) {
+    const showCreateTractionHandler = () => {
+        setShowCreateWagon(false);
+        setShowCreateTraction(true);
+    }
+
+    const showCreateWagonHandler = () => {
+        setShowCreateWagon(true);
+        setShowCreateTraction(false);
+    }
+    const selectedJourneyHandler = (selectedJourney) => {
         setSelectedJourney(selectedJourney);
         setTrain(prevState => ({ ...prevState, journeySections: [...prevState.journeySections, selectedJourney] }))
-        console.log("JS ID updated: ", selectedJourney.id)
     }
 
     if (fetchingTrainError) {
@@ -71,7 +80,8 @@ export default function TrainDetails() {
                     setSelectedJourney={setSelectedJourney}
                     setShowCreateJourney={setShowCreateJourney}
                     setShowEditJourney={() => setShowEditJourney(true)}
-                    setShowCreateTraction={() => setShowCreateTraction(true)}
+                    setShowCreateTraction={showCreateTractionHandler}
+                    setShowCreateWagon={showCreateWagonHandler}
                 />
             }
 
@@ -95,6 +105,14 @@ export default function TrainDetails() {
             {showCreateTraction &&
                 <CreateTraction
                     onHide={() => setShowCreateTraction(false)}
+                    selectedJourney={selectedJourney}
+                    setSelectedJourney={selectedJourneyHandler}
+                />
+            }
+
+            {showCreateWagon &&
+                <CreateWagon
+                    onHide={() => setShowCreateWagon(false)}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={selectedJourneyHandler}
                 />
