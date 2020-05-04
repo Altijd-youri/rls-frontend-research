@@ -6,6 +6,7 @@ import CreateJourney from "./innerbar/journeys/createjourney/CreateJourney";
 import TrainService from '../../api/trains';
 import './TrainDetails.scoped.css';
 import EditJourney from './innerbar/journeys/editjourney/EditJourney';
+import CreateTraction from './innerbar/composition/createTraction/CreateTraction';
 
 export default function TrainDetails() {
     // Fetch train state
@@ -17,6 +18,10 @@ export default function TrainDetails() {
     const [showCreateJourney, setShowCreateJourney] = useState(false);
     const [showEditJourney, setShowEditJourney] = useState(false);
     const [selectedJourney, setSelectedJourney] = useState();
+
+    /* State for adding traction/wagon */
+    const [showCreateTraction, setShowCreateTraction] = useState(false);
+    const [showCreateWagon, setShowCreateWagon] = useState(false);
 
     const { trainid } = useParams();
 
@@ -35,12 +40,10 @@ export default function TrainDetails() {
         setFetchingTrain(false);
     }
 
-    function showEditJourneyHandler(selectedJourney) {
-        if (selectedJourney) {
-            console.log("TrainDetails: ", selectedJourney)
-            setSelectedJourney(selectedJourney);
-            setShowEditJourney(true);
-        }
+    function selectedJourneyHandler(selectedJourney) {
+        setSelectedJourney(selectedJourney);
+        setTrain(prevState => ({ ...prevState, journeySections: [...prevState.journeySections, selectedJourney] }))
+        console.log("JS ID updated: ", selectedJourney.id)
     }
 
     if (fetchingTrainError) {
@@ -64,8 +67,11 @@ export default function TrainDetails() {
             {!fetchingTrain && train &&
                 <Innerbar
                     train={train}
+                    selectedJourney={selectedJourney}
+                    setSelectedJourney={setSelectedJourney}
                     setShowCreateJourney={setShowCreateJourney}
-                    setShowEditJourney={showEditJourneyHandler}
+                    setShowEditJourney={() => setShowEditJourney(true)}
+                    setShowCreateTraction={() => setShowCreateTraction(true)}
                 />
             }
 
@@ -83,6 +89,14 @@ export default function TrainDetails() {
                     selectedJourney={selectedJourney}
                     onHide={() => setShowEditJourney(false)}
                     setTrain={setTrain}
+                />
+            }
+
+            {showCreateTraction &&
+                <CreateTraction
+                    onHide={() => setShowCreateTraction(false)}
+                    selectedJourney={selectedJourney}
+                    setSelectedJourney={selectedJourneyHandler}
                 />
             }
 

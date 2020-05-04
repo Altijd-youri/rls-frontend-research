@@ -4,7 +4,6 @@ import './JourneysPicker.scss';
 import Button from 'react-bootstrap/Button'
 
 export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler }) {
-    // const [selectedJourney, setSelectedJourney] = useState();
     const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
 
     useEffect(() => {

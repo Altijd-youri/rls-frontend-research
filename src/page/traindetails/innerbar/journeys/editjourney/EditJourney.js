@@ -181,7 +181,6 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
                         placeholder="Choose a destination..."
                         selected={destination}
                         filterBy={['code', 'primaryLocationName']}
-                        required={true}
                         isLoading={fetchingLocations}
                     />
                     <label className="ct-label" htmlFor="basic-typeahead-example">

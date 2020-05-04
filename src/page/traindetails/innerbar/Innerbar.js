@@ -4,13 +4,10 @@ import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
 import Composition from './composition/Composition';
 
-export default function Innerbar({ train, setShowCreateJourney, setShowEditJourney }) {
+export default function Innerbar({ train, setShowCreateJourney, setShowEditJourney,
+    selectedJourney, setSelectedJourney,
+    setShowCreateTraction, setShowCreateWagon }) {
 
-    const [selectedJourney, setSelectedJourney] = useState();
-
-    const selectedJourneyHandler = (selectedJourney) => {
-        setSelectedJourney(selectedJourney)
-    }
 
     return (
         <div className="d-flex flex-column" style={{ flex: 1, overflow: "auto", padding: "32px 40px" }}>
@@ -29,7 +26,7 @@ export default function Innerbar({ train, setShowCreateJourney, setShowEditJourn
                     setShowCreateJourney={setShowCreateJourney}
                     setShowEditJourney={setShowEditJourney}
                     selectedJourney={selectedJourney}
-                    selectedJourneyHandler={selectedJourneyHandler}
+                    selectedJourneyHandler={setSelectedJourney}
                 />
             </div>
 
@@ -37,6 +34,8 @@ export default function Innerbar({ train, setShowCreateJourney, setShowEditJourn
                 <Composition
                     train={train}
                     selectedJourney={selectedJourney}
+                    setShowCreateTraction={setShowCreateTraction}
+                    setShowCreateWagon={() => { }}
                 />
             </div>
 
