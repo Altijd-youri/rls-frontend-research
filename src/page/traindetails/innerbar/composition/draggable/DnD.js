@@ -50,7 +50,7 @@ export default function DnD({ selectedJourney }) {
 
         setItems(newList)
     }
-
+    // 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <List data={items} />
