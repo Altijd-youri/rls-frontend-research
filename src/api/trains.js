@@ -30,9 +30,16 @@ class TrainService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    async saveJourney(trainid, body) {
+    saveJourney(trainid, body) {
         return super
             .fetch(`${ENDPOINTS.TRAINS}/${trainid}/journeysections`, 'POST', body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
+
+    editJourney(url, body) {
+        return super
+            .fetch(url, 'PUT', body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

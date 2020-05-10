@@ -11,7 +11,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }, [])
 
     const [wagons, setWagons] = useState({ wagons: [], isFetching: false, error: '' });
-    const [form, setForm] = useState({ wagon: [], loadWeight: '', breakType: 'G', isSubmitting: false, error: '' })
+    const [form, setForm] = useState({ wagon: [], loadWeight: 0, breakType: 'P', isSubmitting: false, error: '' })
 
     const setWagonHandler = wagon => {
         setForm(prevState => ({ ...prevState, wagon }))
@@ -74,7 +74,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }
 
     const resetForm = () => {
-        setForm({ wagon: [], loadWeight: '', breakType: 'G', isSubmitting: false, error: '' })
+        setForm({ wagon: [], loadWeight: '', breakType: 'P', isSubmitting: false, error: '' })
     }
 
     return (

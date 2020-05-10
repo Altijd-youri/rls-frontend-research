@@ -141,7 +141,7 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
 
                 <div className="label-pos d-flex align-items-center">
                     <input onChange={(event) => setHasDriverHandler(event.target.checked)} checked={form.hasDriver} className="w-auto" type="checkbox" id="lifestock" />
-                    <label className="ml-2 mb-0" htmlFor="lifestock">Lifestock</label>
+                    <label className="ml-2 mb-0" htmlFor="lifestock">Driver</label>
                 </div>
 
                 <div className="btn-submit">

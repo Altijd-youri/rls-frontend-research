@@ -41,15 +41,34 @@ export default function TrainDetails() {
         setFetchingTrain(false);
     }
 
+    const showEditJourneyHandler = () => {
+        setShowCreateJourney(false);
+        setShowEditJourney(true);
+        setShowCreateWagon(false);
+        setShowCreateTraction(false);
+    }
+
+    const setCreateJourneyHandler = () => {
+        setShowCreateJourney(true);
+        setShowEditJourney(false);
+        setShowCreateWagon(false);
+        setShowCreateTraction(false);
+    }
+
     const showCreateTractionHandler = () => {
         setShowCreateWagon(false);
         setShowCreateTraction(true);
+        setShowCreateJourney(false);
+        setShowEditJourney(false);
     }
 
     const showCreateWagonHandler = () => {
         setShowCreateWagon(true);
         setShowCreateTraction(false);
+        setShowCreateJourney(false);
+        setShowEditJourney(false);
     }
+
     const selectedJourneyHandler = (selectedJourney) => {
         setSelectedJourney(selectedJourney);
         setTrain(prevState => {
@@ -83,8 +102,8 @@ export default function TrainDetails() {
                     train={train}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={setSelectedJourney}
-                    setShowCreateJourney={setShowCreateJourney}
-                    setShowEditJourney={() => setShowEditJourney(true)}
+                    setShowCreateJourney={setCreateJourneyHandler}
+                    setShowEditJourney={showEditJourneyHandler}
                     setShowCreateTraction={showCreateTractionHandler}
                     setShowCreateWagon={showCreateWagonHandler}
                 />
@@ -103,7 +122,7 @@ export default function TrainDetails() {
                     train={train}
                     selectedJourney={selectedJourney}
                     onHide={() => setShowEditJourney(false)}
-                    setTrain={setTrain}
+                    setJourneySection={selectedJourneyHandler}
                 />
             }
 

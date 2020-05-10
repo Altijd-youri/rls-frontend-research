@@ -8,7 +8,7 @@ import LocationsService from '../../../../../api/locations';
 
 import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 
-export default function EditJourney({ onHide, train, selectedJourney, setTrain }) {
+export default function EditJourney({ onHide, train, selectedJourney, setJourneySection }) {
 
     useEffect(() => {
         setActivities(selectedJourney.activities)
@@ -20,7 +20,7 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
 
         const departure = selectedJourney.links.find(l => l.rel === 'journeySectionOrigin');
         fetchLocationByHateoas(departure.href, (data) => {
-            setDeparture(data.primaryLocationName)
+            setDeparture([data])
         })
 
         setLifeStockChecked(selectedJourney.trainComposition.livestockOrPeopleIndicator)
@@ -91,18 +91,9 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
     };
 
     function getDeparture() {
-        let departureDetails;
-        if (train.journeySections.length === 0) {
-            departureDetails = train.links.find(item => {
-                return item.rel === 'transferPoint'
-            })
-        } else {
-            const journeys = train.journeySections;
-            const lastJourneySection = journeys[journeys.length - 1];
-            departureDetails = lastJourneySection.links.find(item => {
-                return item.rel === "journeySectionDestination";
-            })
-        }
+        const departureDetails = departure[0].links.find(item => {
+            return item.rel === 'self'
+        })
         return departureDetails;
     }
 
@@ -122,19 +113,19 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
         }
 
         setIsSaving(true);
-        const saveJourney = async (trainid, body) => {
-            const { data, error } = await TrainService.saveJourney(trainid, body);
+        const api = selectedJourney.links.find(l => l.rel === 'self').href;
+        const saveJourney = async (url, body) => {
+            const { data, error } = await TrainService.editJourney(url, body);
             if (data) {
-                setTrain(data)
+                setJourneySection(data)
                 succeedAlert();
-                clearForm();
             } else {
-                setError(error);
-                errorAlert(error)
+                setError(error.message);
+                errorAlert(error.message)
             }
             setIsSaving(false);
         }
-        saveJourney(train.id, body);
+        saveJourney(api, body);
     }
 
     function clearForm() {
@@ -164,12 +155,22 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
             <form onSubmit={submitForm} className="form-wrapper">
 
                 <div className="label-pos">
-                    <input value={departure} placeholder="Departure" type="text" name="journeyDep" readOnly />
-                    <label className="ct-label" htmlFor="journeyDep">
-                        <li className="fa fa-fingerprint"></li>
+                    <Typeahead
+                        clearButton
+                        id="basic-typeahead-example"
+                        labelKey={option => `${option.code} - ${option.primaryLocationName}`}
+                        onChange={() => { }}
+                        options={locations}
+                        placeholder="Departure"
+                        selected={departure}
+                        filterBy={['code', 'primaryLocationName']}
+                        isLoading={fetchingLocations}
+                        disabled={true}
+                    />
+                    <label className="ct-label" htmlFor="basic-typeahead-example">
+                        <li className="fas fa-fingerprint"></li>
                     </label>
                 </div>
-
 
                 <div className="label-pos">
                     <Typeahead
@@ -215,7 +216,7 @@ export default function EditJourney({ onHide, train, selectedJourney, setTrain }
                 <div className="btn-submit">
                     <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm() || isSaving}
                         type="submit">
-                        ADD
+                        EDIT
                     </button>
                 </div>
 

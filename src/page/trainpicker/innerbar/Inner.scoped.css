@@ -4,45 +4,23 @@
 	overflow: auto;
 }
 
-.inner .header {
+.fa-plus:before {
+	margin-left: 5px;
+}
+
+.inner .inner-box .content-title {
 	position: relative;
 	margin-bottom: 60px;
 }
 
-.inner .header span {
+.inner .inner-box .content-title span {
 	font-size: 14px;
 	color: #8186ad;
 }
 
-.inner .header span i {
+.inner .inner-box .content-title span i {
 	font-size: 11px;
 	margin-left: 8px;
-}
-
-.inner .header label {
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 45px;
-	height: 45px;
-	color: #8f94b8;
-}
-
-.inner .header input {
-	width: 340px;
-	height: 44px;
-	border-radius: 44px;
-	background: rgba(202, 206, 231, 0.14);
-	font-size: 14px;
-	padding: 0 20px 0 50px;
-	box-sizing: border-box;
-}
-
-.inner .header input::placeholder {
-	color: #8f94b8;
 }
 
 .inner .inner-box {

@@ -14,7 +14,6 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
         })
     }, [train])
 
-
     function getDepartureName(journey) {
         const departure = journey.links.find(link => link.rel === "journeySectionOrigin")
         return departure.title;
@@ -66,20 +65,28 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
             <div className="jp-header d-flex w-100 align-items-center justify-content-between pl-4 pr-4">
                 <h5>Journeys</h5>
                 {selectedJourney && <Button
+                    style={{ marginLeft: "auto", marginRight: "15px" }}
                     variant="outline-secondary"
                     size="sm"
-                    onClick={() => setShowEditJourney(selectedJourney)}
+                    onClick={() => setShowEditJourney(true)}
                 >
-                    EDIT
+                    EDIT DESTINATION
                 </Button>}
+                <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => setShowCreateJourney(true)}
+                >
+                    ADD DESTINATION
+                </Button>
             </div>
 
             <div style={{ overflow: "auto" }} className="partcontainer">
                 {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
-                {trainWithSortedJourneys.journeySections.length > 0 &&
+                {/* {trainWithSortedJourneys.journeySections.length > 0 &&
                     createPart("part2 disabled", true, true, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
-                }
-                {createPart("part2 create", true, false, 'Add destination', () => setShowCreateJourney(true))}
+                } */}
+                {createPart("part2 create", true, false, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })}
             </div>
         </>
     )

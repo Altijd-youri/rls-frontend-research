@@ -1,9 +1,9 @@
 import React from 'react'
-import { TRAIN_TYPES } from '../../../utils/constants';
+import { TRAIN_TYPES } from '../../../../utils/constants';
 import { useHistory } from 'react-router-dom';
 import DataTable from "react-data-table-component";
-import FilterComponent from './table/FilterComponent';
-import ExpendedRow from './table/ExpendedRow';
+import FilterComponent from './FilterComponent';
+import ExpendedRow from './ExpendedRow';
 import Button from 'react-bootstrap/Button'
 
 
@@ -55,7 +55,8 @@ export default function TrainTable({ trains, onEditTrain }) {
             }
         };
 
-        return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+        return (
+            <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />);
     }, [filterText, resetPaginationToggle]);
 
     return (
