@@ -128,12 +128,6 @@ export default function EditJourney({ onHide, train, selectedJourney, setJourney
         saveJourney(api, body);
     }
 
-    function clearForm() {
-        setDestination([])
-        setActivities([])
-        setLifeStockChecked(false);
-    }
-
     function validateForm() {
         if (destination.length) {
             return false;
