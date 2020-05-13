@@ -20,8 +20,8 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
     }
 
     function getDestinationName(journey) {
-        const destination = journey.links.find(link => link.rel === "journeySectionDestination")
-        return destination.title;
+        const destination = journey?.links?.find(link => link?.rel === "journeySectionDestination")?.title
+        return destination ?? train?.transferPoint
     }
 
     function createPart(className, incoming, outcoming, text, onClick) {
@@ -83,10 +83,10 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
 
             <div style={{ overflow: "auto" }} className="partcontainer">
                 {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
-                {trainWithSortedJourneys.journeySections.length > 0 &&
-                    createPart("part2 disabled", true, true, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
+                {
+                    createPart("part2 create", true, false, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
                 }
-                {createPart("part2 create", true, false, "Add destination", () => { })}
+                {/* {createPart("part2 create", true, false, "Add destination", () => { })} */}
             </div>
         </>
     )

@@ -28,7 +28,7 @@ export default function EditJourney({ onHide, train, selectedJourney, setJourney
     }, [selectedJourney])
 
     // User input
-    const [departure, setDeparture] = useState('');
+    const [departure, setDeparture] = useState([]);
     const [destination, setDestination] = useState([]);
     const [activities, setActivities] = useState([]);
     const [lifeStockChecked, setLifeStockChecked] = useState(false);
