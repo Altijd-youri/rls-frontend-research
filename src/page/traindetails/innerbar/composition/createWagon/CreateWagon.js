@@ -36,7 +36,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }
 
     const validateForm = () => {
-        if (form.wagon.length && form.loadWeight.length && !form.isSubmitting) {
+        if (form.wagon.length && form.loadWeight && !form.isSubmitting) {
             return false;
         }
         return true;
@@ -74,7 +74,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }
 
     const resetForm = () => {
-        setForm({ wagon: [], loadWeight: '', breakType: 'P', isSubmitting: false, error: '' })
+        setForm({ wagon: [], loadWeight: 0, breakType: 'P', isSubmitting: false, error: '' })
     }
 
     return (

@@ -30,6 +30,15 @@ export default function TrainDetails() {
         getTrain(trainid);
     }, [trainid])
 
+    useEffect(() => {
+        if (selectedJourney) {
+            const newJourney = train.journeySections.find(journey => journey.id === selectedJourney.id);
+            if (newJourney !== selectedJourney) {
+                setSelectedJourney(prevState => newJourney ?? prevState);
+            }
+        }
+    }, [train, selectedJourney])
+
     const getTrain = async (trainid) => {
         setFetchingTrain(true);
         const { data, error } = await TrainService.getTrain(trainid);
@@ -106,6 +115,7 @@ export default function TrainDetails() {
                     setShowEditJourney={showEditJourneyHandler}
                     setShowCreateTraction={showCreateTractionHandler}
                     setShowCreateWagon={showCreateWagonHandler}
+                    setTrain={setTrain}
                 />
             }
 

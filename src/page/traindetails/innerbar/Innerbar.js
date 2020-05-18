@@ -4,9 +4,11 @@ import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
 import Composition from './composition/Composition';
 
-export default function Innerbar({ train, setShowCreateJourney, setShowEditJourney,
+export default function Innerbar({
+    train, setShowCreateJourney, setShowEditJourney,
     selectedJourney, setSelectedJourney,
-    setShowCreateTraction, setShowCreateWagon }) {
+    setShowCreateTraction, setShowCreateWagon,
+    setTrain }) {
 
 
     return (
@@ -36,6 +38,7 @@ export default function Innerbar({ train, setShowCreateJourney, setShowEditJourn
                     selectedJourney={selectedJourney}
                     setShowCreateTraction={setShowCreateTraction}
                     setShowCreateWagon={setShowCreateWagon}
+                    setTrain={setTrain}
                 />
             </div>
 

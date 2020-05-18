@@ -57,7 +57,7 @@ export default function EditJourney({ onHide, train, selectedJourney, setJourney
         if (data) {
             callback(data);
         } else {
-            console.log(error);
+            errorAlert(error.message);
         }
     }
 

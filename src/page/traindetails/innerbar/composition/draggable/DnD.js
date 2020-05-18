@@ -34,7 +34,6 @@ export default function DnD({ selectedJourney }) {
     };
 
     const onDragEnd = (result) => {
-        console.log(result)
         const { wagon } = items[result.source.index];
         const destinationIsPositionOfWagon = items[result.destination.index];
 
