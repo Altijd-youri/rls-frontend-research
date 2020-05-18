@@ -18,7 +18,7 @@ export default function Statistics({ selectedJourney }) {
                             </tr>
                             <tr>
                                 <th>Train weight</th>
-                                <td>{selectedJourney.trainComposition.trainWeight} tonnes</td>
+                                <td>{selectedJourney.trainComposition.trainWeight / 1000} tonnes</td>
                                 <th>Max. speed</th>
                                 <td>{selectedJourney.trainComposition.trainMaxSpeed} km/h</td>
                                 <th>Exceptional gauging</th>
