@@ -4,6 +4,7 @@ import WagonService from '../../../../../api/wagon';
 import TrainCompositionService from '../../../../../api/traincomposition';
 import './CreateWagon.scoped.css';
 import { succeedAlert } from '../../../../../utils/Alerts';
+import DangerousGoods from './DangerousGoods/DangerousGoods';
 
 export default function CreateWagon({ onHide, selectedJourney, setSelectedJourney }) {
     useEffect(() => {
@@ -11,7 +12,16 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }, [])
 
     const [wagons, setWagons] = useState({ wagons: [], isFetching: false, error: '' });
-    const [form, setForm] = useState({ wagon: [], loadWeight: 0, breakType: 'P', isSubmitting: false, error: '' })
+    const [form, setForm] = useState({ wagon: [], loadWeight: 0, breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
+
+    const addDangerGoodHandler = (dangerGood) => {
+        setForm(prevState => ({ ...prevState, dangerGoods: [...prevState.dangerGoods, dangerGood] }))
+    }
+
+    const removeDangerGoodHandler = (dangerGoodIndex) => {
+        const filteredList = form.dangerGoods.filter(item => item.index !== dangerGoodIndex)
+        setForm(prevState => ({ ...prevState, dangerGoods: filteredList }))
+    }
 
     const setWagonHandler = wagon => {
         setForm(prevState => ({ ...prevState, wagon }))
@@ -48,14 +58,19 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
 
         const trainCompositionId = selectedJourney.trainComposition.id;
         const wagonUrl = form.wagon[0].links.find(link => link.rel === 'self').href;
+
+        const dangerGoodsInWagonPostDtos = form.dangerGoods.map(item => {
+            return {
+                dangerGoodsTypeUrl: item.data.links.find(link => link.rel === 'self').href,
+                dangerousGoodsWeight: item.weight
+            }
+        })
+
         const body = {
             brakeType: form.breakType,
-            brakeWeight: 1,
-            breakTypeUrl: "string",
-            position: 0,
             totalLoadWeight: form.loadWeight,
-            wagonMaxSpeed: 0,
-            wagonUrl
+            wagonUrl,
+            dangerGoodsInWagonPostDtos
         }
 
         const saveWagon = async (trainCompositionId, body) => {
@@ -74,7 +89,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }
 
     const resetForm = () => {
-        setForm({ wagon: [], loadWeight: 0, breakType: 'P', isSubmitting: false, error: '' })
+        setForm({ wagon: [], loadWeight: '', breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
     }
 
     return (
@@ -132,10 +147,16 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                     </div>
                 </div>
 
+                <DangerousGoods
+                    dangerGoods={form.dangerGoods}
+                    add={addDangerGoodHandler}
+                    remove={removeDangerGoodHandler}
+                />
+
                 <div className="btn-submit">
                     <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm()}
                         type="submit">
-                        ADD
+                        SAVE WAGON
                     </button>
                 </div>
 
