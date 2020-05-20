@@ -26,7 +26,7 @@ export default function Statistics({ selectedJourney }) {
                             </tr>
                             <tr>
                                 <th>Train length</th>
-                                <td>{selectedJourney.trainComposition.trainLength} meters</td>
+                                <td>{selectedJourney.trainComposition.trainLength / 100} meters</td>
                                 <th>Max. axle weight</th>
                                 <td>{selectedJourney.trainComposition.maxAxleWeight} tonnes</td>
                             </tr>
