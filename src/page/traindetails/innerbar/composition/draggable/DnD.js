@@ -2,17 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd';
 import List from './List';
 
-export default function DnD({ selectedJourney }) {
+export default function DnD({ selectedJourney, setTrainCompositionHandler }) {
     const [items, setItems] = useState([]);
-    const getItems = count =>
-        Array.from({ length: count }, (v, k) => k).map(k => ({
-            id: `item-${k}`,
-            content: `item ${k}`,
-        }));
-
-    useEffect(() => {
-        setItems(getItems(6))
-    }, [])
 
     useEffect(() => {
         let compositionList = []
@@ -53,7 +44,11 @@ export default function DnD({ selectedJourney }) {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <List data={items} />
+            <List
+                data={items}
+                trainCompositionId={selectedJourney?.trainComposition?.id}
+                setTrainCompositionHandler={setTrainCompositionHandler}
+            />
         </DragDropContext>
     )
 }

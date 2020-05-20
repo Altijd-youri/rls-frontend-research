@@ -2,7 +2,7 @@ import React from 'react'
 import { Droppable } from 'react-beautiful-dnd';
 import Item from './Item';
 
-export default function List({ data }) {
+export default function List({ data, trainCompositionId, setTrainCompositionHandler }) {
     const grid = 8;
 
     const getListStyle = isDraggingOver => ({
@@ -28,6 +28,8 @@ export default function List({ data }) {
                             key={index}
                             item={item}
                             index={index}
+                            trainCompositionId={trainCompositionId}
+                            setTrainCompositionHandler={setTrainCompositionHandler}
                         />
                     ))}
                     {provided.placeholder}

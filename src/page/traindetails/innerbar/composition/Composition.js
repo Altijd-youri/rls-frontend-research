@@ -4,7 +4,12 @@ import Statistics from './statistics/Statistics'
 import DnD from './draggable/DnD'
 import CloneComposition from './cloneComposition/CloneComposition'
 
-export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain }) {
+export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler }) {
+
+    const setTrainCompositionHandler = (trainComposition) => {
+        const updatedSelectedJourney = { ...selectedJourney, trainComposition }
+        setJourneyAndTrainHandler(updatedSelectedJourney);
+    }
 
     return (
         <>
@@ -36,7 +41,10 @@ export default function Composition({ selectedJourney, setShowCreateTraction, se
                     <div style={{ overflow: "auto" }}>
                         <Statistics selectedJourney={selectedJourney} />
                     </div>
-                    <DnD selectedJourney={selectedJourney} />
+                    <DnD
+                        selectedJourney={selectedJourney}
+                        setTrainCompositionHandler={setTrainCompositionHandler}
+                    />
                 </>
             }
 

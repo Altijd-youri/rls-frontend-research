@@ -20,10 +20,25 @@ export function succeedAlert() {
 }
 
 export function errorAlert(errorMessage) {
-    return Swal.fire({
-        type: "error",
-        title: "Oops...",
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
         text: errorMessage,
-        heightAuto: false
-    });
+    })
+}
+
+export function confirmAlert(callback) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            callback()
+        }
+    })
 }
