@@ -36,10 +36,7 @@ export default function Composition({ selectedJourney, setShowCreateTraction, se
                     <div style={{ overflow: "auto" }}>
                         <Statistics selectedJourney={selectedJourney} />
                     </div>
-                    <div>
-                        <DnD selectedJourney={selectedJourney} />
-                    </div>
-
+                    <DnD selectedJourney={selectedJourney} />
                 </>
             }
 

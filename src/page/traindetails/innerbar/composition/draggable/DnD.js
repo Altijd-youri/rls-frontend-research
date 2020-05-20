@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd';
 import List from './List';
 
@@ -16,11 +16,11 @@ export default function DnD({ selectedJourney }) {
 
     useEffect(() => {
         let compositionList = []
-        selectedJourney.trainComposition.wagons.map(wagon => {
-            return compositionList.push(wagon);
-        });
         selectedJourney.trainComposition.tractions.map(traction => {
             return compositionList.push(traction);
+        });
+        selectedJourney.trainComposition.wagons.map(wagon => {
+            return compositionList.push(wagon);
         });
         setItems(compositionList)
     }, [selectedJourney, selectedJourney.trainComposition, setItems])
@@ -33,11 +33,11 @@ export default function DnD({ selectedJourney }) {
         return result;
     };
 
-    const onDragEnd = (result) => {
-        const { wagon } = items[result.source.index];
+    const onDragEnd = useCallback((result) => {
+        const { traction } = items[result.source.index];
         const destinationIsPositionOfWagon = items[result.destination.index];
 
-        if (!result.destination || wagon || destinationIsPositionOfWagon.wagon) {
+        if (!result.destination || traction || destinationIsPositionOfWagon.traction) {
             return;
         }
 
@@ -48,7 +48,8 @@ export default function DnD({ selectedJourney }) {
         );
 
         setItems(newList)
-    }
+    }, [items])
+
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
