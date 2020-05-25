@@ -16,7 +16,7 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
         ...draggableStyle,
     });
 
-    const deleteItem = async () => {
+    const deleteItem = () => {
         const { traction, wagon } = item
 
         confirmAlert(async () => {
