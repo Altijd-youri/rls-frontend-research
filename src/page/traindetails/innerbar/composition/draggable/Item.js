@@ -20,7 +20,6 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
         const { traction, wagon } = item
 
         confirmAlert(async () => {
-
             try {
                 if (traction) {
                     const { data, error } = await TrainCompositionService.deleteTraction(trainCompositionId, item.id)
@@ -37,11 +36,7 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
                 const errorMessage = (e instanceof String) ? e : e.message
                 errorAlert(errorMessage)
             }
-
-
         })
-
-
     }
 
     const Icon = () => {
