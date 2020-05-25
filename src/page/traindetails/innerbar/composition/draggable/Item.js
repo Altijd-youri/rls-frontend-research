@@ -1,8 +1,10 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd';
 import { Wagon, Traction } from '../../../../../utils/icons/composition';
+import TrainCompositionService from '../../../../../api/traincomposition';
+import { succeedAlert, errorAlert, confirmAlert } from '../../../../../utils/Alerts';
 
-export default function Item({ item, index }) {
+export default function Item({ item, index, trainCompositionId, setTrainCompositionHandler }) {
     const grid = 8;
     const getItemStyle = (isDragging, draggableStyle) => ({
         userSelect: 'none',
@@ -13,6 +15,29 @@ export default function Item({ item, index }) {
         height: "100px",
         ...draggableStyle,
     });
+
+    const deleteItem = () => {
+        const { traction, wagon } = item
+
+        confirmAlert(async () => {
+            try {
+                if (traction) {
+                    const { data, error } = await TrainCompositionService.deleteTraction(trainCompositionId, item.id)
+                    if (error) throw new Error(error)
+                    succeedAlert()
+                    setTrainCompositionHandler(data)
+                } else if (wagon) {
+                    const { data, error } = await TrainCompositionService.deleteWagon(trainCompositionId, item.id)
+                    if (error) throw new Error(error)
+                    succeedAlert()
+                    setTrainCompositionHandler(data)
+                }
+            } catch (e) {
+                const errorMessage = (e instanceof String) ? e : e.message
+                errorAlert(errorMessage)
+            }
+        })
+    }
 
     const Icon = () => {
         const { wagon } = item
@@ -46,7 +71,7 @@ export default function Item({ item, index }) {
                     {/* Header: Identifier */}
                     <div className="d-flex">
                         <span>{getIdentifier()}</span>
-                        <span style={{ marginLeft: "10px", cursor: "pointer", color: "red" }} onClick={() => { }}>
+                        <span style={{ marginLeft: "10px", cursor: "pointer", color: "red" }} onClick={deleteItem}>
                             <li className="far fa-minus-square" />
                         </span>
                     </div>

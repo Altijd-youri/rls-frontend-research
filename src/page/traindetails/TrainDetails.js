@@ -116,6 +116,7 @@ export default function TrainDetails() {
                     setShowCreateTraction={showCreateTractionHandler}
                     setShowCreateWagon={showCreateWagonHandler}
                     setTrain={setTrain}
+                    setJourneyAndTrainHandler={selectedJourneyHandler}
                 />
             }
 
@@ -129,10 +130,9 @@ export default function TrainDetails() {
 
             {showEditJourney &&
                 <EditJourney
-                    train={train}
                     selectedJourney={selectedJourney}
                     onHide={() => setShowEditJourney(false)}
-                    setJourneySection={selectedJourneyHandler}
+                    setJourneyAndTrainHandler={selectedJourneyHandler}
                 />
             }
 
