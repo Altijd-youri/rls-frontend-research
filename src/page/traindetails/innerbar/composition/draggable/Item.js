@@ -1,6 +1,6 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd';
-import { Wagon, Traction } from '../../../../../utils/icons/composition';
+import { Wagon, Traction, Driver } from '../../../../../utils/icons/composition';
 import TrainCompositionService from '../../../../../api/traincomposition';
 import { succeedAlert, errorAlert, confirmAlert } from '../../../../../utils/Alerts';
 
@@ -37,6 +37,13 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
                 errorAlert(errorMessage)
             }
         })
+    }
+
+    const renderDriver = () => {
+        const { traction } = item
+        if (traction) {
+            return item.driverIndication ? Driver() : null
+        }
     }
 
     const Icon = () => {
@@ -84,7 +91,7 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
 
                     {/* Footer: hasDriver/Dangerlabel */}
                     <div className="d-flex justify-content-begin align-items-center">
-                        <span>Driver {item?.driverIndication ? "present" : "absent"}</span>
+                        {renderDriver()}
                     </div>
                 </div>
             )}
