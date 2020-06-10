@@ -2,18 +2,30 @@ import React, { useState, useEffect } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead';
 import WagonService from '../../../../../api/wagon';
 import TrainCompositionService from '../../../../../api/traincomposition';
-import './CreateWagon.scoped.css';
+import '../createWagon/CreateWagon.scoped.css';
 import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
-import DangerousGoods from './DangerousGoods/DangerousGoods';
+import DangerousGoods from '../createWagon/DangerousGoods/DangerousGoods';
 import JourneySectionService from '../../../../../api/journeysections';
 
-export default function CreateWagon({ onHide, selectedJourney, setSelectedJourney }) {
+export default function EditWagon({ onHide, selectedJourney, setSelectedJourney, data }) {
     useEffect(() => {
         fetchWagons();
     }, [])
 
+    useEffect(() => {
+        if (data) {
+            setForm(prevState => ({
+                ...prevState,
+                wagon: [data.wagon],
+                loadWeight: data.totalLoadWeight,
+                brakeType: data.brakeType,
+                dangerGoods: data.dangerGoods.map((item, index) => ({ data: item.dangerGoodsType, index, weight: item.dangerousGoodsWeight }))
+            }))
+        }
+    }, [data])
+
     const [wagons, setWagons] = useState({ wagons: [], isFetching: false, error: '' });
-    const [form, setForm] = useState({ wagon: [], loadWeight: "0", breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
+    const [form, setForm] = useState({ wagon: [], loadWeight: 0, brakeType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
 
     const addDangerGoodHandler = (dangerGood) => {
         setForm(prevState => ({ ...prevState, dangerGoods: [...prevState.dangerGoods, dangerGood] }))
@@ -32,8 +44,8 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
         setForm(prevState => ({ ...prevState, loadWeight }))
     }
 
-    const setBreakTypeHandler = breakType => {
-        setForm(prevState => ({ ...prevState, breakType }))
+    const setBrakeTypeHandler = brakeType => {
+        setForm(prevState => ({ ...prevState, brakeType }))
     }
 
     const fetchWagons = async () => {
@@ -55,16 +67,6 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
 
     const submitForm = async (event) => {
         event.preventDefault();
-
-        const numberFreight = form.wagon[0].numberFreight
-        const containsStock = selectedJourney.trainComposition.rollingStock.some(stock => {
-            return stock?.wagon?.numberFreight === numberFreight
-        });
-
-        if (containsStock) {
-            return setForm(prevState => ({ ...prevState, error: 'Stock exists in current composition' }));
-        }
-
         setForm(prevState => ({ ...prevState, isSubmitting: true }))
 
         const trainCompositionId = selectedJourney.trainComposition.id;
@@ -78,14 +80,15 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
 
         const body = {
             stockType: "wagon",
-            brakeType: form.breakType,
-            totalLoadWeight: form.loadWeight,
-            stockIdentifier: numberFreight,
-            dangerGoodsInWagonPostDtos
+            stockIdentifier: parseInt(form.wagon[0].numberFreight),
+            dangerGoodsInWagonPostDtos,
+            brakeType: form.brakeType,
+            totalLoadWeight: form.loadWeight
         }
 
-        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body);
+        const { error } = await TrainCompositionService.updateStock(trainCompositionId, data.id, body);
         if (error) {
+            setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
             errorAlert(error)
         } else {
             const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id)
@@ -96,20 +99,15 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                 setSelectedJourney(data)
                 setForm(prevState => ({ ...prevState, isSubmitting: false }));
                 succeedAlert();
-                resetForm()
             }
         }
-    }
-
-    const resetForm = () => {
-        setForm({ wagon: [], loadWeight: '0', breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
     }
 
     return (
         <div className="rightbar">
             <div className="top">
                 <h4>
-                    Add Wagon
+                    Edit Wagon
                 </h4>
                 <span onClick={onHide}>
                     <li className="fa fa-times" />
@@ -149,13 +147,13 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center">
-                    <label>Break type</label><br />
+                    <label>Brake type</label><br />
                     <div className="form-check form-check-inline" style={{ width: "40px" }}>
-                        <input className="form-check-input" type="radio" name="inlineRadioOptions" onChange={() => setBreakTypeHandler('G')} checked={form.breakType === 'G'} />
+                        <input className="form-check-input" type="radio" name="inlineRadioOptions" onChange={() => setBrakeTypeHandler('G')} checked={form.brakeType === 'G'} />
                         <label className="form-check-label">G</label>
                     </div>
                     <div className="form-check form-check-inline" style={{ width: "40px" }}>
-                        <input className="form-check-input" type="radio" name="inlineRadioOptions" onChange={() => setBreakTypeHandler('P')} checked={form.breakType === 'P'} />
+                        <input className="form-check-input" type="radio" name="inlineRadioOptions" onChange={() => setBrakeTypeHandler('P')} checked={form.brakeType === 'P'} />
                         <label className="form-check-label" >P</label>
                     </div>
                 </div>
@@ -169,7 +167,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                 <div className="btn-submit">
                     <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm()}
                         type="submit">
-                        SAVE WAGON
+                        UPDATE WAGON
                     </button>
                 </div>
 

@@ -4,10 +4,13 @@ import Statistics from './statistics/Statistics'
 import DnD from './draggable/DnD'
 import CloneComposition from './cloneComposition/CloneComposition'
 
-export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler }) {
+export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain }) {
 
-    const setTrainCompositionHandler = (trainComposition) => {
-        const updatedSelectedJourney = { ...selectedJourney, trainComposition }
+    const setTrainCompositionHandler = (stockId) => {
+        const { trainComposition } = selectedJourney
+        const updatedRollingStock = trainComposition.rollingStock.filter((item) => item.id !== stockId)
+        const updatedTrainComposition = { ...trainComposition, rollingStock: updatedRollingStock }
+        const updatedSelectedJourney = { ...selectedJourney, trainComposition: updatedTrainComposition }
         setJourneyAndTrainHandler(updatedSelectedJourney);
     }
 
@@ -42,8 +45,10 @@ export default function Composition({ selectedJourney, setShowCreateTraction, se
                         <Statistics selectedJourney={selectedJourney} />
                     </div>
                     <DnD
+                        showEditMode={showEditMode}
                         selectedJourney={selectedJourney}
                         setTrainCompositionHandler={setTrainCompositionHandler}
+                        fetchTrain={fetchTrain}
                     />
                 </>
             }

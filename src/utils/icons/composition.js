@@ -8,7 +8,9 @@ export const Wagon = (code) => {
             </svg>
         )
     } else {
-        return (<span>No icon found for code: {code}</span>)
+        return (<svg width="50px" heigh="50px" viewBox="0 0 20 20">
+            <path d="M2 15h4a2 2 0 0 0 4 0h1a2 2 0 0 0 4 0h2v1h1v-3h-1v1h-1v-1H2zm10 0a1 1 0 1 1 1 1 1 1 0 0 1-1-1zm-5 0a1 1 0 1 1 1 1 1 1 0 0 1-1-1z" />
+        </svg>)
     }
 }
 

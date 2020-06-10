@@ -1,50 +1,65 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd';
 import List from './List';
+import TrainCompositionService from '../../../../../api/traincomposition'
+import { errorAlert, succeedAlert } from '../../../../../utils/Alerts';
 
-export default function DnD({ selectedJourney, setTrainCompositionHandler }) {
+export default function DnD({ selectedJourney, setTrainCompositionHandler, showEditMode, fetchTrain }) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        let compositionList = []
-        selectedJourney.trainComposition.tractions.map(traction => {
-            return compositionList.push(traction);
-        });
-        selectedJourney.trainComposition.wagons.map(wagon => {
-            return compositionList.push(wagon);
-        });
-        setItems(compositionList)
-    }, [selectedJourney, selectedJourney.trainComposition, setItems])
+        const list = selectedJourney.trainComposition.rollingStock.sort((a, b) => a.position - b.position)
+        setItems(list)
+    }, [selectedJourney, selectedJourney.trainComposition.rollingStock, setItems])
+
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
-
         return result;
     };
 
-    const onDragEnd = useCallback((result) => {
-        const { traction } = items[result.source.index];
-        const destinationIsPositionOfWagon = items[result.destination.index];
+    const onDragEnd = useCallback(async (result) => {
+        const destinationPosition = result?.destination?.index
+        const currentPosition = result?.source?.index
+        const draggedStock = items[currentPosition]
 
-        if (!result.destination || traction || destinationIsPositionOfWagon.traction) {
-            return;
+        if (destinationPosition === undefined || draggedStock === undefined) {
+            return
         }
 
-        const newList = reorder(
-            items,
-            result.source.index,
-            result.destination.index
-        );
+        if (destinationPosition === currentPosition) {
+            return
+        }
 
-        setItems(newList)
-    }, [items])
+        const body = {
+            position: destinationPosition
+        }
+
+        const moveStock = async (stockId, body) => {
+            const { error } = await TrainCompositionService.moveStock(selectedJourney.trainComposition.id, stockId, body)
+            if (error) {
+                fetchTrain();
+                errorAlert(error)
+            } else {
+                succeedAlert()
+                const newList = reorder(
+                    items,
+                    result.source.index,
+                    result.destination.index
+                );
+                setItems(newList)
+            }
+        }
+        moveStock(draggedStock.id, body)
+    }, [items, selectedJourney.trainComposition.id])
 
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <List
+                showEditMode={showEditMode}
                 data={items}
                 trainCompositionId={selectedJourney?.trainComposition?.id}
                 setTrainCompositionHandler={setTrainCompositionHandler}

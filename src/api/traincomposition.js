@@ -2,30 +2,30 @@ import { ENDPOINTS } from '../utils/constants';
 import FetchService from './fetchservice';
 
 class TrainCompositionService extends FetchService {
-    saveTraction(trainCompositionId, body) {
+    saveStock(trainCompositionId, body) {
         return super
-            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/tractions`, 'POST', body)
+            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/stock`, 'POST', body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    saveWagon(trainCompositionId, body) {
+    updateStock(trainCompositionId, stockId, body) {
         return super
-            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/wagons`, 'POST', body)
+            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/stock/${stockId}`, 'PUT', body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    deleteWagon(trainCompositionId, wagonId) {
+    deleteStock(trainCompositionId, stockId) {
         return super
-            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/wagons/${wagonId}`, 'DELETE')
+            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/stock/${stockId}`, 'DELETE')
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    deleteTraction(trainCompositionId, tractionId) {
+    moveStock(trainCompositionId, stockId, body) {
         return super
-            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/tractions/${tractionId}`, 'DELETE')
+            .fetch(`${ENDPOINTS.TRAINCOMPOSITIONS}/${trainCompositionId}/stock/${stockId}/move`, 'PUT', body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

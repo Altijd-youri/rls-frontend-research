@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Innerbar from './innerbar/Innerbar'
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import CreateJourney from "./innerbar/journeys/createjourney/CreateJourney";
 import TrainService from '../../api/trains';
@@ -8,12 +8,13 @@ import './TrainDetails.scoped.css';
 import EditJourney from './innerbar/journeys/editjourney/EditJourney';
 import CreateTraction from './innerbar/composition/createTraction/CreateTraction';
 import CreateWagon from './innerbar/composition/createWagon/CreateWagon';
+import EditWagon from './innerbar/composition/editWagon/EditWagon';
+import EditTraction from './innerbar/composition/editTraction/EditTraction';
 
 export default function TrainDetails() {
     // Fetch train state
     const [train, setTrain] = useState();
     const [fetchingTrain, setFetchingTrain] = useState(false);
-    const [fetchingTrainError, setFetchingTrainError] = useState('');
 
     /* state for create/edit journey  */
     const [showCreateJourney, setShowCreateJourney] = useState(false);
@@ -24,10 +25,14 @@ export default function TrainDetails() {
     const [showCreateTraction, setShowCreateTraction] = useState(false);
     const [showCreateWagon, setShowCreateWagon] = useState(false);
 
-    const { trainid } = useParams();
+    /* State for editing traction/wagon */
+    const initialCompositionManagerState = { data: undefined, showWagonEditor: false, showTractionEditor: false }
+    const [compositionManager, setCompositionManager] = useState(initialCompositionManagerState)
 
+    const { trainid } = useParams();
+    const history = useHistory();
     useEffect(() => {
-        getTrain(trainid);
+        getTrain();
     }, [trainid])
 
     useEffect(() => {
@@ -39,46 +44,57 @@ export default function TrainDetails() {
         }
     }, [train, selectedJourney])
 
-    const getTrain = async (trainid) => {
+    const closeAllSidebars = () => {
+        setCompositionManager(initialCompositionManagerState);
+        setShowCreateTraction(false);
+        setShowCreateWagon(false);
+        setShowCreateJourney(false);
+        setShowEditJourney(false);
+    }
+
+    const getTrain = async () => {
         setFetchingTrain(true);
-        const { data, error } = await TrainService.getTrain(trainid);
+        const { data } = await TrainService.getTrain(trainid);
         if (data) {
             setTrain(data);
         } else {
-            setFetchingTrainError(error);
+            history.push('/')
         }
         setFetchingTrain(false);
     }
 
     const showEditJourneyHandler = () => {
-        setShowCreateJourney(false);
+        closeAllSidebars()
         setShowEditJourney(true);
-        setShowCreateWagon(false);
-        setShowCreateTraction(false);
+
     }
 
     const setCreateJourneyHandler = () => {
+        closeAllSidebars()
         setShowCreateJourney(true);
-        setShowEditJourney(false);
-        setShowCreateWagon(false);
-        setShowCreateTraction(false);
     }
 
     const showCreateTractionHandler = () => {
-        setShowCreateWagon(false);
+        closeAllSidebars()
         setShowCreateTraction(true);
-        setShowCreateJourney(false);
-        setShowEditJourney(false);
     }
 
     const showCreateWagonHandler = () => {
+        closeAllSidebars()
         setShowCreateWagon(true);
-        setShowCreateTraction(false);
-        setShowCreateJourney(false);
-        setShowEditJourney(false);
+    }
+
+    const processCompositionManager = (updatedJourneySection) => {
+        const newSize = updatedJourneySection.trainComposition.rollingStock.length
+        const prevSize = selectedJourney.trainComposition.rollingStock.length
+
+        if (newSize < prevSize) {
+            setCompositionManager(initialCompositionManagerState)
+        }
     }
 
     const selectedJourneyHandler = (selectedJourney) => {
+        processCompositionManager(selectedJourney)
         setSelectedJourney(selectedJourney);
         setTrain(prevState => {
             const newJourneySectionsList = prevState.journeySections.filter(item => item.id !== selectedJourney.id)
@@ -88,10 +104,15 @@ export default function TrainDetails() {
         })
     }
 
-    if (fetchingTrainError) {
-        return (<div className="d-flex justify-content-center align-items-center w-100">
-            {fetchingTrainError}
-        </div>)
+    const showCompositionEditorHandler = (item) => {
+        const { stockType } = item
+        closeAllSidebars()
+        if (stockType === "traction") {
+            return setCompositionManager(prevState => ({ ...prevState, data: item, showTractionEditor: true, showWagonEditor: false }))
+        } else if (stockType === "wagon") {
+            return setCompositionManager(prevState => ({ ...prevState, data: item, showTractionEditor: false, showWagonEditor: true }))
+        }
+        setCompositionManager(prevState => ({ ...prevState, data: undefined, showTractionEditor: false, showWagonEditor: false }))
     }
 
     if (fetchingTrain) {
@@ -117,6 +138,8 @@ export default function TrainDetails() {
                     setShowCreateWagon={showCreateWagonHandler}
                     setTrain={setTrain}
                     setJourneyAndTrainHandler={selectedJourneyHandler}
+                    showEditMode={showCompositionEditorHandler}
+                    fetchTrain={() => getTrain()}
                 />
             }
 
@@ -149,6 +172,24 @@ export default function TrainDetails() {
                     onHide={() => setShowCreateWagon(false)}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={selectedJourneyHandler}
+                />
+            }
+
+            {compositionManager.showWagonEditor &&
+                <EditWagon
+                    onHide={() => setCompositionManager(prevState => ({ ...prevState, showWagonEditor: false, data: undefined }))}
+                    selectedJourney={selectedJourney}
+                    setSelectedJourney={selectedJourneyHandler}
+                    data={compositionManager.data}
+                />
+            }
+
+            {compositionManager.showTractionEditor &&
+                <EditTraction
+                    onHide={() => setCompositionManager(prevState => ({ ...prevState, showTractionEditor: false, data: undefined }))}
+                    selectedJourney={selectedJourney}
+                    setSelectedJourney={selectedJourneyHandler}
+                    data={compositionManager.data}
                 />
             }
 

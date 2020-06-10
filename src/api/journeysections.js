@@ -8,6 +8,14 @@ class JourneySectionService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+
+    getJourneySectionById(journeySectionId) {
+        return super
+            .fetch(`${ENDPOINTS.JOURNEYSECTIONS}/${journeySectionId}`, 'GET')
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
+
 }
 
 export default new JourneySectionService();

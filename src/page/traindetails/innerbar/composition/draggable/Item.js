@@ -4,7 +4,7 @@ import { Wagon, Traction, Driver } from '../../../../../utils/icons/composition'
 import TrainCompositionService from '../../../../../api/traincomposition';
 import { succeedAlert, errorAlert, confirmAlert } from '../../../../../utils/Alerts';
 
-export default function Item({ item, index, trainCompositionId, setTrainCompositionHandler }) {
+export default function Item({ item, index, trainCompositionId, setTrainCompositionHandler, showEditMode }) {
     const grid = 8;
     const getItemStyle = (isDragging, draggableStyle) => ({
         userSelect: 'none',
@@ -17,21 +17,12 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
     });
 
     const deleteItem = () => {
-        const { traction, wagon } = item
-
         confirmAlert(async () => {
             try {
-                if (traction) {
-                    const { data, error } = await TrainCompositionService.deleteTraction(trainCompositionId, item.id)
-                    if (error) throw new Error(error)
-                    succeedAlert()
-                    setTrainCompositionHandler(data)
-                } else if (wagon) {
-                    const { data, error } = await TrainCompositionService.deleteWagon(trainCompositionId, item.id)
-                    if (error) throw new Error(error)
-                    succeedAlert()
-                    setTrainCompositionHandler(data)
-                }
+                const { error } = await TrainCompositionService.deleteStock(trainCompositionId, item.id)
+                if (error) throw new Error(error)
+                succeedAlert()
+                setTrainCompositionHandler(item.id)
             } catch (e) {
                 const errorMessage = (e instanceof String) ? e : e.message
                 errorAlert(errorMessage)
@@ -57,15 +48,14 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
     }
 
     const getWeight = () => {
-        const { wagon, traction } = item
-        const weight = Boolean(wagon) ? wagon.weightEmpty : traction.weight
-        return (<span>{`${weight} T`}</span>)
+        return (<span>{`${Math.round((item.totalWeight / 1000) * 10) / 10} T`}</span>)
     }
 
     return (
         <Draggable key={item.id} draggableId={String(index)} index={index}>
             {(provided, snapshot) => (
                 <div
+                    onClick={() => showEditMode(item)}
                     className="d-flex flex-column"
                     ref={provided.innerRef}
                     {...provided.draggableProps}

@@ -14,19 +14,19 @@ export default function Statistics({ selectedJourney }) {
                                 <th>Brake percentage</th>
                                 <td>{selectedJourney.trainComposition.brakeWeight}%</td>
                                 <th>Dangerous goods</th>
-                                <td>{selectedJourney.trainComposition.dangerousGoodsIndicator === 1 ? 'Yes' : 'No'}</td>
+                                <td>{selectedJourney.trainComposition.containsDangerousGoods === true ? 'Yes' : 'No'}</td>
                             </tr>
                             <tr>
                                 <th>Train weight</th>
-                                <td>{selectedJourney.trainComposition.trainWeight} tonnes</td>
+                                <td>{selectedJourney.trainComposition.weight / 1000} tonnes</td>
                                 <th>Max. speed</th>
-                                <td>{selectedJourney.trainComposition.trainMaxSpeed} km/h</td>
+                                <td>{selectedJourney.trainComposition.maxSpeed} km/h</td>
                                 <th>Exceptional gauging</th>
-                                <td>{selectedJourney.trainComposition.exceptionalGaugingIndicator === 1 ? 'Yes' : 'No'}</td>
+                                <td>{selectedJourney.trainComposition.gaugedExceptional === true ? 'Yes' : 'No'}</td>
                             </tr>
                             <tr>
                                 <th>Train length</th>
-                                <td>{selectedJourney.trainComposition.trainLength} meters</td>
+                                <td>{selectedJourney.trainComposition.length} meters</td>
                                 <th>Max. axle weight</th>
                                 <td>{selectedJourney.trainComposition.maxAxleWeight} tonnes</td>
                             </tr>

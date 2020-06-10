@@ -7,8 +7,8 @@ export default function CloneComposition({ selectedJourney, setTrain }) {
     const [copiedJourneySectionUrl, setCopiedJourneySectionUrl] = useState('')
 
     const hasComposition = () => {
-        const { trainComposition: { wagons, tractions } } = selectedJourney
-        return Boolean(wagons.length || tractions.length)
+        const { trainComposition: { rollingStock } } = selectedJourney
+        return Boolean(rollingStock?.length)
     }
 
     const copiedJourneySectionUrlHandler = () => {

@@ -8,7 +8,7 @@ export default function Innerbar({
     train, setShowCreateJourney, setShowEditJourney,
     selectedJourney, setSelectedJourney,
     setShowCreateTraction, setShowCreateWagon,
-    setTrain, setJourneyAndTrainHandler }) {
+    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain }) {
 
 
     return (
@@ -40,6 +40,8 @@ export default function Innerbar({
                     setShowCreateWagon={setShowCreateWagon}
                     setTrain={setTrain}
                     setJourneyAndTrainHandler={setJourneyAndTrainHandler}
+                    showEditMode={showEditMode}
+                    fetchTrain={fetchTrain}
                 />
             </div>
 

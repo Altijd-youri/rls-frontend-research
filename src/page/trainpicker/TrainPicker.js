@@ -5,6 +5,7 @@ import CreateTrain from './createTrain/CreateTrain'
 import EditTrain from './editTrain/EditTrain'
 import Spinner from 'react-bootstrap/Spinner'
 import TrainService from '../../api/trains';
+import { errorAlert } from '../../utils/Alerts'
 
 export default function TrainPicker() {
     const [showCreateTrain, setShowCreateTrain] = useState(false);
@@ -15,14 +16,23 @@ export default function TrainPicker() {
     const [trains, setTrains] = useState([]);
 
     useEffect(() => {
-        const fetchTrains = async () => {
-            setLoading(true);
-            const { data, error } = await TrainService.getTrains();
-            data ? setTrains(data) : setError(error);
-            setLoading(false);
-        }
         fetchTrains();
     }, [])
+
+    const fetchTrains = async () => {
+        setLoading(true);
+        try {
+            const { data, error } = await TrainService.getTrains();
+            if (data) {
+                setTrains(data);
+            } else {
+                throw new Error(error)
+            }
+        } catch (e) {
+            setError(e.message)
+        }
+        setLoading(false);
+    }
 
     function updateTrain(train) {
         let newTrainsList = trains.filter((t) => t.id !== train.id);
