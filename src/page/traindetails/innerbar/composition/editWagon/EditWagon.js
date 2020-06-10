@@ -25,7 +25,7 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
     }, [data])
 
     const [wagons, setWagons] = useState({ wagons: [], isFetching: false, error: '' });
-    const [form, setForm] = useState({ wagon: [], loadWeight: 0, brakeType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
+    const [form, setForm] = useState({ wagon: [], loadWeight: "0", brakeType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
 
     const addDangerGoodHandler = (dangerGood) => {
         setForm(prevState => ({ ...prevState, dangerGoods: [...prevState.dangerGoods, dangerGood] }))
@@ -59,7 +59,7 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
     }
 
     const validateForm = () => {
-        if (form.wagon.length && form.loadWeight && !form.isSubmitting) {
+        if (form.wagon.length && !form.isSubmitting) {
             return false;
         }
         return true;
@@ -83,7 +83,7 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
             stockIdentifier: parseInt(form.wagon[0].numberFreight),
             dangerGoodsInWagonPostDtos,
             brakeType: form.brakeType,
-            totalLoadWeight: form.loadWeight
+            totalLoadWeight: form.loadWeight === '' ? 0 : form.loadWeight
         }
 
         const { error } = await TrainCompositionService.updateStock(trainCompositionId, data.id, body);

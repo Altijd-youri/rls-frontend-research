@@ -5,7 +5,6 @@ import CreateTrain from './createTrain/CreateTrain'
 import EditTrain from './editTrain/EditTrain'
 import Spinner from 'react-bootstrap/Spinner'
 import TrainService from '../../api/trains';
-import { errorAlert } from '../../utils/Alerts'
 
 export default function TrainPicker() {
     const [showCreateTrain, setShowCreateTrain] = useState(false);

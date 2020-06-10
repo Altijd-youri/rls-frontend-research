@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Innerbar from './innerbar/Innerbar'
 import { useParams, useHistory } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
@@ -31,9 +31,22 @@ export default function TrainDetails() {
 
     const { trainid } = useParams();
     const history = useHistory();
+
+
+    const getTrain = useCallback(async () => {
+        setFetchingTrain(true);
+        const { data } = await TrainService.getTrain(trainid);
+        if (data) {
+            setTrain(data);
+        } else {
+            history.push('/')
+        }
+        setFetchingTrain(false);
+    }, [history, trainid])
+
     useEffect(() => {
         getTrain();
-    }, [trainid])
+    }, [getTrain])
 
     useEffect(() => {
         if (selectedJourney) {
@@ -50,17 +63,6 @@ export default function TrainDetails() {
         setShowCreateWagon(false);
         setShowCreateJourney(false);
         setShowEditJourney(false);
-    }
-
-    const getTrain = async () => {
-        setFetchingTrain(true);
-        const { data } = await TrainService.getTrain(trainid);
-        if (data) {
-            setTrain(data);
-        } else {
-            history.push('/')
-        }
-        setFetchingTrain(false);
     }
 
     const showEditJourneyHandler = () => {

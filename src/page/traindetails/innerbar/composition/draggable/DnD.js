@@ -53,7 +53,7 @@ export default function DnD({ selectedJourney, setTrainCompositionHandler, showE
             }
         }
         moveStock(draggedStock.id, body)
-    }, [items, selectedJourney.trainComposition.id])
+    }, [items, selectedJourney.trainComposition.id, fetchTrain])
 
 
     return (

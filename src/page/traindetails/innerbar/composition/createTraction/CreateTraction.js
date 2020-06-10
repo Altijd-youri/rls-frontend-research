@@ -59,7 +59,7 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
             stockIdentifier: parseInt(selectedLocoTypeNumber),
         }
 
-        const { data, error } = await TrainCompositionService.saveStock(trainCompositionId, body);
+        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body);
         if (error) {
             errorAlert(error)
         } else {
