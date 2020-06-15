@@ -2,27 +2,41 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Statistics from './statistics/Statistics'
 import DnD from './draggable/DnD'
+import CloneComposition from './cloneComposition/CloneComposition'
 
-export default function Composition({ train, selectedJourney, setShowCreateTraction, setShowCreateWagon }) {
+export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain }) {
 
+    const setTrainCompositionHandler = (stockId) => {
+        const { trainComposition } = selectedJourney
+        const updatedRollingStock = trainComposition.rollingStock.filter((item) => item.id !== stockId)
+        const updatedTrainComposition = { ...trainComposition, rollingStock: updatedRollingStock }
+        const updatedSelectedJourney = { ...selectedJourney, trainComposition: updatedTrainComposition }
+        setJourneyAndTrainHandler(updatedSelectedJourney);
+    }
 
     return (
         <>
             <div className="jp-header d-flex w-100 align-items-center justify-content-between pl-4 pr-4">
                 <h5>Composition</h5>
-                {selectedJourney && <><Button
-                    className="ml-auto mr-2"
-                    variant="outline-secondary"
-                    size="sm"
-                    onClick={setShowCreateTraction}>
-                    ADD TRACTION
-                </Button>
+                {selectedJourney && <div className="d-flex justify-content-center align-items-center">
+                    <CloneComposition
+                        selectedJourney={selectedJourney}
+                        setTrain={setTrain}
+                    />
+                    <Button
+                        className="mr-2"
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={setShowCreateTraction}>
+                        ADD TRACTION
+                    </Button>
                     <Button
                         variant="outline-secondary"
                         size="sm"
                         onClick={setShowCreateWagon}>
                         ADD WAGON
-                </Button></>}
+                    </Button>
+                </div>}
             </div>
 
             {selectedJourney &&
@@ -30,10 +44,12 @@ export default function Composition({ train, selectedJourney, setShowCreateTract
                     <div style={{ overflow: "auto" }}>
                         <Statistics selectedJourney={selectedJourney} />
                     </div>
-                    <div>
-                        <DnD selectedJourney={selectedJourney} />
-                    </div>
-
+                    <DnD
+                        showEditMode={showEditMode}
+                        selectedJourney={selectedJourney}
+                        setTrainCompositionHandler={setTrainCompositionHandler}
+                        fetchTrain={fetchTrain}
+                    />
                 </>
             }
 

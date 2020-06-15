@@ -8,7 +8,7 @@ import LocationsService from '../../../../../api/locations';
 
 import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 
-export default function EditJourney({ onHide, train, selectedJourney, setJourneySection }) {
+export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrainHandler }) {
 
     useEffect(() => {
         setActivities(selectedJourney.activities)
@@ -57,7 +57,7 @@ export default function EditJourney({ onHide, train, selectedJourney, setJourney
         if (data) {
             callback(data);
         } else {
-            console.log(error);
+            errorAlert(error.message);
         }
     }
 
@@ -117,7 +117,7 @@ export default function EditJourney({ onHide, train, selectedJourney, setJourney
         const saveJourney = async (url, body) => {
             const { data, error } = await TrainService.editJourney(url, body);
             if (data) {
-                setJourneySection(data)
+                setJourneyAndTrainHandler(data)
                 succeedAlert();
             } else {
                 setError(error.message);

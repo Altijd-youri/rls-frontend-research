@@ -21,6 +21,7 @@ export const ENDPOINTS = {
     WAGONS: `${process.env.REACT_APP_ENDPOINT}/api/v1/wagons`,
     TRACTIONMODES: `${process.env.REACT_APP_ENDPOINT}/api/v1/tractionmodes`,
     TRAINCOMPOSITIONS: `${process.env.REACT_APP_ENDPOINT}/api/v1/traincompositions`,
+    DANGERGOODSTYPES: `${process.env.REACT_APP_ENDPOINT}/api/v1/dangergoodstypes`,
 }
 
 export const TRAIN_TYPES = [

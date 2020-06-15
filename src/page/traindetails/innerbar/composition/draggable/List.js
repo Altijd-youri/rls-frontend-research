@@ -2,19 +2,21 @@ import React from 'react'
 import { Droppable } from 'react-beautiful-dnd';
 import Item from './Item';
 
-export default function List({ data }) {
-
+export default function List({ data, trainCompositionId, setTrainCompositionHandler, showEditMode }) {
     const grid = 8;
 
     const getListStyle = isDraggingOver => ({
         background: isDraggingOver ? 'lightblue' : 'lightgrey',
         display: 'flex',
         padding: grid,
-        overflow: 'auto',
+        overflow: 'auto'
     });
 
     return (
-        <Droppable droppableId="droppable" direction="horizontal">
+        <Droppable
+            droppableId="droppable"
+            direction="horizontal"
+        >
             {(provided, snapshot) => (
                 <div
                     ref={provided.innerRef}
@@ -22,7 +24,14 @@ export default function List({ data }) {
                     {...provided.droppableProps}
                 >
                     {data.map((item, index) => (
-                        <Item key={index} item={item} index={index} />
+                        <Item
+                            showEditMode={showEditMode}
+                            key={index}
+                            item={item}
+                            index={index}
+                            trainCompositionId={trainCompositionId}
+                            setTrainCompositionHandler={setTrainCompositionHandler}
+                        />
                     ))}
                     {provided.placeholder}
                 </div>

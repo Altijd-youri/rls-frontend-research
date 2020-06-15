@@ -1,25 +1,62 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd';
+import { Wagon, Traction, Driver } from '../../../../../utils/icons/composition';
+import TrainCompositionService from '../../../../../api/traincomposition';
+import { succeedAlert, errorAlert, confirmAlert } from '../../../../../utils/Alerts';
 
-export default function Item({ item, index }) {
+export default function Item({ item, index, trainCompositionId, setTrainCompositionHandler, showEditMode }) {
     const grid = 8;
     const getItemStyle = (isDragging, draggableStyle) => ({
-        // some basic styles to make the items look a bit nicer
         userSelect: 'none',
-        padding: grid * 2,
+        paddingLeft: grid * 2,
+        paddingRight: grid * 2,
         margin: `0 ${grid}px 0 0`,
-
-        // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
-
-        // styles we need to apply on draggables
+        background: isDragging ? 'lightgreen' : 'white',
+        height: "100px",
         ...draggableStyle,
     });
 
-    return (<>
+    const deleteItem = () => {
+        confirmAlert(async () => {
+            try {
+                const { error } = await TrainCompositionService.deleteStock(trainCompositionId, item.id)
+                if (error) throw new Error(error)
+                succeedAlert()
+                setTrainCompositionHandler(item.id)
+            } catch (e) {
+                const errorMessage = (e instanceof String) ? e : e.message
+                errorAlert(errorMessage)
+            }
+        })
+    }
+
+    const renderDriver = () => {
+        const { traction } = item
+        if (traction) {
+            return item.driverIndication ? Driver() : null
+        }
+    }
+
+    const Icon = () => {
+        const { wagon } = item
+        return wagon ? Wagon(wagon.code) : Traction()
+    }
+
+    const getIdentifier = () => {
+        const { wagon, traction } = item
+        return wagon ? wagon.numberFreight : traction.locoNumber
+    }
+
+    const getWeight = () => {
+        return (<span>{`${Math.round((item.totalWeight / 1000) * 10) / 10} T`}</span>)
+    }
+
+    return (
         <Draggable key={item.id} draggableId={String(index)} index={index}>
             {(provided, snapshot) => (
                 <div
+                    onClick={() => showEditMode(item)}
+                    className="d-flex flex-column"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -28,9 +65,26 @@ export default function Item({ item, index }) {
                         provided.draggableProps.style
                     )}
                 >
-                    Pos: {item.position}
+                    {/* Header: Identifier */}
+                    <div className="d-flex">
+                        <span>{getIdentifier()}</span>
+                        <span style={{ marginLeft: "10px", cursor: "pointer", color: "red" }} onClick={deleteItem}>
+                            <li className="far fa-minus-square" />
+                        </span>
+                    </div>
+
+                    {/* Body: Icon/Weight */}
+                    <div className="d-flex justify-content-between align-items-center">
+                        {Icon()}
+                        {getWeight()}
+                    </div>
+
+                    {/* Footer: hasDriver/Dangerlabel */}
+                    <div className="d-flex justify-content-begin align-items-center">
+                        {renderDriver()}
+                    </div>
                 </div>
             )}
-        </Draggable></>
+        </Draggable>
     )
 }

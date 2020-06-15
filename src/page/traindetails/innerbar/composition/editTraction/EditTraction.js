@@ -2,17 +2,25 @@ import React, { useState, useEffect } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead';
 import TractionService from '../../../../../api/tractions';
 import TrainCompositionService from '../../../../../api/traincomposition';
-import './CreateTraction.scoped.css';
-import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
+import '../createTraction/CreateTraction.scoped.css';
+import { succeedAlert } from '../../../../../utils/Alerts';
 import JourneySectionService from '../../../../../api/journeysections';
 
-export default function CreateTraction({ onHide, selectedJourney, setSelectedJourney }) {
+export default function EditTraction({ onHide, selectedJourney, setSelectedJourney, data }) {
     useEffect(() => {
         fetchTractions();
     }, [])
 
     const [tractions, setTractions] = useState({ tractions: [], isFetching: false, error: '' });
     const [form, setForm] = useState({ traction: [], hasDriver: false, isSubmitting: false, error: '' })
+
+    useEffect(() => {
+        setForm(prevState => ({
+            ...prevState,
+            hasDriver: Boolean(data.driverIndication),
+            traction: [data.traction],
+        }))
+    }, [data])
 
     const setTractionHandler = traction => {
         setForm(prevState => ({ ...prevState, traction }))
@@ -33,7 +41,7 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
     }
 
     const validateForm = () => {
-        if (form.traction.length && !form.isSubmitting) {
+        if (form?.traction?.length && !form?.isSubmitting) {
             return false;
         }
         return true;
@@ -41,50 +49,36 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
 
     const submitForm = async (event) => {
         event.preventDefault();
-        const selectedLocoTypeNumber = form.traction[0].locoTypeNumber
-        const containsStock = selectedJourney.trainComposition.rollingStock.some(stock => {
-            return stock?.traction?.locoTypeNumber === selectedLocoTypeNumber
-        });
+        setForm(prevState => ({ ...prevState, isSubmitting: true }))
 
-        if (containsStock) {
-            return setForm(prevState => ({ ...prevState, error: 'Stock exists in current composition' }));
-        }
-
-        setForm(prevState => ({ ...prevState, isSubmitting: true, error: '' }))
         const trainCompositionId = selectedJourney.trainComposition.id;
 
         const body = {
             stockType: "traction",
             driverIndication: form.hasDriver,
-            stockIdentifier: parseInt(selectedLocoTypeNumber),
+            stockIdentifier: parseInt(form.traction[0].locoTypeNumber),
         }
 
-        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body);
+        const { error } = await TrainCompositionService.updateStock(trainCompositionId, data.id, body);
         if (error) {
-            errorAlert(error)
+            setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
         } else {
             const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id)
             if (error) {
                 setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
-                errorAlert(error)
             } else {
                 setSelectedJourney(data)
-                setForm(prevState => ({ ...prevState, isSubmitting: false }));
                 succeedAlert();
-                resetForm();
+                setForm(prevState => ({ ...prevState, isSubmitting: false }));
             }
         }
-    }
-
-    const resetForm = () => {
-        setForm({ traction: [], hasDriver: false, isSubmitting: false, error: '' })
     }
 
     return (
         <div className="rightbar">
             <div className="top">
                 <h4>
-                    Add Traction
+                    Edit Traction
                 </h4>
                 <span onClick={onHide}>
                     <li className="fa fa-times" />
@@ -119,7 +113,7 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
                 <div className="btn-submit">
                     <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm()}
                         type="submit">
-                        ADD
+                        UPDATE TRACTION
                     </button>
                 </div>
 
