@@ -100,7 +100,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <input
                         id="brakeWeightG"
                         type="number"
-                        pattern="[0-9]{6}"
+                        pattern="^[1-9][0-9]{0,5}$"
                         title="Must contain at least one and max 6 numbers"
                         name="brakeWeightG"
                         maxLength="6"
@@ -110,7 +110,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightG">
-                        brakeWeightG
+                        Brake Weight G (in tons)
                     </label>
                     {form.brakeWeightG.error && <p>{form.brakeWeightG.error}</p>}
                 </div>
@@ -119,7 +119,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <input
                         id="brakeWeightP"
                         type="number"
-                        pattern="[0-9]{6}"
+                        pattern="^[1-9][0-9]{0,5}$"
                         title="Must contain at least one and max 6 numbers"
                         name="brakeWeightP"
                         maxLength="6"
@@ -129,7 +129,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightP">
-                        brakeWeightP
+                        Brake Weight P (in tons)
                     </label>
                     {form.brakeWeightP.error && <p>{form.brakeWeightP.error}</p>}
                 </div>
@@ -148,7 +148,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="code">
-                        code
+                        Code
                     </label>
                     {form.code.error && <p>{form.code.error}</p>}
                 </div>
@@ -157,7 +157,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <input
                         id="lengthOverBuffers"
                         type="number"
-                        pattern="[0-9]{6}"
+                        pattern="^[1-9][0-9]{0,5}$"
                         maxLength="6"
                         title="Must contain at least one and max 6 numbers"
                         name="lengthOverBuffers"
@@ -167,7 +167,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="lengthOverBuffers">
-                        lengthOverBuffers
+                        Length Over Buffers (in meters)
                     </label>
                     {form.lengthOverBuffers.error && <p>{form.lengthOverBuffers.error}</p>}
                 </div>
@@ -186,7 +186,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="locoNumber">
-                        locoNumber
+                        loco Number
                     </label>
                     {form.locoNumber.error && <p>{form.locoNumber.error}</p>}
                 </div>
@@ -205,7 +205,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="locoTypeNumber">
-                        locoTypeNumber
+                        loco Type Number
                     </label>
                     {form.locoTypeNumber.error && <p>{form.locoTypeNumber.error}</p>}
                 </div>
@@ -214,7 +214,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <input
                         id="numberOfAxles"
                         type="number"
-                        pattern="[0-9]{6}"
+                        pattern="^[1-9][0-9]{0,5}$"
                         title="Must contain at least one and max 6 numbers"
                         name="numberOfAxles"
                         maxLength="6"
@@ -224,7 +224,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="numberOfAxles">
-                        numberOfAxles
+                        Number of Axles
                     </label>
                     {form.numberOfAxles.error && <p>{form.numberOfAxles.error}</p>}
                 </div>
@@ -243,7 +243,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="tractionType">
-                        tractionType
+                        Traction Type
                     </label>
                     {form.tractionType.error && <p>{form.tractionType.error}</p>}
                 </div>
@@ -262,7 +262,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="typeName">
-                        typeName
+                        Type Name
                     </label>
                     {form.typeName.error && <p>{form.typeName.error}</p>}
                 </div>
@@ -271,7 +271,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <input
                         id="weight"
                         type="number"
-                        pattern="[0-9]{6}"
+                        pattern="^[1-9][0-9]{0,5}$"
                         title="Must contain at least one and max 6 numbers"
                         name="weight"
                         maxLength="6"
@@ -281,7 +281,7 @@ export default function CreateTraction({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="weight">
-                        weight
+                        Weight (in tons)
                     </label>
                     {form.weight.error && <p>{form.weight.error}</p>}
                 </div>

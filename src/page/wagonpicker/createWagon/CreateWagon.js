@@ -105,7 +105,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightG">
-                        brakeWeightG
+                        Brake Weight G (in tons)
                     </label>
                     {form.brakeWeightG.error && <p>{form.brakeWeightG.error}</p>}
                 </div>
@@ -124,7 +124,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightP">
-                        brakeWeightP
+                        Brake Weight P (in tons)
                     </label>
                     {form.brakeWeightP.error && <p>{form.brakeWeightP.error}</p>}
                 </div>
@@ -143,7 +143,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="code">
-                        code
+                        Code
                     </label>
                     {form.code.error && <p>{form.code.error}</p>}
                 </div>
@@ -162,7 +162,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="lengthOverBuffers">
-                        lengthOverBuffers
+                        Length Over Buffers (in meters)
                     </label>
                     {form.lengthOverBuffers.error && <p>{form.lengthOverBuffers.error}</p>}
                 </div>
@@ -181,7 +181,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="maxSpeed">
-                        maxSpeed
+                        Max Speed (in km/h)
                     </label>
                     {form.maxSpeed.error && <p>{form.maxSpeed.error}</p>}
                 </div>
@@ -200,7 +200,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="numberFreight">
-                        numberFreight
+                        Number Freight
                     </label>
                     {form.numberFreight.error && <p>{form.numberFreight.error}</p>}
                 </div>
@@ -219,7 +219,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="numberOfAxles">
-                        numberOfAxles
+                        Number Of Axles
                     </label>
                     {form.numberOfAxles.error && <p>{form.numberOfAxles.error}</p>}
                 </div>
@@ -238,7 +238,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="typeName">
-                        typeName
+                        Type Name
                     </label>
                     {form.typeName.error && <p>{form.typeName.error}</p>}
                 </div>
@@ -257,7 +257,7 @@ export default function CreateWagon({ onHide, onSave }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="weightEmpty">
-                        weightEmpty in tons
+                        Weight Empty (in tons)
                     </label>
                     {form.weightEmpty.error && <p>{form.weightEmpty.error}</p>}
                 </div>

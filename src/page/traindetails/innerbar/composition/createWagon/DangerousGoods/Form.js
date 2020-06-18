@@ -41,7 +41,7 @@ export default function Form({ setForm, dangerGoodsTypes, form, add }) {
                 <input
                     value={form.weight}
                     onChange={setWeightHandler}
-                    placeholder="Load weight"
+                    placeholder="Load weight (in kilos)"
                     type="number"
                     name="loadweight"
                 />
