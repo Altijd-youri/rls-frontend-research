@@ -2,6 +2,8 @@ export const PATH = {
     HOME: '/',
     TRAINS: '/trains',
     TRAINDETAILS: '/train/:trainid/details',
+    TRACTIONS: '/tractions',
+    WAGONS: '/wagons',
 }
 
 export const trainTypes = [

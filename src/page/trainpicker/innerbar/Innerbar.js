@@ -18,7 +18,6 @@ export default function Innerbar({ onCreateTrain, onEditTrain, trains }) {
                 </div>
                 <TrainTable onEditTrain={onEditTrain} trains={trains} />
             </div>
-
         </div>
     )
 }

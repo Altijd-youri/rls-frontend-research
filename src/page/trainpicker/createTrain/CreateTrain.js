@@ -79,7 +79,6 @@ export default function CreateTrain({ onHide, setTrains }) {
             </div>
 
             <form onSubmit={submitForm} className="form-wrapper">
-
                 <div className="train-number">
                     <input value={form.trainNumber} onChange={setTrainNumberHandler} placeholder="Train number.."
                         type="number" pattern="[0-9]{6}" name="trainNumber" maxLength="6" required />
@@ -134,8 +133,6 @@ export default function CreateTrain({ onHide, setTrains }) {
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
                 </div>
-
-
 
                 <div className="btn-submit">
                     <button style={{ cursor: validateForm() ? 'no-drop' : 'pointer' }} disabled={validateForm()}

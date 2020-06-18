@@ -8,6 +8,13 @@ class TractionService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+
+    saveTraction(body) {
+        return super
+            .fetch(`${ENDPOINTS.TRACTIONS}`, 'POST', body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error)));
+    }
 }
 
 export default new TractionService();

@@ -17,8 +17,14 @@ export default function Sidebar() {
 
             <nav className="menu">
                 <ul>
-                    <li className="active">
+                    <li>
                         <NavLink activeClassName="active" to={PATH.TRAINS}>Manage trains</NavLink>
+                    </li>
+                    <li>
+                        <NavLink activeClassName="active" to={PATH.TRACTIONS}>Manage tractions</NavLink>
+                    </li>
+                    <li>
+                        <NavLink activeClassName="active" to={PATH.WAGONS}>Manage wagons</NavLink>
                     </li>
                 </ul>
             </nav>
