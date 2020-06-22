@@ -12,7 +12,7 @@ export default function Statistics({ selectedJourney }) {
                                 <th>Number of vehicles</th>
                                 <td>{selectedJourney.trainComposition.numberOfVehicles} vehicles</td>
                                 <th>Brake percentage</th>
-                                <td>{selectedJourney.trainComposition.brakeWeight}%</td>
+                                <td>{selectedJourney.trainComposition.brakeWeight / selectedJourney.trainComposition.weight * 100}%</td>
                                 <th>Dangerous goods</th>
                                 <td>{selectedJourney.trainComposition.containsDangerousGoods === true ? 'Yes' : 'No'}</td>
                             </tr>
