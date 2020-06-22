@@ -3,13 +3,12 @@ import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
 import TractionService from '../../api/tractions';
 import TractionTable from './table/TractionTable';
-import CreateTraction from './createTraction/CreateTraction';
-import EditTraction from './editTraction/EditTraction';
+import ManageTraction from './manageTraction/ManageTraction';
 
 export default function TrainPicker() {
     const [tractions, setTractions] = useState({ data: [], isFetching: false, error: '' });
 
-    const initSidebar = { showEditTraction: false, showCreateTraction: false, data: undefined }
+    const initSidebar = { showManageTraction: false, data: undefined }
     const [sidebar, setSidebar] = useState(initSidebar)
 
     useEffect(() => {
@@ -37,13 +36,13 @@ export default function TrainPicker() {
     const editTractionHandler = (traction) => {
         closeAllSidebars();
         if (traction) {
-            setSidebar(prevState => ({ ...prevState, data: tractions, showEditTraction: true }))
+            setSidebar(prevState => ({ ...prevState, data: traction, showManageTraction: true }))
         }
     }
 
     const createTractionHandler = () => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showCreateTraction: true }))
+        setSidebar(prevState => ({ ...prevState, showManageTraction: true }))
     }
 
     if (tractions.isFetching) {
@@ -79,17 +78,11 @@ export default function TrainPicker() {
                 </div>
             </div>
 
-            {sidebar.showCreateTraction &&
-                <CreateTraction
+            {sidebar.showManageTraction &&
+                <ManageTraction
                     onHide={closeAllSidebars}
                     onSave={setTractions}
-                />}
-
-            {sidebar.showEditTraction &&
-                <EditTraction
-                    traction={sidebar.data}
-                    onHide={closeAllSidebars}
-                    onSave={setTractions}
+                    tractionDTO={sidebar.data}
                 />}
         </div>
     )

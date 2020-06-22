@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import WagonService from "../../../api/wagon";
 
-export default function CreateWagon({ onHide, onSave }) {
+export default function ManageWagon({ onHide, onSave, wagonDTO }) {
     const [isFetching, setFetching] = useState(false);
+    const [editMode] = useState(wagonDTO ? true : false)
 
     const initForm = {
         brakeWeightG: {
@@ -37,6 +38,10 @@ export default function CreateWagon({ onHide, onSave }) {
     }
     const [form, setForm] = useState(initForm);
 
+    useEffect(() => {
+
+    }, [wagonDTO])
+
     const submitForm = async (event) => {
         event.preventDefault();
         setFetching(true);
@@ -56,7 +61,7 @@ export default function CreateWagon({ onHide, onSave }) {
             weightEmpty: params.get('weightEmpty')
         }
 
-        const result = await WagonService.saveWagon(body);
+        const result = editMode ? await WagonService.editWagon(body) : await WagonService.saveWagon(body)
         try {
             if (result.data) {
                 onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
@@ -83,7 +88,7 @@ export default function CreateWagon({ onHide, onSave }) {
         <div className="rightbar">
             <div className="top">
                 <h4>
-                    Create Wagon
+                    {editMode ? "Edit" : "Create"} Wagon
                 </h4>
                 <span onClick={onHide}>
                     <li className="fa fa-times" />
@@ -93,6 +98,8 @@ export default function CreateWagon({ onHide, onSave }) {
             <form onSubmit={submitForm} className="form-wrapper">
                 <div className="form-group">
                     <input
+                        key={`brakeWeightG || ${wagonDTO?.brakeWeightG}`}
+                        defaultValue={wagonDTO?.brakeWeightG}
                         id="brakeWeightG"
                         type="number"
                         pattern="^[1-9][0-9]{0,2}$"
@@ -112,6 +119,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`brakeWeightP || ${wagonDTO?.brakeWeightP}`}
+                        defaultValue={wagonDTO?.brakeWeightP}
                         id="brakeWeightP"
                         type="number"
                         pattern="^[1-9][0-9]{0,2}$"
@@ -131,6 +140,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`code || ${wagonDTO?.code}`}
+                        defaultValue={wagonDTO?.code}
                         id="code"
                         type="text"
                         pattern="[a-zA-Z]{0,12}"
@@ -150,6 +161,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`lengthOverBuffers || ${wagonDTO?.lengthOverBuffers}`}
+                        defaultValue={wagonDTO?.lengthOverBuffers}
                         id="lengthOverBuffers"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -169,6 +182,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`maxSpeed || ${wagonDTO?.maxSpeed}`}
+                        defaultValue={wagonDTO?.maxSpeed}
                         id="maxSpeed"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -188,9 +203,11 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`numberFreight || ${wagonDTO?.numberFreight}`}
+                        defaultValue={wagonDTO?.numberFreight}
                         id="numberFreight"
                         type="text"
-                        pattern="[a-zA-Z]{12}"
+                        pattern="^.{1,12}$"
                         title="Must contain 12 characters"
                         name="numberFreight"
                         maxLength="12"
@@ -207,6 +224,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`wagonNumberOfAxles || ${wagonDTO?.wagonNumberOfAxles}`}
+                        defaultValue={wagonDTO?.wagonNumberOfAxles}
                         id="numberOfAxles"
                         type="number"
                         pattern="^[1-9][0-9]{0,2}$"
@@ -226,6 +245,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`typeName || ${wagonDTO?.typeName}`}
+                        defaultValue={wagonDTO?.typeName}
                         id="typeName"
                         type="text"
                         pattern="[a-zA-Z]{0,12}"
@@ -245,6 +266,8 @@ export default function CreateWagon({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`weightEmpty || ${wagonDTO?.weightEmpty}`}
+                        defaultValue={wagonDTO?.weightEmpty}
                         id="weightEmpty"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -267,7 +290,7 @@ export default function CreateWagon({ onHide, onSave }) {
                         {isFetching
                             ? (<><span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                 <span className="sr-only">Loading...</span></>)
-                            : "ADD"
+                            : editMode ? "EDIT" : "ADD"
                         }
                     </button>
                 </div>

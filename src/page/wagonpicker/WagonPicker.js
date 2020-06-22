@@ -3,7 +3,7 @@ import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
 import WagonService from '../../api/wagon';
 import WagonTable from './table/WagonTable';
-import CreateWagon from './createWagon/CreateWagon';
+import ManageWagon from './manageWagon/ManageWagon';
 export default function WagonPicker() {
     const [wagons, setWagons] = useState({ data: [], isFetching: false, error: '' });
 
@@ -35,7 +35,7 @@ export default function WagonPicker() {
     const editWagonHandler = (wagon) => {
         closeAllSidebars();
         if (wagon) {
-            setSidebar(prevState => ({ ...prevState, data: wagons, showEditWagon: true }))
+            setSidebar(prevState => ({ ...prevState, data: wagon, showCreateWagon: true }))
         }
     }
 
@@ -78,9 +78,10 @@ export default function WagonPicker() {
             </div>
 
             {sidebar.showCreateWagon &&
-                <CreateWagon
+                <ManageWagon
                     onHide={closeAllSidebars}
                     onSave={setWagons}
+                    wagonDTO={sidebar.data}
                 />}
 
             {/* {sidebar.showEditTraction &&

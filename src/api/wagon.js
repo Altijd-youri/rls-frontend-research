@@ -15,6 +15,13 @@ class WagonService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+
+    editWagon(body) {
+        return super
+            .fetch(`${ENDPOINTS.WAGONS}`, 'PUT', body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 }
 
 export default new WagonService();

@@ -48,3 +48,20 @@ export const TRAIN_TYPES = [
         "description": "Engineering train Train for measurement, maintenance, instructions, homologation, etc"
     },
 ];
+
+// * Identifies the type of a locomotive: First digit:
+export const POWER_SUPPLY = [
+    { key: 0, value: "Not specified" },
+    { key: 1, value: "External electric power supply for traction (catenary and pantograph, third rail or other such as maglev" },
+    { key: 2, value: "On-board traction power supply for traction without external electrical or other power supply available" },
+    { key: 3, value: "Hybrid traction (both on-board or electric traction available" },
+]
+
+// * Second digit(definitions in chapter 2.2.2 of the LOC and PAS TSI 1302 / 2014):
+export const TRACTION_UNIT = [
+    { key: 0, value: "Not specified" },
+    { key: 1, value: "Locomotive or power unit" },
+    { key: 2, value: "Trainset or multiple unit or railcar" },
+    { key: 3, value: "Shunter" },
+    { key: 4, value: "On track machine or infrastructure inspection vehicle" },
+]

@@ -1,10 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import TractionService from "../../../api/tractions";
+import { POWER_SUPPLY, TRACTION_UNIT } from '../../../utils/constants';
 
-export default function CreateTraction({ onHide, onSave }) {
+export default function ManageTraction({ onHide, onSave, tractionDTO }) {
     const [isFetching, setFetching] = useState(false);
+    const [editMode] = useState(tractionDTO ? true : false);
+    const [powerSupply, setPowerSupply] = useState(0);
+    const [tractionUnit, setTractionUnit] = useState(0);
+
+    useEffect(() => {
+        if (tractionDTO) {
+            const code = tractionDTO.tractionType?.code;
+            if (code) {
+                const charArray = Array.from(code);
+                if (charArray.length === 2) {
+                    setPowerSupply(POWER_SUPPLY[charArray[0]].key)
+                    setTractionUnit(TRACTION_UNIT[charArray[1]].key)
+                }
+            }
+        } else {
+            setPowerSupply(0);
+            setTractionUnit(0);
+        }
+    }, [tractionDTO])
 
     const initForm = {
         brakeWeightG: {
@@ -56,12 +76,12 @@ export default function CreateTraction({ onHide, onSave }) {
             locoNumber: params.get('locoNumber'),
             locoTypeNumber: params.get('locoTypeNumber'),
             numberOfAxles: params.get('numberOfAxles'),
-            tractionType: params.get('tractionType'),
             typeName: params.get('typeName'),
-            weight: params.get('weight')
+            weight: params.get('weight'),
+            tractionType: `${powerSupply}${tractionUnit}`
         }
 
-        const result = await TractionService.saveTraction(body);
+        const result = editMode ? TractionService.editTraction(body) : await TractionService.saveTraction(body);
         try {
             if (result.data) {
                 onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
@@ -88,7 +108,7 @@ export default function CreateTraction({ onHide, onSave }) {
         <div className="rightbar">
             <div className="top">
                 <h4>
-                    Create Traction
+                    {editMode ? "Edit" : "Create"} Traction
                 </h4>
                 <span onClick={onHide}>
                     <li className="fa fa-times" />
@@ -98,6 +118,8 @@ export default function CreateTraction({ onHide, onSave }) {
             <form onSubmit={submitForm} className="form-wrapper">
                 <div className="form-group">
                     <input
+                        key={`brakeWeightG || ${tractionDTO?.brakeWeightG}`}
+                        defaultValue={tractionDTO?.brakeWeightG}
                         id="brakeWeightG"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -117,6 +139,8 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`brakeWeightP || ${tractionDTO?.brakeWeightP}`}
+                        defaultValue={tractionDTO?.brakeWeightP}
                         id="brakeWeightP"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -136,6 +160,8 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`code || ${tractionDTO?.code}`}
+                        defaultValue={tractionDTO?.code}
                         id="code"
                         type="text"
                         pattern="[a-zA-Z]{0,12}"
@@ -155,6 +181,8 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`lengthOverBuffers || ${tractionDTO?.lengthOverBuffers}`}
+                        defaultValue={tractionDTO?.lengthOverBuffers}
                         id="lengthOverBuffers"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -174,9 +202,11 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`locoNumber || ${tractionDTO?.locoNumber}`}
+                        defaultValue={tractionDTO?.locoNumber}
                         id="locoNumber"
                         type="text"
-                        pattern="[a-zA-Z]{5,12}"
+                        pattern="^.{5,12}$"
                         title="Must contain at least 5 and max 12 characters"
                         name="locoNumber"
                         maxLength="12"
@@ -193,6 +223,8 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`locoTypeNumber || ${tractionDTO?.locoTypeNumber}`}
+                        defaultValue={tractionDTO?.locoTypeNumber}
                         id="locoTypeNumber"
                         type="number"
                         pattern="[0-9]{5,12}"
@@ -212,6 +244,8 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`numberOfAxles || ${tractionDTO?.numberOfAxles}`}
+                        defaultValue={tractionDTO?.numberOfAxles}
                         id="numberOfAxles"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -230,26 +264,53 @@ export default function CreateTraction({ onHide, onSave }) {
                 </div>
 
                 <div className="form-group">
-                    <input
-                        id="tractionType"
-                        type="text"
-                        pattern="[a-zA-Z]{0,12}"
-                        title="Must contain at least one and max 12 characters"
-                        name="tractionType"
-                        maxLength="12"
+                    <select
+                        onChange={({ target }) => setPowerSupply(target.value)}
+                        value={powerSupply}
+                        name="powerSupply"
                         className="form-control"
-                        required
-                    />
+                        id="powerSupply">
+                        {
+                            POWER_SUPPLY.map((item, index) => {
+                                return (
+                                    <option key={index} value={item.key}>{item.value}</option>
+                                )
+                            })
+                        }
+                    </select>
                     <label
                         className="form-control-placeholder"
-                        htmlFor="tractionType">
-                        Traction Type
+                        htmlFor="powerSupply">
+                        Power Supply
                     </label>
-                    {form.tractionType.error && <p>{form.tractionType.error}</p>}
+                </div>
+
+                <div className="form-group">
+                    <select
+                        onChange={({ target }) => setTractionUnit(target.value)}
+                        value={tractionUnit}
+                        name="tractionUnit"
+                        className="form-control"
+                        id="tractionUnit">
+                        {
+                            TRACTION_UNIT.map((item, index) => {
+                                return (
+                                    <option key={index} value={item.key}>{item.value}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="tractionUnit">
+                        Traction Unit
+                    </label>
                 </div>
 
                 <div className="form-group">
                     <input
+                        key={`typeName || ${tractionDTO?.typeName}`}
+                        defaultValue={tractionDTO?.typeName}
                         id="typeName"
                         type="text"
                         pattern="[a-zA-Z]{0,12}"
@@ -269,6 +330,8 @@ export default function CreateTraction({ onHide, onSave }) {
 
                 <div className="form-group">
                     <input
+                        key={`weight || ${tractionDTO?.weight}`}
+                        defaultValue={tractionDTO?.weight}
                         id="weight"
                         type="number"
                         pattern="^[1-9][0-9]{0,5}$"
@@ -291,7 +354,7 @@ export default function CreateTraction({ onHide, onSave }) {
                         {isFetching
                             ? (<><span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                 <span className="sr-only">Loading...</span></>)
-                            : "ADD"
+                            : editMode ? "EDIT" : "ADD"
                         }
                     </button>
                 </div>
