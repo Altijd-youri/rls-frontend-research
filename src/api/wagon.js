@@ -16,9 +16,9 @@ class WagonService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    editWagon(body) {
+    editWagon(wagonId, body) {
         return super
-            .fetch(`${ENDPOINTS.WAGONS}`, 'PUT', body)
+            .fetch(`${ENDPOINTS.WAGONS}/${wagonId}`, 'PUT', body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

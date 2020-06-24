@@ -9,9 +9,11 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
     const [editMode] = useState(tractionDTO ? true : false);
     const [powerSupply, setPowerSupply] = useState(0);
     const [tractionUnit, setTractionUnit] = useState(0);
+    const [title, setTitle] = useState('CREATE');
 
     useEffect(() => {
         if (tractionDTO) {
+            setTitle("EDIT");
             const code = tractionDTO.tractionType?.code;
             if (code) {
                 const charArray = Array.from(code);
@@ -21,6 +23,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                 }
             }
         } else {
+            setTitle("CREATE");
             setPowerSupply(0);
             setTractionUnit(0);
         }
@@ -60,7 +63,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
     }
     const [form, setForm] = useState(initForm);
 
-
     const submitForm = async (event) => {
         event.preventDefault();
         setFetching(true);
@@ -81,10 +83,23 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
             tractionType: `${powerSupply}${tractionUnit}`
         }
 
-        const result = editMode ? TractionService.editTraction(body) : await TractionService.saveTraction(body);
+        const result = editMode ? await TractionService.editTraction(tractionDTO.id, body) : await TractionService.saveTraction(body);
         try {
             if (result.data) {
-                onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
+                if (editMode) {
+                    onSave(prevState => {
+                        const newList = prevState.data.map((item) => {
+                            if (item.id === result.data.id) {
+                                return result.data;
+                            } else {
+                                return item;
+                            }
+                        })
+                        return ({ ...prevState, data: newList })
+                    })
+                } else {
+                    onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
+                }
                 succeedAlert()
             } else if (result?.error?.errors) {
                 result.error.errors.forEach(element => {
@@ -108,7 +123,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
         <div className="rightbar">
             <div className="top">
                 <h4>
-                    {editMode ? "Edit" : "Create"} Traction
+                    {title} TRACTION
                 </h4>
                 <span onClick={onHide}>
                     <li className="fa fa-times" />
@@ -122,8 +137,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.brakeWeightG}
                         id="brakeWeightG"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
-                        title="Must contain at least one and max 6 numbers"
                         name="brakeWeightG"
                         maxLength="6"
                         className="form-control"
@@ -143,8 +156,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.brakeWeightP}
                         id="brakeWeightP"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
-                        title="Must contain at least one and max 6 numbers"
                         name="brakeWeightP"
                         maxLength="6"
                         className="form-control"
@@ -164,8 +175,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.code}
                         id="code"
                         type="text"
-                        pattern="[a-zA-Z]{0,12}"
-                        title="Must contain at least one and max 12 characters"
                         name="code"
                         maxLength="12"
                         className="form-control"
@@ -185,9 +194,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.lengthOverBuffers}
                         id="lengthOverBuffers"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
                         maxLength="6"
-                        title="Must contain at least one and max 6 numbers"
                         name="lengthOverBuffers"
                         className="form-control"
                         required
@@ -206,8 +213,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.locoNumber}
                         id="locoNumber"
                         type="text"
-                        pattern="^.{5,12}$"
-                        title="Must contain at least 5 and max 12 characters"
                         name="locoNumber"
                         maxLength="12"
                         className="form-control"
@@ -227,8 +232,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.locoTypeNumber}
                         id="locoTypeNumber"
                         type="number"
-                        pattern="[0-9]{5,12}"
-                        title="Must contain at least 5 and max 6 numbers"
                         name="locoTypeNumber"
                         maxLength="12"
                         className="form-control"
@@ -248,8 +251,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.numberOfAxles}
                         id="numberOfAxles"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
-                        title="Must contain at least one and max 6 numbers"
                         name="numberOfAxles"
                         maxLength="6"
                         className="form-control"
@@ -313,8 +314,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.typeName}
                         id="typeName"
                         type="text"
-                        pattern="[a-zA-Z]{0,12}"
-                        title="Must contain at least one and max 12 characters"
                         name="typeName"
                         maxLength="12"
                         className="form-control"
@@ -334,8 +333,6 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         defaultValue={tractionDTO?.weight}
                         id="weight"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
-                        title="Must contain at least one and max 6 numbers"
                         name="weight"
                         maxLength="6"
                         className="form-control"
@@ -354,7 +351,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
                         {isFetching
                             ? (<><span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                 <span className="sr-only">Loading...</span></>)
-                            : editMode ? "EDIT" : "ADD"
+                            : `${title}`
                         }
                     </button>
                 </div>

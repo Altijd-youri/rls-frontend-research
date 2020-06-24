@@ -16,9 +16,9 @@ class TractionService extends FetchService {
             .catch((error) => Promise.reject(new Error(error)));
     }
 
-    editTraction(body) {
+    editTraction(tractionId, body) {
         return super
-            .fetch(`${ENDPOINTS.TRACTIONS}`, 'POST', body)
+            .fetch(`${ENDPOINTS.TRACTIONS}/${tractionId}`, 'PUT', body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error)));
     }

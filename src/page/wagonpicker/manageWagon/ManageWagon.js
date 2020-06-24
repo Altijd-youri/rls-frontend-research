@@ -6,6 +6,7 @@ import WagonService from "../../../api/wagon";
 export default function ManageWagon({ onHide, onSave, wagonDTO }) {
     const [isFetching, setFetching] = useState(false);
     const [editMode] = useState(wagonDTO ? true : false)
+    const [title, setTitle] = useState('CREATE');
 
     const initForm = {
         brakeWeightG: {
@@ -39,7 +40,11 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
     const [form, setForm] = useState(initForm);
 
     useEffect(() => {
-
+        if (wagonDTO) {
+            setTitle("EDIT");
+        } else {
+            setTitle("CREATE");
+        }
     }, [wagonDTO])
 
     const submitForm = async (event) => {
@@ -61,10 +66,23 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
             weightEmpty: params.get('weightEmpty')
         }
 
-        const result = editMode ? await WagonService.editWagon(body) : await WagonService.saveWagon(body)
+        const result = editMode ? await WagonService.editWagon(wagonDTO.id, body) : await WagonService.saveWagon(body)
         try {
             if (result.data) {
-                onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
+                if (editMode) {
+                    onSave(prevState => {
+                        const newList = prevState.data.map((item) => {
+                            if (item.id === result.data.id) {
+                                return result.data;
+                            } else {
+                                return item;
+                            }
+                        })
+                        return ({ ...prevState, data: newList })
+                    })
+                } else {
+                    onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
+                }
                 succeedAlert()
             } else if (result?.error?.errors) {
                 result.error.errors.forEach(element => {
@@ -88,7 +106,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
         <div className="rightbar">
             <div className="top">
                 <h4>
-                    {editMode ? "Edit" : "Create"} Wagon
+                    {title} WAGON
                 </h4>
                 <span onClick={onHide}>
                     <li className="fa fa-times" />
@@ -102,8 +120,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.brakeWeightG}
                         id="brakeWeightG"
                         type="number"
-                        pattern="^[1-9][0-9]{0,2}$"
-                        title="Must contain at least one and max 3 numbers"
                         name="brakeWeightG"
                         maxLength="3"
                         className="form-control"
@@ -123,8 +139,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.brakeWeightP}
                         id="brakeWeightP"
                         type="number"
-                        pattern="^[1-9][0-9]{0,2}$"
-                        title="Validation: "
                         name="brakeWeightP"
                         maxLength="3"
                         className="form-control"
@@ -144,8 +158,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.code}
                         id="code"
                         type="text"
-                        pattern="[a-zA-Z]{0,12}"
-                        title="Must contain at least one and max 12 characters"
                         name="code"
                         maxLength="12"
                         className="form-control"
@@ -165,9 +177,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.lengthOverBuffers}
                         id="lengthOverBuffers"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
                         maxLength="6"
-                        title="Must contain at least one and max 6 numbers"
                         name="lengthOverBuffers"
                         className="form-control"
                         required
@@ -186,8 +196,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.maxSpeed}
                         id="maxSpeed"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
-                        title="Must contain at least one and max 6 numbers"
                         name="maxSpeed"
                         maxLength="6"
                         className="form-control"
@@ -207,8 +215,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.numberFreight}
                         id="numberFreight"
                         type="text"
-                        pattern="^.{1,12}$"
-                        title="Must contain 12 characters"
                         name="numberFreight"
                         maxLength="12"
                         className="form-control"
@@ -228,8 +234,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.wagonNumberOfAxles}
                         id="numberOfAxles"
                         type="number"
-                        pattern="^[1-9][0-9]{0,2}$"
-                        title="Must contain at least one and max 3 numbers"
                         name="numberOfAxles"
                         maxLength="3"
                         className="form-control"
@@ -249,8 +253,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.typeName}
                         id="typeName"
                         type="text"
-                        pattern="[a-zA-Z]{0,12}"
-                        title="Must contain at least one and max 12 characters"
                         name="typeName"
                         maxLength="12"
                         className="form-control"
@@ -270,8 +272,6 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         defaultValue={wagonDTO?.weightEmpty}
                         id="weightEmpty"
                         type="number"
-                        pattern="^[1-9][0-9]{0,5}$"
-                        title="Must contain at least one and max 6 numbers"
                         name="weightEmpty"
                         maxLength="6"
                         className="form-control"
@@ -290,7 +290,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
                         {isFetching
                             ? (<><span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                 <span className="sr-only">Loading...</span></>)
-                            : editMode ? "EDIT" : "ADD"
+                            : `${title}`
                         }
                     </button>
                 </div>
