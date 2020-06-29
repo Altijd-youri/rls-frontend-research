@@ -84,7 +84,7 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
             <div style={{ overflow: "auto" }} className="partcontainer">
                 {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
                 {
-                    createPart("part2 create", true, false, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
+                    createPart("part2 create", trainWithSortedJourneys.journeySections.length !== 0, trainWithSortedJourneys.journeySections.length === 0, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
                 }
                 {/* {createPart("part2 create", true, false, "Add destination", () => { })} */}
             </div>
