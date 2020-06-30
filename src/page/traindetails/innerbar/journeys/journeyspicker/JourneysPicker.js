@@ -2,6 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react'
 import './JourneysPicker.css';
 import './JourneysPicker.scss';
 import Button from 'react-bootstrap/Button'
+import { hasPermissions } from '../../../../../utils/scopeChecker';
 
 export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler }) {
     const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
@@ -64,7 +65,7 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
         <>
             <div className="jp-header d-flex w-100 align-items-center justify-content-between pl-4 pr-4">
                 <h5>Journeys</h5>
-                {selectedJourney && <Button
+                {hasPermissions(["write:journeysection"]) && selectedJourney && <Button
                     style={{ marginLeft: "auto", marginRight: "15px" }}
                     variant="outline-secondary"
                     size="sm"
@@ -72,13 +73,13 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                 >
                     EDIT DESTINATION
                 </Button>}
-                <Button
+                {hasPermissions(["write:journeysection"]) && <Button
                     variant="outline-secondary"
                     size="sm"
                     onClick={() => setShowCreateJourney(true)}
                 >
                     ADD DESTINATION
-                </Button>
+                </Button>}
             </div>
 
             <div style={{ overflow: "auto" }} className="partcontainer">

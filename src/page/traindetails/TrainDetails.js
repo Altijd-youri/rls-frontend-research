@@ -10,6 +10,7 @@ import CreateTraction from './innerbar/composition/createTraction/CreateTraction
 import CreateWagon from './innerbar/composition/createWagon/CreateWagon';
 import EditWagon from './innerbar/composition/editWagon/EditWagon';
 import EditTraction from './innerbar/composition/editTraction/EditTraction';
+import { useAuth0 } from '../../react-auth0-spa';
 
 export default function TrainDetails() {
     // Fetch train state
@@ -31,18 +32,23 @@ export default function TrainDetails() {
 
     const { trainid } = useParams();
     const history = useHistory();
+    const { getTokenSilently } = useAuth0();
 
+    const getToken = useCallback(async () => {
+        const token = await getTokenSilently();
+        return token;
+    }, [getTokenSilently]);
 
     const getTrain = useCallback(async () => {
         setFetchingTrain(true);
-        const { data } = await TrainService.getTrain(trainid);
+        const { data } = await TrainService.getTrain(trainid, await getToken());
         if (data) {
             setTrain(data);
         } else {
             history.push('/')
         }
         setFetchingTrain(false);
-    }, [history, trainid])
+    }, [history, trainid, getToken])
 
     useEffect(() => {
         getTrain();
@@ -131,6 +137,7 @@ export default function TrainDetails() {
         <div className="content overflow-auto">
             {!fetchingTrain && train &&
                 <Innerbar
+                    getToken={() => getToken()}
                     train={train}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={setSelectedJourney}
@@ -147,6 +154,7 @@ export default function TrainDetails() {
 
             {showCreateJourney &&
                 <CreateJourney
+                    getToken={() => getToken()}
                     train={train}
                     onHide={() => setShowCreateJourney(false)}
                     setTrain={setTrain}
@@ -155,6 +163,7 @@ export default function TrainDetails() {
 
             {showEditJourney &&
                 <EditJourney
+                    getToken={() => getToken()}
                     selectedJourney={selectedJourney}
                     onHide={() => setShowEditJourney(false)}
                     setJourneyAndTrainHandler={selectedJourneyHandler}
@@ -163,6 +172,7 @@ export default function TrainDetails() {
 
             {showCreateTraction &&
                 <CreateTraction
+                    getToken={() => getToken()}
                     onHide={() => setShowCreateTraction(false)}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={selectedJourneyHandler}
@@ -171,6 +181,7 @@ export default function TrainDetails() {
 
             {showCreateWagon &&
                 <CreateWagon
+                    getToken={() => getToken()}
                     onHide={() => setShowCreateWagon(false)}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={selectedJourneyHandler}
@@ -179,6 +190,7 @@ export default function TrainDetails() {
 
             {compositionManager.showWagonEditor &&
                 <EditWagon
+                    getToken={() => getToken()}
                     onHide={() => setCompositionManager(prevState => ({ ...prevState, showWagonEditor: false, data: undefined }))}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={selectedJourneyHandler}
@@ -188,6 +200,7 @@ export default function TrainDetails() {
 
             {compositionManager.showTractionEditor &&
                 <EditTraction
+                    getToken={() => getToken()}
                     onHide={() => setCompositionManager(prevState => ({ ...prevState, showTractionEditor: false, data: undefined }))}
                     selectedJourney={selectedJourney}
                     setSelectedJourney={selectedJourneyHandler}

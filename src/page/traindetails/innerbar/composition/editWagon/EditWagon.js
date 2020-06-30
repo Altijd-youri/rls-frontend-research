@@ -7,10 +7,19 @@ import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 import DangerousGoods from '../createWagon/DangerousGoods/DangerousGoods';
 import JourneySectionService from '../../../../../api/journeysections';
 
-export default function EditWagon({ onHide, selectedJourney, setSelectedJourney, data }) {
+export default function EditWagon({ onHide, selectedJourney, setSelectedJourney, data, getToken }) {
     useEffect(() => {
+        const fetchWagons = async () => {
+            setWagons(prevState => ({ ...prevState, isFetching: true }))
+            const { data, error } = await WagonService.getWagons(await getToken());
+            if (data) {
+                setWagons(prevState => ({ ...prevState, isFetching: false, wagons: data }))
+            } else {
+                setWagons(prevState => ({ ...prevState, isFetching: false, error }))
+            }
+        }
         fetchWagons();
-    }, [])
+    }, [getToken])
 
     useEffect(() => {
         if (data) {
@@ -48,16 +57,6 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
         setForm(prevState => ({ ...prevState, brakeType }))
     }
 
-    const fetchWagons = async () => {
-        setWagons(prevState => ({ ...prevState, isFetching: true }))
-        const { data, error } = await WagonService.getWagons();
-        if (data) {
-            setWagons(prevState => ({ ...prevState, isFetching: false, wagons: data }))
-        } else {
-            setWagons(prevState => ({ ...prevState, isFetching: false, error }))
-        }
-    }
-
     const validateForm = () => {
         if (form.wagon.length && !form.isSubmitting) {
             return false;
@@ -86,12 +85,12 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
             totalLoadWeight: form.loadWeight === '' ? 0 : form.loadWeight
         }
 
-        const { error } = await TrainCompositionService.updateStock(trainCompositionId, data.id, body);
+        const { error } = await TrainCompositionService.updateStock(trainCompositionId, data.id, body, await getToken());
         if (error) {
             setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
             errorAlert(error)
         } else {
-            const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id)
+            const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id, await getToken())
             if (error) {
                 setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
                 errorAlert(error)
@@ -159,6 +158,7 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
                 </div>
 
                 <DangerousGoods
+                    getToken={getToken}
                     dangerGoods={form.dangerGoods}
                     add={addDangerGoodHandler}
                     remove={removeDangerGoodHandler}

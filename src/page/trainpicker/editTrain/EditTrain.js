@@ -10,7 +10,7 @@ import { errorAlert, succeedAlert } from '../../../utils/Alerts';
 import LocationsService from '../../../api/locations'
 import TrainService from '../../../api/trains'
 
-export default function EditTrain({ onHide, train, onUpdateTrain }) {
+export default function EditTrain({ onHide, train, onUpdateTrain, getToken }) {
     const [isSaving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [departure, setDeparture] = useState([]);
@@ -23,19 +23,19 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
     const [fetchingLocationsError, setFetchingLocationsError] = useState('');
 
     useEffect(() => {
-        fetchLocations();
-    }, [])
-
-    const fetchLocations = async () => {
-        setFetchingLocations(true);
-        const { data, error } = await LocationsService.getLocations();
-        if (data) {
-            setLocations(data)
-        } else {
-            setFetchingLocationsError(error);
+        const fetchLocations = async () => {
+            setFetchingLocations(true);
+            const { data, error } = await LocationsService.getLocations(await getToken());
+            if (data) {
+                setLocations(data)
+            } else {
+                setFetchingLocationsError(error);
+            }
+            setFetchingLocations(false);
         }
-        setFetchingLocations(false);
-    }
+
+        fetchLocations();
+    }, [getToken])
 
     useEffect(() => {
         setTrainNumber(train.operationalTrainNumber);
@@ -53,7 +53,7 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
         }
     }, [train, locations])
 
-    const submitForm = (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
         let body = {
             transferPoint: departure[0].links[0].href,
@@ -64,18 +64,15 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
         };
 
         setSaving(true);
-        const editTrain = async (trainid, body) => {
-            const { data, error } = await TrainService.editTrain(trainid, body);
-            if (data) {
-                onUpdateTrain(data);
-                succeedAlert()
-            } else {
-                setError(error);
-                errorAlert(error);
-            }
-            setSaving(false);
+        const { data, error } = await TrainService.editTrain(train.id, body, await getToken());
+        if (data) {
+            onUpdateTrain(data);
+            succeedAlert()
+        } else {
+            setError(error);
+            errorAlert(error);
         }
-        editTrain(train.id, body);
+        setSaving(false);
     }
 
     function validateForm() {
@@ -149,7 +146,7 @@ export default function EditTrain({ onHide, train, onUpdateTrain }) {
                         timeFormat="HH:mm"
                         timeIntervals={15}
                         timeCaption="time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
+                        dateFormat="d MMMM, yyyy h:mm aa"
                     />
                 </div>
 

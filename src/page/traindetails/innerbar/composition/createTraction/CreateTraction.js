@@ -6,10 +6,20 @@ import './CreateTraction.scoped.css';
 import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 import JourneySectionService from '../../../../../api/journeysections';
 
-export default function CreateTraction({ onHide, selectedJourney, setSelectedJourney }) {
+export default function CreateTraction({ onHide, selectedJourney, setSelectedJourney, getToken }) {
     useEffect(() => {
-        fetchTractions();
-    }, [])
+        // Fetch tractions
+        const fetchTractions = async () => {
+            setTractions(prevState => ({ ...prevState, isFetching: true }))
+            const { data, error } = await TractionService.getTractions(await getToken());
+            if (data) {
+                setTractions(prevState => ({ ...prevState, isFetching: false, tractions: data }))
+            } else {
+                setTractions(prevState => ({ ...prevState, isFetching: false, error }))
+            }
+        }
+        fetchTractions()
+    }, [getToken])
 
     const [tractions, setTractions] = useState({ tractions: [], isFetching: false, error: '' });
     const [form, setForm] = useState({ traction: [], hasDriver: false, isSubmitting: false, error: '' })
@@ -20,16 +30,6 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
 
     const setHasDriverHandler = hasDriver => {
         setForm(prevState => ({ ...prevState, hasDriver }))
-    }
-
-    const fetchTractions = async () => {
-        setTractions(prevState => ({ ...prevState, isFetching: true }))
-        const { data, error } = await TractionService.getTractions();
-        if (data) {
-            setTractions(prevState => ({ ...prevState, isFetching: false, tractions: data }))
-        } else {
-            setTractions(prevState => ({ ...prevState, isFetching: false, error }))
-        }
     }
 
     const validateForm = () => {
@@ -59,11 +59,11 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
             stockIdentifier: parseInt(selectedLocoTypeNumber),
         }
 
-        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body);
+        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body, await getToken());
         if (error) {
             errorAlert(error)
         } else {
-            const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id)
+            const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id, await getToken())
             if (error) {
                 setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
                 errorAlert(error)

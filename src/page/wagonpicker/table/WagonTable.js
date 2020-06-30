@@ -2,6 +2,7 @@ import React from 'react'
 import DataTable from "react-data-table-component";
 import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
+import { hasPermissions } from '../../../utils/scopeChecker';
 
 export default function WagonTable({ wagons, onEditWagon }) {
 
@@ -20,15 +21,23 @@ export default function WagonTable({ wagons, onEditWagon }) {
             name: 'weightEmpty',
             selector: 'weightEmpty',
             sortable: true,
-        },
-        {
-            cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditWagon(row)}>Edit</Button>,
-            allowOverflow: true,
-            ignoreRowClick: true,
-            button: true,
-            width: '56px',
-        },
+        }
     ];
+
+    const getColumns = () => {
+        if (hasPermissions(["write:wagon"])) {
+            const editColumn = {
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditWagon(row)}>Edit</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '56px',
+            }
+            return [...columns, editColumn];
+        } else {
+            return columns;
+        }
+    }
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
@@ -48,7 +57,7 @@ export default function WagonTable({ wagons, onEditWagon }) {
 
     return (
         <DataTable
-            columns={columns}
+            columns={getColumns()}
             defaultSortField='scheduledTimeAtHandover'
             data={filteredWagon}
             pagination

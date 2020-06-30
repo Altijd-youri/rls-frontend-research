@@ -2,44 +2,44 @@ import { ENDPOINTS } from '../utils/constants';
 import FetchService from './fetchservice';
 
 class TrainService extends FetchService {
-    getTrains() {
+    getTrains(token) {
         return super
-            .fetch(`${ENDPOINTS.TRAINS}`, 'GET')
+            .fetch(`${ENDPOINTS.TRAINS}`, 'GET', token)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    saveTrain(body) {
+    saveTrain(body, token) {
         return super
-            .fetch(`${ENDPOINTS.TRAINS}`, 'POST', body)
+            .fetch(`${ENDPOINTS.TRAINS}`, 'POST', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    getTrain(trainid) {
+    getTrain(trainid, token) {
         return super
-            .fetch(`${ENDPOINTS.TRAINS}/${trainid}`, 'GET')
+            .fetch(`${ENDPOINTS.TRAINS}/${trainid}`, 'GET', token)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    editTrain(trainid, body) {
+    editTrain(trainid, body, token) {
         return super
-            .fetch(`${ENDPOINTS.TRAINS}/${trainid}`, 'PUT', body)
+            .fetch(`${ENDPOINTS.TRAINS}/${trainid}`, 'PUT', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    saveJourney(trainid, body) {
+    saveJourney(trainid, body, token) {
         return super
-            .fetch(`${ENDPOINTS.TRAINS}/${trainid}/journeysections`, 'POST', body)
+            .fetch(`${ENDPOINTS.TRAINS}/${trainid}/journeysections`, 'POST', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    editJourney(url, body) {
+    editJourney(url, body, token) {
         return super
-            .fetch(url, 'PUT', body)
+            .fetch(url, 'PUT', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

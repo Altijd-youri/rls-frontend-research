@@ -3,8 +3,9 @@ import Button from 'react-bootstrap/Button'
 import Statistics from './statistics/Statistics'
 import DnD from './draggable/DnD'
 import CloneComposition from './cloneComposition/CloneComposition'
+import { hasPermissions } from '../../../../utils/scopeChecker'
 
-export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain }) {
+export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
 
     const setTrainCompositionHandler = (stockId) => {
         const { trainComposition } = selectedJourney
@@ -19,23 +20,26 @@ export default function Composition({ selectedJourney, setShowCreateTraction, se
             <div className="jp-header d-flex w-100 align-items-center justify-content-between pl-4 pr-4">
                 <h5>Composition</h5>
                 {selectedJourney && <div className="d-flex justify-content-center align-items-center">
-                    <CloneComposition
+                    {hasPermissions(["write:traincomposition"]) && <CloneComposition
+                        getToken={getToken}
                         selectedJourney={selectedJourney}
                         setTrain={setTrain}
-                    />
-                    <Button
-                        className="mr-2"
-                        variant="outline-secondary"
-                        size="sm"
-                        onClick={setShowCreateTraction}>
-                        ADD TRACTION
-                    </Button>
-                    <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        onClick={setShowCreateWagon}>
-                        ADD WAGON
-                    </Button>
+                    />}
+                    {hasPermissions(["write:rollingstock"]) && <>
+                        <Button
+                            className="mr-2"
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={setShowCreateTraction}>
+                            ADD TRACTION
+                        </Button>
+                        <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={setShowCreateWagon}>
+                            ADD WAGON
+                        </Button>
+                    </>}
                 </div>}
             </div>
 
@@ -45,6 +49,7 @@ export default function Composition({ selectedJourney, setShowCreateTraction, se
                         <Statistics selectedJourney={selectedJourney} />
                     </div>
                     <DnD
+                        getToken={getToken}
                         showEditMode={showEditMode}
                         selectedJourney={selectedJourney}
                         setTrainCompositionHandler={setTrainCompositionHandler}

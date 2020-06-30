@@ -1,6 +1,7 @@
 import React from 'react'
 import './Inner.scoped.css'
 import TrainTable from './table/TrainTable'
+import { hasPermissions } from '../../../utils/scopeChecker'
 
 export default function Innerbar({ onCreateTrain, onEditTrain, trains }) {
 
@@ -11,10 +12,11 @@ export default function Innerbar({ onCreateTrain, onEditTrain, trains }) {
                     <h4>
                         All trains
                     </h4>
-                    <span className="d-flex align-items-center" onClick={onCreateTrain}>
-                        Add Train
+                    {hasPermissions(["write:train"]) &&
+                        <span className="d-flex align-items-center" onClick={onCreateTrain}>
+                            Add Train
                         <i className="fas fa-plus"></i>
-                    </span>
+                        </span>}
                 </div>
                 <TrainTable onEditTrain={onEditTrain} trains={trains} />
             </div>

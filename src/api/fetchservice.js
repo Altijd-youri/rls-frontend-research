@@ -1,6 +1,6 @@
 const defaultOptions = {
     GET: {
-        method: 'GET',
+        method: 'GET'
     },
     PATCH: {
         headers: new Headers({
@@ -36,8 +36,18 @@ export default class FetchService {
      * @param {object} customOptions options object to override default options
      * @param {object} body form body object
      */
-    fetch(endpoint, type, body) {
-        const options = Object.assign({}, defaultOptions[type], { body: JSON.stringify(body) });
+    fetch(endpoint, type, userToken, body) {
+        let tp = defaultOptions[type];
+        tp = {
+            ...tp, headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userToken}`
+            }
+        }
+        const options = Object.assign({}, tp, {
+            body: JSON.stringify(body),
+        });
+
         return fetch(endpoint, options);
     }
 

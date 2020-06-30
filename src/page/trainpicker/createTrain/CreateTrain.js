@@ -9,16 +9,25 @@ import { errorAlert, succeedAlert } from "../../../utils/Alerts";
 import DatePicker from "react-datepicker";
 import LocationsService from '../../../api/locations'
 
-export default function CreateTrain({ onHide, setTrains }) {
+export default function CreateTrain({ onHide, setTrains, getToken }) {
     const initForm = { trainNumber: '', trainType: [], departure: [], departureTime: new Date(), isSubmitting: false, error: '' };
     const [form, setForm] = useState(initForm)
     const [locations, setLocation] = useState({ locations: [], isFetching: false, error: '' })
 
     useEffect(() => {
+        const fetchLocations = async () => {
+            setLocation(prevState => ({ ...prevState, isFetching: true }))
+            const { data, error } = await LocationsService.getLocations(await getToken());
+            if (data) {
+                setLocation(prevState => ({ ...prevState, isFetching: false, locations: data }))
+            } else {
+                setLocation(prevState => ({ ...prevState, isFetching: false, error }))
+            }
+        }
         fetchLocations();
-    }, [])
+    }, [getToken])
 
-    const submitForm = (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
         setForm(prevState => ({ ...prevState, isSubmitting: true }));
 
@@ -30,27 +39,14 @@ export default function CreateTrain({ onHide, setTrains }) {
             trainType: form.trainType[0].id
         };
 
-        const saveTrain = async () => {
-            const { data, error } = await TrainService.saveTrain(body)
-            if (data) {
-                setTrains(prevState => ([...prevState, data]))
-                succeedAlert()
-                setForm(initForm);
-            } else {
-                errorAlert(error)
-                setForm(prevState => ({ ...prevState, isSubmitting: false, error }))
-            }
-        }
-        saveTrain()
-    }
-
-    const fetchLocations = async () => {
-        setLocation(prevState => ({ ...prevState, isFetching: true }))
-        const { data, error } = await LocationsService.getLocations();
+        const { data, error } = await TrainService.saveTrain(body, await getToken())
         if (data) {
-            setLocation(prevState => ({ ...prevState, isFetching: false, locations: data }))
+            setTrains(prevState => ([...prevState, data]))
+            succeedAlert()
+            setForm(initForm);
         } else {
-            setLocation(prevState => ({ ...prevState, isFetching: false, error }))
+            errorAlert(error)
+            setForm(prevState => ({ ...prevState, isSubmitting: false, error }))
         }
     }
 

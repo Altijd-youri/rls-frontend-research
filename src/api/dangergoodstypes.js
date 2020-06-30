@@ -2,9 +2,9 @@ import { ENDPOINTS } from '../utils/constants';
 import FetchService from './fetchservice';
 
 class DangerGoodsTypesService extends FetchService {
-    getAll() {
+    getAll(token) {
         return super
-            .fetch(`${ENDPOINTS.DANGERGOODSTYPES}`, 'GET')
+            .fetch(`${ENDPOINTS.DANGERGOODSTYPES}`, 'GET', token)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

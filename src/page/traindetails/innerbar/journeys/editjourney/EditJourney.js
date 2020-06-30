@@ -8,10 +8,19 @@ import LocationsService from '../../../../../api/locations';
 
 import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 
-export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrainHandler }) {
+export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrainHandler, getToken }) {
 
     useEffect(() => {
         setActivities(selectedJourney.activities)
+
+        const fetchLocationByHateoas = async (url, callback) => {
+            const { data, error } = await LocationsService.getLocationsByHateoas(url, await getToken());
+            if (data) {
+                callback(data);
+            } else {
+                errorAlert(error.message);
+            }
+        }
 
         const destination = selectedJourney.links.find(l => l.rel === 'journeySectionDestination');
         fetchLocationByHateoas(destination.href, (data) => {
@@ -25,7 +34,7 @@ export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrai
 
         setLifeStockChecked(selectedJourney.trainComposition.livestockOrPeopleIndicator)
 
-    }, [selectedJourney])
+    }, [selectedJourney, getToken])
 
     // User input
     const [departure, setDeparture] = useState([]);
@@ -48,40 +57,33 @@ export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrai
     const [error, setError] = useState('');
 
     useEffect(() => {
+        const fetchActivities = async () => {
+            setFetchingActivities(true);
+            const { data, error } = await TrainActivitiesService.getActivities(await getToken());
+            if (data) {
+                setActivitiesList(data);
+            } else {
+                setFetchingActivitiesError(error);
+            }
+            setFetchingActivities(false);
+        }
+
+        const fetchLocations = async () => {
+            setFetchingLocations(true);
+            const { data, error } = await LocationsService.getLocations(await getToken());
+            if (data) {
+                setLocations(data)
+            } else {
+                setFetchingLocationsError(error);
+            }
+            setFetchingLocations(false);
+        }
+
         fetchLocations();
         fetchActivities();
-    }, []);
+    }, [getToken]);
 
-    const fetchLocationByHateoas = async (url, callback) => {
-        const { data, error } = await LocationsService.getLocationsByHateoas(url);
-        if (data) {
-            callback(data);
-        } else {
-            errorAlert(error.message);
-        }
-    }
 
-    const fetchActivities = async () => {
-        setFetchingActivities(true);
-        const { data, error } = await TrainActivitiesService.getActivities();
-        if (data) {
-            setActivitiesList(data);
-        } else {
-            setFetchingActivitiesError(error);
-        }
-        setFetchingActivities(false);
-    }
-
-    const fetchLocations = async () => {
-        setFetchingLocations(true);
-        const { data, error } = await LocationsService.getLocations();
-        if (data) {
-            setLocations(data)
-        } else {
-            setFetchingLocationsError(error);
-        }
-        setFetchingLocations(false);
-    }
 
     function getDestination() {
         const destinationDetails = destination[0].links.find(item => {
@@ -97,7 +99,7 @@ export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrai
         return departureDetails;
     }
 
-    function submitForm(event) {
+    const submitForm = async (event) => {
         event.preventDefault();
         let activitiesIds = [];
 
@@ -114,18 +116,15 @@ export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrai
 
         setIsSaving(true);
         const api = selectedJourney.links.find(l => l.rel === 'self').href;
-        const saveJourney = async (url, body) => {
-            const { data, error } = await TrainService.editJourney(url, body);
-            if (data) {
-                setJourneyAndTrainHandler(data)
-                succeedAlert();
-            } else {
-                setError(error.message);
-                errorAlert(error.message)
-            }
-            setIsSaving(false);
+        const { data, error } = await TrainService.editJourney(api, body, await getToken());
+        if (data) {
+            setJourneyAndTrainHandler(data)
+            succeedAlert();
+        } else {
+            setError(error.message);
+            errorAlert(error.message)
         }
-        saveJourney(api, body);
+        setIsSaving(false);
     }
 
     function validateForm() {

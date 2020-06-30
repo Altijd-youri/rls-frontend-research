@@ -4,7 +4,7 @@ import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import TractionService from "../../../api/tractions";
 import { POWER_SUPPLY, TRACTION_UNIT } from '../../../utils/constants';
 
-export default function ManageTraction({ onHide, onSave, tractionDTO }) {
+export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }) {
     const [isFetching, setFetching] = useState(false);
     const [editMode] = useState(tractionDTO ? true : false);
     const [powerSupply, setPowerSupply] = useState(0);
@@ -83,7 +83,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO }) {
             tractionType: `${powerSupply}${tractionUnit}`
         }
 
-        const result = editMode ? await TractionService.editTraction(tractionDTO.id, body) : await TractionService.saveTraction(body);
+        const result = editMode ? await TractionService.editTraction(tractionDTO.id, body, await getToken()) : await TractionService.saveTraction(body, await getToken());
         try {
             if (result.data) {
                 if (editMode) {

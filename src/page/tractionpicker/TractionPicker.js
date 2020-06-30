@@ -1,33 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
 import TractionService from '../../api/tractions';
 import TractionTable from './table/TractionTable';
 import ManageTraction from './manageTraction/ManageTraction';
+import { useAuth0 } from '../../react-auth0-spa';
+import { hasPermissions } from '../../utils/scopeChecker';
 
 export default function TrainPicker() {
     const [tractions, setTractions] = useState({ data: [], isFetching: false, error: '' });
+    const { getTokenSilently } = useAuth0();
 
     const initSidebar = { showManageTraction: false, data: undefined }
     const [sidebar, setSidebar] = useState(initSidebar)
 
-    useEffect(() => {
-        fetchTractions();
-    }, [])
+    const getToken = useCallback(async () => {
+        const token = await getTokenSilently();
+        return token;
+    }, [getTokenSilently]);
 
-    const fetchTractions = async () => {
-        setTractions(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
-        try {
-            const { data, error } = await TractionService.getTractions();
-            if (data) {
-                setTractions(prevState => ({ ...prevState, isFetching: false, data }))
-            } else {
-                throw new Error(error)
+    useEffect(() => {
+        const fetchTractions = async () => {
+            setTractions(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
+            try {
+                const { data, error } = await TractionService.getTractions(await getToken());
+                if (data) {
+                    setTractions(prevState => ({ ...prevState, isFetching: false, data }))
+                } else {
+                    throw new Error(error)
+                }
+            } catch (e) {
+                setTractions(prevState => ({ ...prevState, isFetching: false, error: e.message }))
             }
-        } catch (e) {
-            setTractions(prevState => ({ ...prevState, isFetching: false, error: e.message }))
         }
-    }
+        fetchTractions();
+    }, [getToken])
 
     const closeAllSidebars = () => {
         setSidebar(initSidebar);
@@ -68,11 +75,11 @@ export default function TrainPicker() {
                     <div className="content-title">
                         <h4>
                             All tractions
-                    </h4>
-                        <span className="d-flex align-items-center add-btn" onClick={createTractionHandler}>
+                        </h4>
+                        {hasPermissions(["write:traction"]) && <span className="d-flex align-items-center add-btn" onClick={createTractionHandler}>
                             Add traction
                         <i className="fas fa-plus"></i>
-                        </span>
+                        </span>}
                     </div>
                     <TractionTable onEditTraction={editTractionHandler} tractions={tractions.data} />
                 </div>
@@ -80,6 +87,7 @@ export default function TrainPicker() {
 
             {sidebar.showManageTraction &&
                 <ManageTraction
+                    getToken={() => getToken()}
                     onHide={closeAllSidebars}
                     onSave={setTractions}
                     tractionDTO={sidebar.data}

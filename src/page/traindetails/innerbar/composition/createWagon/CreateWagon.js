@@ -7,10 +7,19 @@ import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 import DangerousGoods from './DangerousGoods/DangerousGoods';
 import JourneySectionService from '../../../../../api/journeysections';
 
-export default function CreateWagon({ onHide, selectedJourney, setSelectedJourney }) {
+export default function CreateWagon({ onHide, selectedJourney, setSelectedJourney, getToken }) {
     useEffect(() => {
+        const fetchWagons = async () => {
+            setWagons(prevState => ({ ...prevState, isFetching: true }))
+            const { data, error } = await WagonService.getWagons(await getToken());
+            if (data) {
+                setWagons(prevState => ({ ...prevState, isFetching: false, wagons: data }))
+            } else {
+                setWagons(prevState => ({ ...prevState, isFetching: false, error }))
+            }
+        }
         fetchWagons();
-    }, [])
+    }, [getToken])
 
     const [wagons, setWagons] = useState({ wagons: [], isFetching: false, error: '' });
     const [form, setForm] = useState({ wagon: [], loadWeight: "0", breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
@@ -34,16 +43,6 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
 
     const setBreakTypeHandler = breakType => {
         setForm(prevState => ({ ...prevState, breakType }))
-    }
-
-    const fetchWagons = async () => {
-        setWagons(prevState => ({ ...prevState, isFetching: true }))
-        const { data, error } = await WagonService.getWagons();
-        if (data) {
-            setWagons(prevState => ({ ...prevState, isFetching: false, wagons: data }))
-        } else {
-            setWagons(prevState => ({ ...prevState, isFetching: false, error }))
-        }
     }
 
     const validateForm = () => {
@@ -84,11 +83,11 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
             dangerGoodsInWagonPostDtos
         }
 
-        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body);
+        const { error } = await TrainCompositionService.saveStock(trainCompositionId, body, await getToken());
         if (error) {
             errorAlert(error)
         } else {
-            const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id)
+            const { data, error } = await JourneySectionService.getJourneySectionById(selectedJourney.id, await getToken())
             if (error) {
                 setForm(prevState => ({ ...prevState, error, isSubmitting: false }));
                 errorAlert(error)
@@ -161,6 +160,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                 </div>
 
                 <DangerousGoods
+                    getToken={() => getToken()}
                     dangerGoods={form.dangerGoods}
                     add={addDangerGoodHandler}
                     remove={removeDangerGoodHandler}

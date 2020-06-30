@@ -3,7 +3,7 @@ import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import WagonService from "../../../api/wagon";
 
-export default function ManageWagon({ onHide, onSave, wagonDTO }) {
+export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
     const [isFetching, setFetching] = useState(false);
     const [editMode] = useState(wagonDTO ? true : false)
     const [title, setTitle] = useState('CREATE');
@@ -66,7 +66,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO }) {
             weightEmpty: params.get('weightEmpty')
         }
 
-        const result = editMode ? await WagonService.editWagon(wagonDTO.id, body) : await WagonService.saveWagon(body)
+        const result = editMode ? await WagonService.editWagon(wagonDTO.id, body, await getToken()) : await WagonService.saveWagon(body, await getToken())
         try {
             if (result.data) {
                 if (editMode) {

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './TrainPicker.scoped.css'
 import Innerbar from './innerbar/Innerbar'
 import CreateTrain from './createTrain/CreateTrain'
 import EditTrain from './editTrain/EditTrain'
 import Spinner from 'react-bootstrap/Spinner'
 import TrainService from '../../api/trains';
+import { useAuth0 } from '../../react-auth0-spa';
 
 export default function TrainPicker() {
     const [showCreateTrain, setShowCreateTrain] = useState(false);
@@ -13,25 +14,30 @@ export default function TrainPicker() {
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [trains, setTrains] = useState([]);
+    const { getTokenSilently } = useAuth0();
+
+    const getToken = useCallback(async () => {
+        const token = await getTokenSilently();
+        return token;
+    }, [getTokenSilently]);
 
     useEffect(() => {
-        fetchTrains();
-    }, [])
-
-    const fetchTrains = async () => {
-        setLoading(true);
-        try {
-            const { data, error } = await TrainService.getTrains();
-            if (data) {
-                setTrains(data);
-            } else {
-                throw new Error(error)
+        const fetchTrains = async () => {
+            setLoading(true);
+            try {
+                const { data, error } = await TrainService.getTrains(await getToken());
+                if (data) {
+                    setTrains(data);
+                } else {
+                    throw new Error(error)
+                }
+            } catch (e) {
+                setError(e.message)
             }
-        } catch (e) {
-            setError(e.message)
+            setLoading(false);
         }
-        setLoading(false);
-    }
+        fetchTrains();
+    }, [getToken])
 
     function updateTrain(train) {
         let newTrainsList = trains.filter((t) => t.id !== train.id);
@@ -84,12 +90,14 @@ export default function TrainPicker() {
 
             {showCreateTrain &&
                 <CreateTrain
+                    getToken={() => getToken()}
                     onHide={createTrainHandler}
                     setTrains={setTrains}
                 />}
 
             {showEditTrain && selectedTrain &&
                 <EditTrain
+                    getToken={() => getToken()}
                     isLoading={isLoading}
                     train={selectedTrain}
                     onHide={() => setShowEditTrain(false)}

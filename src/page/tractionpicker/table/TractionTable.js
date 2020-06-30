@@ -2,6 +2,7 @@ import React from 'react'
 import DataTable from "react-data-table-component";
 import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
+import { hasPermissions } from '../../../utils/scopeChecker';
 
 
 export default function TractionTable({ tractions, onEditTraction }) {
@@ -21,15 +22,23 @@ export default function TractionTable({ tractions, onEditTraction }) {
             name: 'Weight',
             selector: 'weight',
             sortable: true,
-        },
-        {
-            cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditTraction(row)}>Edit</Button>,
-            allowOverflow: true,
-            ignoreRowClick: true,
-            button: true,
-            width: '56px',
-        },
+        }
     ];
+
+    const getColumns = () => {
+        if (hasPermissions(["write:traction"])) {
+            const editColumn = {
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditTraction(row)}>Edit</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '56px',
+            }
+            return [...columns, editColumn];
+        } else {
+            return columns;
+        }
+    }
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
@@ -49,7 +58,7 @@ export default function TractionTable({ tractions, onEditTraction }) {
 
     return (
         <DataTable
-            columns={columns}
+            columns={getColumns()}
             defaultSortField='scheduledTimeAtHandover'
             data={filteredTractions}
             pagination

@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 import JourneySectionService from '../../../../../api/journeysections'
 import { errorAlert, succeedAlert } from '../../../../../utils/Alerts'
 
-export default function CloneComposition({ selectedJourney, setTrain }) {
+export default function CloneComposition({ selectedJourney, setTrain, getToken }) {
     const [copiedJourneySectionUrl, setCopiedJourneySectionUrl] = useState('')
 
     const hasComposition = () => {
@@ -32,7 +32,7 @@ export default function CloneComposition({ selectedJourney, setTrain }) {
             const body = {
                 "journeySectionUrl": copiedJourneySectionUrl
             }
-            const { data, error } = await JourneySectionService.clone(selectedJourney.id, body);
+            const { data, error } = await JourneySectionService.clone(selectedJourney.id, body, await getToken());
             if (data) {
                 setTrain(data)
                 succeedAlert()

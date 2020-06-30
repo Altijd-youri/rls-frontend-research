@@ -8,7 +8,7 @@ import LocationsService from '../../../../../api/locations';
 
 import { succeedAlert, errorAlert } from '../../../../../utils/Alerts';
 
-export default function CreateJourney({ onHide, train, setTrain }) {
+export default function CreateJourney({ onHide, train, setTrain, getToken }) {
     // User input
     const [destination, setDestination] = useState([]);
     const [activities, setActivities] = useState([]);
@@ -30,31 +30,34 @@ export default function CreateJourney({ onHide, train, setTrain }) {
 
 
     useEffect(() => {
+        const fetchLocations = async () => {
+            setFetchingLocations(true);
+            const { data, error } = await LocationsService.getLocations(await getToken());
+            if (data) {
+                setLocations(data)
+            } else {
+                setFetchingLocationsError(error);
+            }
+            setFetchingLocations(false);
+        }
         fetchLocations();
+
+        const fetchActivities = async () => {
+            setFetchingActivities(true);
+            const { data, error } = await TrainActivitiesService.getActivities(await getToken());
+            if (data) {
+                setActivitiesList(data)
+            } else {
+                setFetchingActivitiesError(error);
+            }
+            setFetchingActivities(false);
+        }
         fetchActivities();
-    }, []);
+    }, [getToken]);
 
-    const fetchActivities = async () => {
-        setFetchingActivities(true);
-        const { data, error } = await TrainActivitiesService.getActivities();
-        if (data) {
-            setActivitiesList(data)
-        } else {
-            setFetchingActivitiesError(error);
-        }
-        setFetchingActivities(false);
-    }
 
-    const fetchLocations = async () => {
-        setFetchingLocations(true);
-        const { data, error } = await LocationsService.getLocations();
-        if (data) {
-            setLocations(data)
-        } else {
-            setFetchingLocationsError(error);
-        }
-        setFetchingLocations(false);
-    }
+
+
 
     function getDestination() {
         const destinationDetails = destination[0].links.find(item => {
@@ -79,7 +82,7 @@ export default function CreateJourney({ onHide, train, setTrain }) {
         return departureDetails;
     }
 
-    function submitForm(event) {
+    const submitForm = async (event) => {
         event.preventDefault();
         let activitiesIds = [];
 
@@ -95,19 +98,16 @@ export default function CreateJourney({ onHide, train, setTrain }) {
         }
 
         setIsSaving(true);
-        const saveJourney = async (trainid, body) => {
-            const { data, error } = await TrainService.saveJourney(trainid, body);
-            if (data) {
-                setTrain(data)
-                succeedAlert();
-                clearForm();
-            } else {
-                setError(error);
-                errorAlert(error)
-            }
-            setIsSaving(false);
+        const { data, error } = await TrainService.saveJourney(train.id, body, await getToken());
+        if (data) {
+            setTrain(data)
+            succeedAlert();
+            clearForm();
+        } else {
+            setError(error);
+            errorAlert(error)
         }
-        saveJourney(train.id, body);
+        setIsSaving(false);
     }
 
     function clearForm() {

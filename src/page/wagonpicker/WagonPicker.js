@@ -1,32 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
 import WagonService from '../../api/wagon';
 import WagonTable from './table/WagonTable';
 import ManageWagon from './manageWagon/ManageWagon';
+import { useAuth0 } from '../../react-auth0-spa';
+import { hasPermissions } from '../../utils/scopeChecker';
 export default function WagonPicker() {
     const [wagons, setWagons] = useState({ data: [], isFetching: false, error: '' });
+    const { getTokenSilently } = useAuth0();
 
     const initSidebar = { showEditWagon: false, showCreateWagon: false, data: undefined }
     const [sidebar, setSidebar] = useState(initSidebar)
 
-    useEffect(() => {
-        fetchWagons();
-    }, [])
+    const getToken = useCallback(async () => {
+        const token = await getTokenSilently();
+        return token;
+    }, [getTokenSilently]);
 
-    const fetchWagons = async () => {
-        setWagons(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
-        try {
-            const { data, error } = await WagonService.getWagons();
-            if (data) {
-                setWagons(prevState => ({ ...prevState, isFetching: false, data }))
-            } else {
-                throw new Error(error)
+    useEffect(() => {
+        const fetchWagons = async () => {
+            setWagons(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
+            try {
+                const { data, error } = await WagonService.getWagons(await getToken());
+                if (data) {
+                    setWagons(prevState => ({ ...prevState, isFetching: false, data }))
+                } else {
+                    throw new Error(error)
+                }
+            } catch (e) {
+                setWagons(prevState => ({ ...prevState, isFetching: false, error: e.message }))
             }
-        } catch (e) {
-            setWagons(prevState => ({ ...prevState, isFetching: false, error: e.message }))
         }
-    }
+        fetchWagons();
+    }, [getToken])
 
     const closeAllSidebars = () => {
         setSidebar(initSidebar);
@@ -68,10 +75,10 @@ export default function WagonPicker() {
                         <h4>
                             All wagons
                     </h4>
-                        <span className="d-flex align-items-center add-btn" onClick={createWagonHandler}>
+                        {hasPermissions(["write:wagon"]) && <span className="d-flex align-items-center add-btn" onClick={createWagonHandler}>
                             Add Wagon
                         <i className="fas fa-plus"></i>
-                        </span>
+                        </span>}
                     </div>
                     <WagonTable onEditWagon={editWagonHandler} wagons={wagons.data} />
                 </div>
@@ -79,17 +86,11 @@ export default function WagonPicker() {
 
             {sidebar.showCreateWagon &&
                 <ManageWagon
+                    getToken={() => getToken()}
                     onHide={closeAllSidebars}
                     onSave={setWagons}
                     wagonDTO={sidebar.data}
                 />}
-
-            {/* {sidebar.showEditTraction &&
-                <EditTraction
-                    traction={sidebar.data}
-                    onHide={closeAllSidebars}
-                    onSave={setWagons}
-                />} */}
         </div>
     )
 }

@@ -8,7 +8,7 @@ export default function Innerbar({
     train, setShowCreateJourney, setShowEditJourney,
     selectedJourney, setSelectedJourney,
     setShowCreateTraction, setShowCreateWagon,
-    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain }) {
+    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
 
 
     return (
@@ -34,6 +34,7 @@ export default function Innerbar({
 
             <div style={{ marginBottom: "30px" }} className="td-journeyspicker">
                 <Composition
+                    getToken={getToken}
                     train={train}
                     selectedJourney={selectedJourney}
                     setShowCreateTraction={setShowCreateTraction}

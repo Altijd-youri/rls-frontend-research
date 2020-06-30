@@ -3,31 +3,30 @@ import DangerGoodsTypesService from '../../../../../../api/dangergoodstypes'
 import Good from './Good';
 import Form from './Form';
 
-export default function DangerousGoods({ dangerGoods, add, remove }) {
+export default function DangerousGoods({ dangerGoods, add, remove, getToken }) {
 
     const [dangerGoodsTypes, setDangerGoodsTypes] = useState({ data: [], isFetching: false, error: '' })
     const [form, setForm] = useState({ selectedDangerGoodsType: [], weight: '', showForm: false })
 
     useEffect(() => {
+        const fetchDangerGoodsTypes = async () => {
+            setDangerGoodsTypes(prevState => ({ ...prevState, isFetching: true, error: '' }))
+            try {
+                const { data, error } = await DangerGoodsTypesService.getAll(await getToken());
+                if (data) {
+                    return setDangerGoodsTypes(prevState => ({ ...prevState, data, isFetching: false }))
+                }
+                throw new Error(error.message)
+            } catch (e) {
+                const error = (e instanceof String) ? e : e.message
+                return setDangerGoodsTypes(prevState => ({ ...prevState, error, isFetching: false }))
+            }
+        }
         fetchDangerGoodsTypes()
-    }, [])
+    }, [getToken])
 
     const addDangerGoodHandler = () => {
         add({ index: dangerGoods.length, data: form.selectedDangerGoodsType[0], weight: form.weight })
-    }
-
-    const fetchDangerGoodsTypes = async () => {
-        setDangerGoodsTypes(prevState => ({ ...prevState, isFetching: true, error: '' }))
-        try {
-            const { data, error } = await DangerGoodsTypesService.getAll();
-            if (data) {
-                return setDangerGoodsTypes(prevState => ({ ...prevState, data, isFetching: false }))
-            }
-            throw new Error(error.message)
-        } catch (e) {
-            const error = (e instanceof String) ? e : e.message
-            return setDangerGoodsTypes(prevState => ({ ...prevState, error, isFetching: false }))
-        }
     }
 
     return (

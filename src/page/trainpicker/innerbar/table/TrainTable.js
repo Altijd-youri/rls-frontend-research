@@ -5,6 +5,7 @@ import DataTable from "react-data-table-component";
 import FilterComponent from './FilterComponent';
 import ExpendedRow from './ExpendedRow';
 import Button from 'react-bootstrap/Button'
+import { hasPermissions } from '../../../../utils/scopeChecker';
 
 
 export default function TrainTable({ trains, onEditTrain }) {
@@ -33,7 +34,14 @@ export default function TrainTable({ trains, onEditTrain }) {
             sortable: true,
         },
         {
-            cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditTrain(row)}>Edit</Button>,
+            cell: row => <Button
+                variant="outline-secondary"
+                size="sm"
+                onClick={hasPermissions(["write:train"])
+                    ? () => onEditTrain(row)
+                    : () => history.push(`train/${row.id}/details`)}>
+                {hasPermissions(["write:train"]) ? "EDIT" : "VIEW"}
+            </Button>,
             allowOverflow: true,
             ignoreRowClick: true,
             button: true,

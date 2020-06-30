@@ -3,8 +3,9 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Wagon, Traction, Driver } from '../../../../../utils/icons/composition';
 import TrainCompositionService from '../../../../../api/traincomposition';
 import { succeedAlert, errorAlert, confirmAlert } from '../../../../../utils/Alerts';
+import { hasPermissions } from '../../../../../utils/scopeChecker';
 
-export default function Item({ item, index, trainCompositionId, setTrainCompositionHandler, showEditMode }) {
+export default function Item({ item, index, trainCompositionId, setTrainCompositionHandler, showEditMode, getToken }) {
     const grid = 8;
     const getItemStyle = (isDragging, draggableStyle) => ({
         userSelect: 'none',
@@ -19,7 +20,7 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
     const deleteItem = () => {
         confirmAlert(async () => {
             try {
-                const { error } = await TrainCompositionService.deleteStock(trainCompositionId, item.id)
+                const { error } = await TrainCompositionService.deleteStock(trainCompositionId, item.id, await getToken())
                 if (error) throw new Error(error)
                 succeedAlert()
                 setTrainCompositionHandler(item.id)
@@ -55,7 +56,7 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
         <Draggable key={item.id} draggableId={String(index)} index={index}>
             {(provided, snapshot) => (
                 <div
-                    onClick={() => showEditMode(item)}
+                    onClick={hasPermissions(["delete:rollingstock"]) ? () => showEditMode(item) : () => { }}
                     className="d-flex flex-column"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -68,9 +69,9 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
                     {/* Header: Identifier */}
                     <div className="d-flex">
                         <span>{getIdentifier()}</span>
-                        <span style={{ marginLeft: "10px", cursor: "pointer", color: "red" }} onClick={deleteItem}>
+                        {hasPermissions(["delete:rollingstock"]) && <span style={{ marginLeft: "10px", cursor: "pointer", color: "red" }} onClick={deleteItem}>
                             <li className="far fa-minus-square" />
-                        </span>
+                        </span>}
                     </div>
 
                     {/* Body: Icon/Weight */}
