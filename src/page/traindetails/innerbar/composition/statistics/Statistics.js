@@ -2,6 +2,10 @@ import React from 'react'
 
 export default function Statistics({ selectedJourney }) {
 
+    const calculateBrakeWeight = () => {
+        return parseInt(selectedJourney.trainComposition.brakeWeight / selectedJourney.trainComposition.weight * 100, 10);
+    }
+
     return (
         <>
             {selectedJourney?.trainComposition ?
@@ -12,7 +16,7 @@ export default function Statistics({ selectedJourney }) {
                                 <th>Number of vehicles</th>
                                 <td>{selectedJourney.trainComposition.numberOfVehicles} vehicles</td>
                                 <th>Brake percentage</th>
-                                <td>{selectedJourney.trainComposition.brakeWeight / selectedJourney.trainComposition.weight * 100}%</td>
+                                <td>{calculateBrakeWeight()}%</td>
                                 <th>Dangerous goods</th>
                                 <td>{selectedJourney.trainComposition.containsDangerousGoods === true ? 'Yes' : 'No'}</td>
                             </tr>
