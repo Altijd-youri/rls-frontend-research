@@ -39,6 +39,9 @@ export default function Sidebar() {
                                 {hasPermissions(["read:wagon"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.WAGONS}>Manage wagons</NavLink>
                                 </li>}
+                                {hasPermissions(["read:user"]) && <li>
+                                    <NavLink activeClassName="active" to={PATH.COMPANIES}>Manage companies</NavLink>
+                                </li>}
                                 <li onClick={() => logoutHandler()}>
                                     <span>Logout</span>
                                 </li>

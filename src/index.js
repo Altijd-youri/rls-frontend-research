@@ -25,7 +25,7 @@ ReactDOM.render(
     redirect_uri={window.location.origin}
     onRedirectCallback={onRedirectCallback}
     audience={config.audience}     // NEW - specify the audience value
-    scope={"read:journeysection write:traincomposition write:journeysection read:rollingstock write:rollingstock delete:rollingstock read:traction write:traction read:traincomposition read:train write:train read:wagon write:wagon"}
+    scope={"read:user write:user read:journeysection write:traincomposition write:journeysection read:rollingstock write:rollingstock delete:rollingstock read:traction write:traction read:traincomposition read:train write:train read:wagon write:wagon"}
   >
     <App />
   </Auth0Provider>,

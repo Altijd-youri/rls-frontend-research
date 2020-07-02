@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../../utils/scopeChecker';
 
 
-export default function TrainTable({ trains, onEditTrain }) {
+export default function TrainTable({ trains, onEditTrain, sendTcm }) {
 
     const columns = [
         {
@@ -32,6 +32,18 @@ export default function TrainTable({ trains, onEditTrain }) {
             selector: 'scheduledTimeAtHandover',
             format: row => `${new Date(row.scheduledTimeAtHandover).toLocaleString()}`,
             sortable: true,
+        },
+        {
+            cell: row => <Button
+                variant="outline-warning"
+                size="sm"
+                onClick={() => sendTcm(row.id)}>
+                TCM
+            </Button>,
+            allowOverflow: true,
+            ignoreRowClick: true,
+            button: true,
+            width: '56px',
         },
         {
             cell: row => <Button

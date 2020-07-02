@@ -11,6 +11,7 @@ import { useAuth0 } from './react-auth0-spa';
 import history from "./utils/history";
 import Home from './page/home/Home';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import CompanyPicker from './page/companypicker/CompanyPicker';
 
 function App() {
   const { loading, getTokenSilently, isAuthenticated } = useAuth0();
@@ -43,6 +44,7 @@ function App() {
         <Route path={PATH.HOME} exact component={Home} />
         <PrivateRoute path={PATH.TRACTIONS} exact component={TractionPicker} />
         <PrivateRoute path={PATH.WAGONS} exact component={WagonPicker} />
+        <PrivateRoute path={PATH.COMPANIES} exact component={CompanyPicker} />
       </Switch>
     </Router>
   );

@@ -62,6 +62,10 @@ export default function TrainPicker() {
         setShowCreateTrain(!showCreateTrain)
     }
 
+    const sendTcm = () => {
+        alert("Sent!")
+    }
+
     if (isLoading) {
         return (
             <div className="d-flex justify-content-center align-items-center w-100" >
@@ -86,6 +90,7 @@ export default function TrainPicker() {
                 onCreateTrain={createTrainHandler}
                 onEditTrain={editTrainHandler}
                 trains={trains}
+                sendTcm={sendTcm}
             />
 
             {showCreateTrain &&
