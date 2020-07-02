@@ -24,12 +24,13 @@ export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrai
 
         let destination = selectedJourney.links.find(l => l.rel === 'journeySectionDestination')?.href
         destination = destination?.replace("http://", "https://");
-        fetchLocationByHateoas(destination.href, (data) => {
+        fetchLocationByHateoas(destination, (data) => {
             setDestination([data])
         })
 
-        const departure = selectedJourney.links.find(l => l.rel === 'journeySectionOrigin');
-        fetchLocationByHateoas(departure.href, (data) => {
+        let departure = selectedJourney.links.find(l => l.rel === 'journeySectionOrigin')?.href;
+        departure = departure?.replace("http://", "https://");
+        fetchLocationByHateoas(departure, (data) => {
             setDeparture([data])
         })
 
