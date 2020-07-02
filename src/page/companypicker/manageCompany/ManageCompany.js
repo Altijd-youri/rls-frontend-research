@@ -133,7 +133,7 @@ export default function ManageCompany({ onHide, onSave, ownerDTO, getToken }) {
                     <Typeahead
                         clearButton
                         id="basic-typeahead-example"
-                        labelKey={option => `${option.code}`}
+                        labelKey={option => `${option.code} ${option.name}`}
                         onChange={value => setSelectedCompany(value)}
                         options={companies.data}
                         placeholder="Choose a company..."

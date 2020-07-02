@@ -141,6 +141,8 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                         placeholder="Load weight (in tonnes)"
                         type="number"
                         name="loadweight"
+                        min="0"
+                        max="999999"
                     />
                     <label className="ct-label" htmlFor="loadweight">
                         <li className="fas fa-weight-hanging"></li>

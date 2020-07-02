@@ -6,7 +6,7 @@ import Form from './Form';
 export default function DangerousGoods({ dangerGoods, add, remove, getToken }) {
 
     const [dangerGoodsTypes, setDangerGoodsTypes] = useState({ data: [], isFetching: false, error: '' })
-    const [form, setForm] = useState({ selectedDangerGoodsType: [], weight: '', showForm: false })
+    const [form, setForm] = useState({ selectedDangerGoodsType: [], weight: '0', showForm: false })
 
     useEffect(() => {
         const fetchDangerGoodsTypes = async () => {

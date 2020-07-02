@@ -139,6 +139,7 @@ export default function EditWagon({ onHide, selectedJourney, setSelectedJourney,
                         placeholder="Load weight"
                         type="number"
                         name="loadweight"
+                        min="0"
                     />
                     <label className="ct-label" htmlFor="loadweight">
                         <li className="fas fa-weight-hanging"></li>
