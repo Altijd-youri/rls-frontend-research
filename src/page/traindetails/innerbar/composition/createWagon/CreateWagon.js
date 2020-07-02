@@ -22,7 +22,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }, [getToken])
 
     const [wagons, setWagons] = useState({ wagons: [], isFetching: false, error: '' });
-    const [form, setForm] = useState({ wagon: [], loadWeight: "0", breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
+    const [form, setForm] = useState({ wagon: [], loadWeight: "1", breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
 
     const addDangerGoodHandler = (dangerGood) => {
         setForm(prevState => ({ ...prevState, dangerGoods: [...prevState.dangerGoods, dangerGood] }))
@@ -101,7 +101,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
     }
 
     const resetForm = () => {
-        setForm({ wagon: [], loadWeight: '0', breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
+        setForm({ wagon: [], loadWeight: '1', breakType: 'P', dangerGoods: [], isSubmitting: false, error: '' })
     }
 
     return (
@@ -141,7 +141,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                         placeholder="Load weight (in tonnes)"
                         type="number"
                         name="loadweight"
-                        min="0"
+                        min="1"
                         max="999999"
                     />
                     <label className="ct-label" htmlFor="loadweight">

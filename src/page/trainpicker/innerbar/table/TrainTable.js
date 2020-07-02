@@ -72,7 +72,7 @@ export default function TrainTable({ trains, onEditTrain, sendTcm }) {
             button: true,
             width: '56px'
         }
-        if (hasPermissions(["send:traincompositionmessage"])) {
+        if (hasPermissions(["write:traincompositionmessage"])) {
             return [...columns, tcmColumn, editColumn];
         } else {
             return [...columns, editColumn];
