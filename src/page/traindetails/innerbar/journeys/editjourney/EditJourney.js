@@ -22,7 +22,8 @@ export default function EditJourney({ onHide, selectedJourney, setJourneyAndTrai
             }
         }
 
-        const destination = selectedJourney.links.find(l => l.rel === 'journeySectionDestination');
+        let destination = selectedJourney.links.find(l => l.rel === 'journeySectionDestination')?.href
+        destination = destination?.replace("http://", "https://");
         fetchLocationByHateoas(destination.href, (data) => {
             setDestination([data])
         })

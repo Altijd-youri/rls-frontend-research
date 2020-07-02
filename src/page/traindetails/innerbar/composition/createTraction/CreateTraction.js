@@ -86,7 +86,7 @@ export default function CreateTraction({ onHide, selectedJourney, setSelectedJou
                 <h4>
                     Add Traction
                 </h4>
-                <span onClick={onHide}>
+                <span style={{ cursor: "pointer" }} onClick={onHide}>
                     <li className="fa fa-times" />
                 </span>
             </div>
