@@ -9,6 +9,13 @@ class TrainService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
+    sendTcm(token, trainId) {
+        return super
+            .fetch(`${ENDPOINTS.TRAINS}/${trainId}/send`, 'POST', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
+
     saveTrain(body, token) {
         return super
             .fetch(`${ENDPOINTS.TRAINS}`, 'POST', token, body)

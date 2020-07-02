@@ -10,6 +10,15 @@ import { hasPermissions } from '../../../../utils/scopeChecker';
 
 export default function TrainTable({ trains, onEditTrain, sendTcm }) {
 
+    const getStatusColor = (train) => {
+        if (train) {
+            if (train?.customMessageStatuses?.length) {
+                return train.customMessageStatuses[train.customMessageStatuses.length - 1].acknowledged ? "outline-success" : "outline-danger"
+            }
+        }
+        return "outline-warning"
+    }
+
     const columns = [
         {
             name: 'Number',
@@ -32,20 +41,24 @@ export default function TrainTable({ trains, onEditTrain, sendTcm }) {
             selector: 'scheduledTimeAtHandover',
             format: row => `${new Date(row.scheduledTimeAtHandover).toLocaleString()}`,
             sortable: true,
-        },
-        {
+        }
+    ];
+
+    const getColumns = () => {
+        const tcmColumn = {
             cell: row => <Button
-                variant="outline-warning"
+                variant={getStatusColor(row)}
                 size="sm"
-                onClick={() => sendTcm(row.id)}>
+                onClick={() => sendTcm(row)}>
                 TCM
             </Button>,
             allowOverflow: true,
             ignoreRowClick: true,
             button: true,
             width: '56px',
-        },
-        {
+        }
+
+        const editColumn = {
             cell: row => <Button
                 variant="outline-secondary"
                 size="sm"
@@ -57,9 +70,14 @@ export default function TrainTable({ trains, onEditTrain, sendTcm }) {
             allowOverflow: true,
             ignoreRowClick: true,
             button: true,
-            width: '56px',
-        },
-    ];
+            width: '56px'
+        }
+        if (hasPermissions(["write:train"])) {
+            return [...columns, tcmColumn, editColumn];
+        } else {
+            return [...columns, editColumn];
+        }
+    }
 
 
     const history = useHistory();
@@ -81,7 +99,7 @@ export default function TrainTable({ trains, onEditTrain, sendTcm }) {
 
     return (
         <DataTable
-            columns={columns}
+            columns={getColumns()}
             defaultSortField='scheduledTimeAtHandover'
             data={filteredTrains}
             pagination

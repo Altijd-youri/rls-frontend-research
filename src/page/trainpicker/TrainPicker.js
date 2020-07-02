@@ -6,6 +6,7 @@ import EditTrain from './editTrain/EditTrain'
 import Spinner from 'react-bootstrap/Spinner'
 import TrainService from '../../api/trains';
 import { useAuth0 } from '../../react-auth0-spa';
+import { errorAlert, succeedAlert, confirmAlert } from '../../utils/Alerts'
 
 export default function TrainPicker() {
     const [showCreateTrain, setShowCreateTrain] = useState(false);
@@ -62,8 +63,24 @@ export default function TrainPicker() {
         setShowCreateTrain(!showCreateTrain)
     }
 
-    const sendTcm = () => {
-        alert("Sent!")
+    const sendTcm = (train) => {
+        confirmAlert(async () => {
+            const result = await TrainService.sendTcm(await getToken(), train.id);
+            if (result.data) {
+                const updatedList = trains.map(item => {
+                    if (item.id === result.data.id) {
+                        return result.data;
+                    } else {
+                        return item;
+                    }
+                })
+                setTrains(updatedList);
+                succeedAlert();
+            } else {
+                errorAlert(result?.message)
+                console.log("Failed! ", result.message);
+            }
+        })
     }
 
     if (isLoading) {
