@@ -6,7 +6,7 @@ export default function FilterComponent({ filterText, onFilter }) {
 
         return (
                 <div className="d-flex justify-content-start header position-relative">
-                        <input type="text" name="search" placeholder="Filter by code.." value={filterText} onChange={onFilter} />
+                        <input type="text" name="search" placeholder="Filter by freight number.." value={filterText} onChange={onFilter} />
                         <label htmlFor="search">
                                 <li className="fa fa-search"></li>
                         </label>

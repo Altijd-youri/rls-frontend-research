@@ -8,17 +8,17 @@ export default function WagonTable({ wagons, onEditWagon }) {
 
     const columns = [
         {
-            name: 'numberFreight',
+            name: 'Number',
             selector: 'numberFreight',
             sortable: true,
         },
         {
-            name: 'code',
+            name: 'Code',
             selector: 'code',
             sortable: true,
         },
         {
-            name: 'weightEmpty',
+            name: 'Empty Weight (tonnes)',
             selector: 'weightEmpty',
             sortable: true,
         }
@@ -41,7 +41,7 @@ export default function WagonTable({ wagons, onEditWagon }) {
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-    const filteredWagon = wagons.filter(wagon => wagon.code && wagon.code.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredWagon = wagons.filter(wagon => wagon.numberFreight && wagon.numberFreight.toLowerCase().includes(filterText.toLowerCase()))
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {

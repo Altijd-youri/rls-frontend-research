@@ -18,7 +18,7 @@ export default function Sidebar() {
     return (
         <div className="sidebar">
             <div className="logo">
-                <NavLink to={PATH.HOME}>
+                <NavLink activeClassName="unknown" to={PATH.HOME}>
                     <img src={logo}
                         alt="logo" />
                 </NavLink>

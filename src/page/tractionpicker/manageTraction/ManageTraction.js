@@ -6,7 +6,6 @@ import { POWER_SUPPLY, TRACTION_UNIT } from '../../../utils/constants';
 
 export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }) {
     const [isFetching, setFetching] = useState(false);
-    const [editMode] = useState(tractionDTO ? true : false);
     const [powerSupply, setPowerSupply] = useState(0);
     const [tractionUnit, setTractionUnit] = useState(0);
     const [title, setTitle] = useState('CREATE');
@@ -83,10 +82,10 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
             tractionType: `${powerSupply}${tractionUnit}`
         }
 
-        const result = editMode ? await TractionService.editTraction(tractionDTO.id, body, await getToken()) : await TractionService.saveTraction(body, await getToken());
+        const result = tractionDTO ? await TractionService.editTraction(tractionDTO.id, body, await getToken()) : await TractionService.saveTraction(body, await getToken());
         try {
             if (result.data) {
-                if (editMode) {
+                if (tractionDTO) {
                     onSave(prevState => {
                         const newList = prevState.data.map((item) => {
                             if (item.id === result.data.id) {
@@ -145,7 +144,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightG">
-                        Brake Weight G (in tons)
+                        Brake Weight G (in tonnes)
                     </label>
                     {form.brakeWeightG.error && <p>{form.brakeWeightG.error}</p>}
                 </div>
@@ -164,7 +163,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightP">
-                        Brake Weight P (in tons)
+                        Brake Weight P (in tonnes)
                     </label>
                     {form.brakeWeightP.error && <p>{form.brakeWeightP.error}</p>}
                 </div>
@@ -341,7 +340,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
                     <label
                         className="form-control-placeholder"
                         htmlFor="weight">
-                        Weight (in tons)
+                        Weight (in tonnes)
                     </label>
                     {form.weight.error && <p>{form.weight.error}</p>}
                 </div>

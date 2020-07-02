@@ -13,7 +13,7 @@ export default function Innerbar({ onCreateTrain, onEditTrain, trains, sendTcm }
                         All trains
                     </h4>
                     {hasPermissions(["write:train"]) &&
-                        <span className="d-flex align-items-center" onClick={onCreateTrain}>
+                        <span className="d-flex align-items-center" style={{ cursor: "pointer" }} onClick={onCreateTrain}>
                             Add Train
                         <i className="fas fa-plus"></i>
                         </span>}

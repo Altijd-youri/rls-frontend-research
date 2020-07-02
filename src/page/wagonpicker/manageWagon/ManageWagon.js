@@ -5,7 +5,6 @@ import WagonService from "../../../api/wagon";
 
 export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
     const [isFetching, setFetching] = useState(false);
-    const [editMode] = useState(wagonDTO ? true : false)
     const [title, setTitle] = useState('CREATE');
 
     const initForm = {
@@ -66,10 +65,10 @@ export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
             weightEmpty: params.get('weightEmpty')
         }
 
-        const result = editMode ? await WagonService.editWagon(wagonDTO.id, body, await getToken()) : await WagonService.saveWagon(body, await getToken())
+        const result = wagonDTO ? await WagonService.editWagon(wagonDTO.id, body, await getToken()) : await WagonService.saveWagon(body, await getToken())
         try {
             if (result.data) {
-                if (editMode) {
+                if (wagonDTO) {
                     onSave(prevState => {
                         const newList = prevState.data.map((item) => {
                             if (item.id === result.data.id) {
@@ -128,7 +127,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightG">
-                        Brake Weight G (in tons)
+                        Brake Weight G (in tonnes)
                     </label>
                     {form.brakeWeightG.error && <p>{form.brakeWeightG.error}</p>}
                 </div>
@@ -147,7 +146,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="brakeWeightP">
-                        Brake Weight P (in tons)
+                        Brake Weight P (in tonnes)
                     </label>
                     {form.brakeWeightP.error && <p>{form.brakeWeightP.error}</p>}
                 </div>
@@ -280,7 +279,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
                     <label
                         className="form-control-placeholder"
                         htmlFor="weightEmpty">
-                        Weight Empty (in tons)
+                        Weight Empty (in tonnes)
                     </label>
                     {form.weightEmpty.error && <p>{form.weightEmpty.error}</p>}
                 </div>

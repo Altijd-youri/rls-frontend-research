@@ -138,7 +138,7 @@ export default function CreateWagon({ onHide, selectedJourney, setSelectedJourne
                     <input
                         value={form.loadWeight}
                         onChange={(event) => setLoadWeightHandler(event.target.value)}
-                        placeholder="Load weight (in tons)"
+                        placeholder="Load weight (in tonnes)"
                         type="number"
                         name="loadweight"
                     />

@@ -42,7 +42,7 @@ export default function TractionTable({ tractions, onEditTraction }) {
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-    const filteredTractions = tractions.filter(traction => traction.typeName && traction.typeName.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredTractions = tractions.filter(traction => traction.locoNumber && traction.locoNumber.toLowerCase().includes(filterText.toLowerCase()))
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
