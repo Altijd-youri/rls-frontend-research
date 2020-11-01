@@ -4,7 +4,8 @@ export const PATH = {
     TRAINDETAILS: '/train/:trainid/details',
     TRACTIONS: '/tractions',
     WAGONS: '/wagons',
-    COMPANIES: '/companies'
+    COMPANIES: '/companies',
+    USERS: '/users'
 }
 
 export const trainTypes = [
@@ -27,6 +28,7 @@ export const ENDPOINTS = {
     DANGERGOODSTYPES: `${process.env.REACT_APP_ENDPOINT}/api/v1/dangergoodstypes`,
     COMPANIES: `${process.env.REACT_APP_ENDPOINT}/api/v1/companies`,
     OWNERS: `${process.env.REACT_APP_ENDPOINT}/api/v1/owners`,
+    USERS:  `${process.env.REACT_APP_ENDPOINT}/api/v1/users`,
 }
 
 export const TRAIN_TYPES = [

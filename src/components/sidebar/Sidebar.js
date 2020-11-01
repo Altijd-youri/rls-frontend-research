@@ -30,18 +30,22 @@ export default function Sidebar() {
                         isAuthenticated
                             ?
                             <>
-                                {hasPermissions(["read:train"]) && <li>
-                                    <NavLink activeClassName="active" to={PATH.TRAINS}>Manage trains</NavLink>
+                                {hasPermissions(["read:user"]) && <li>
+                                    <NavLink activeClassName="active" to={PATH.COMPANIES}>Manage companies</NavLink>
                                 </li>}
                                 {hasPermissions(["read:traction"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.TRACTIONS}>Manage tractions</NavLink>
+                                </li>}                            
+                                {hasPermissions(["read:train"]) && <li>
+                                    <NavLink activeClassName="active" to={PATH.TRAINS}>Manage trains</NavLink>
+                                </li>}
+                                {hasPermissions(["read:user"]) && <li>
+                                    <NavLink activeClassName="active" to={PATH.USERS}>Manage Users</NavLink>
                                 </li>}
                                 {hasPermissions(["read:wagon"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.WAGONS}>Manage wagons</NavLink>
                                 </li>}
-                                {hasPermissions(["read:user"]) && <li>
-                                    <NavLink activeClassName="active" to={PATH.COMPANIES}>Manage companies</NavLink>
-                                </li>}
+
                                 <li onClick={() => logoutHandler()}>
                                     <span>Logout</span>
                                 </li>
