@@ -1,28 +1,34 @@
 import { ENDPOINTS } from '../utils/constants';
 import FetchService from './fetchservice';
 
-class UserService extends FetchService {
+class CustomerService extends FetchService {
     getAll(token) {
         return super
-            .fetch(`${ENDPOINTS.USERS}`, 'GET', token)
+            .fetch(`${ENDPOINTS.CUSTOMERS}`, 'GET', token)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
     save(token, body) {
         return super
-            .fetch(`${ENDPOINTS.USERS}`, 'POST', token, body)
+            .fetch(`${ENDPOINTS.CUSTOMERS}`, 'POST', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    update(userId, body, token) {
+    update(customerId, body, token) {
         return super
-        .fetch(`${ENDPOINTS.USERS}/${userId}`, 'PUT', token, body)
+        .fetch(`${ENDPOINTS.CUSTOMERS}/${customerId}`, 'PUT', token, body)
         .then((data) => super.parseJSON(data))
         .catch((error) => Promise.reject(new Error(error.message)));
     }
 
+    deleteCompany(customerId, token) {
+        return super
+            .fetch(`${ENDPOINTS.CUSTOMERS}/${customerId}`, 'DELETE', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 }
 
-export default new UserService();
+export default new CustomerService();

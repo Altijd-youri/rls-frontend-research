@@ -8,13 +8,18 @@ export default function CompanyTable({ users, onDeleteOwner, onEditOwner }) {
 
     const columns = [
         {
-            name: 'id',
-            selector: 'id',
+            name: 'Firstname',
+            selector: 'firstname',
             sortable: true,
         },
         {
-            name: 'name',
+            name: 'Lastname',
             selector: 'lastname', //Nog geen waarde voor KvK in database
+            sortable: true,
+        },
+        {
+            name: 'Email',
+            selector: 'email', //Nog geen waarde voor KvK in database
             sortable: true,
         }
     ];

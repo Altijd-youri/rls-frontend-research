@@ -5,7 +5,7 @@ import { useAuth0 } from '../../react-auth0-spa';
 import { hasPermissions } from '../../utils/scopeChecker';
 import CompanyTable from './table/CompanyTable';
 import ManageCompany from './manageCompany/ManageCompany';
-import OwnerService from '../../api/owner';
+import CompanyService from '../../api/company';
 
 export default function CompanyPicker() {
 
@@ -31,7 +31,8 @@ export default function CompanyPicker() {
         const fetchOwners = async () => {
             setOwners(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
             try {
-                const { data, error } = await OwnerService.getAll(await getToken());
+                const { data, error } = await CompanyService.getAll(await getToken());
+                // const { data, error } = await OwnerService.getAll(await getToken());
                 if (data) {
                     setOwners(prevState => ({ ...prevState, isFetching: false, data }))
                 } else {
@@ -58,6 +59,17 @@ export default function CompanyPicker() {
         setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: owner }))
     }
 
+    const deleteOwnerHandler = async (owner) => {
+            try {
+                const { error } = await CompanyService.deleteCompany(owner.companyCode ,await getToken());
+                if (error) throw new Error(error)
+            } catch (e) {
+                console.log("Failed delete request")
+            }
+
+
+    }
+
     if (owners.isFetching) {
         return (
             <div className="d-flex justify-content-center align-items-center w-100" >
@@ -80,14 +92,16 @@ export default function CompanyPicker() {
                 <div className="inner-box">
                     <div className="content-title">
                         <h4>
-                            All companies
+                            Companies
                     </h4>
-                        {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addCompanyHandler}>
+                    {/* TODO addCompanyHandler moet naar create company page leiden */}
+                        {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addCompanyHandler}> 
                             Add Company
                         <i className="fas fa-plus"></i>
                         </span>}
                     </div>
-                    <CompanyTable onEditOwner={editOwnerHandler} owners={owners.data} />
+                    <CompanyTable onEditOwner={editOwnerHandler} owners={owners.data} 
+                    onDeleteOwner={deleteOwnerHandler} owners={owners.data} />
                 </div>
             </div>
 

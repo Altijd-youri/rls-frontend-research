@@ -4,32 +4,40 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
+export default function CustomerTable({ customers, onDeleteOwner, onEditOwner }) {
 
     const columns = [
         {
-            name: 'Id',
+            name: 'ID',
             selector: 'id',
             sortable: true,
         },
         {
-            name: 'Code',
-            selector: 'code', //Nog geen waarde voor KvK in database
-            sortable: true,
-        },
-        {
             name: 'Name',
-            selector: 'name', //Nog geen waarde voor IBAN in database
+            selector: 'name', //Nog geen waarde voor KvK in database
             sortable: true,
         },
         {
-            name: 'Country',
-            selector: 'country_iso', // Deze waarde wordt nog niet gereturned
+            name: 'KvK',
+            selector: 'kvk', //Nog geen waarde voor KvK in database
+            sortable: true,
+        },
+        {
+            name: 'IBAN',
+            selector: 'iban', //Nog geen waarde voor KvK in database
+            sortable: true,
+        },
+        {
+            name: 'CompanyCode',
+            selector: 'companyCode', //Nog geen waarde voor KvK in database
             sortable: true,
         }
     ];
 
-    
+    // const getColumns = () => {
+    //     return columns
+    // }
+
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
@@ -64,12 +72,9 @@ export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-    /**
-     * Onderstaande filteredCompanies. Eerste filter op naam, tweede op code, derde werkt zowel op naam als code. Kan uitgebreid worden naar andere variabelen.
-     */
-    //const filteredCompanies = owners.filter(owner => owner.name && owner.name.toLowerCase().includes(filterText.toLowerCase()))
-    //const filteredCompanies = owners.filter(owner => owner.code && owner.code.toLowerCase().includes(filterText.toLowerCase()))
-    const filteredCompanies = owners.filter(owner => ((owner.code && owner.code.toLowerCase().includes(filterText.toLowerCase())) || (owner.name && owner.name.toLowerCase().includes(filterText.toLowerCase()))))
+
+    // TODO ook filtered toepassen op andere dan customer.name, o.a. code
+    const filteredCustomers = customers.filter(customer => customer.name && customer.name.toLowerCase().includes(filterText.toLowerCase()))
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
@@ -87,7 +92,7 @@ export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
         <DataTable
             columns={getColumns()}
             defaultSortField='scheduledTimeAtHandover'
-            data={filteredCompanies}
+            data={filteredCustomers}
             pagination
             paginationResetDefaultPage={resetPaginationToggle}
             subHeader
@@ -99,4 +104,6 @@ export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
             pointerOnHover={true}
         />
     );
+
+
 }

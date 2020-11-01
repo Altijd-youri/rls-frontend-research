@@ -13,6 +13,7 @@ import Home from './page/home/Home';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import CompanyPicker from './page/companypicker/CompanyPicker';
 import UserPicker from './page/userpicker/UserPicker'
+import CustomerPicker from './page/customerpicker/CustomerPicker'
 
 function App() {
   const { loading, getTokenSilently, isAuthenticated } = useAuth0();
@@ -46,6 +47,7 @@ function App() {
         <PrivateRoute path={PATH.TRACTIONS} exact component={TractionPicker} />
         <PrivateRoute path={PATH.WAGONS} exact component={WagonPicker} />
         <PrivateRoute path={PATH.COMPANIES} exact component={CompanyPicker} />
+        <PrivateRoute path={PATH.CUSTOMERS} exact component={CustomerPicker} />
         <PrivateRoute path={PATH.USERS} exact component={UserPicker} />
       </Switch>
     </Router>
