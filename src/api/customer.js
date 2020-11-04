@@ -16,16 +16,16 @@ class CustomerService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    update(customerId, body, token) {
+    update(body, token) {
         return super
-        .fetch(`${ENDPOINTS.CUSTOMERS}/${customerId}`, 'PUT', token, body)
+        .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PUT', token, body)
         .then((data) => super.parseJSON(data))
         .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    deleteCompany(customerId, token) {
+    delete(body, token) {
         return super
-            .fetch(`${ENDPOINTS.CUSTOMERS}/${customerId}`, 'DELETE', token)
+            .fetch(`${ENDPOINTS.CUSTOMERS}`, 'DELETE', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

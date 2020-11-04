@@ -4,7 +4,7 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function CustomerTable({ customers, onDeleteOwner, onEditOwner }) {
+export default function CustomerTable({ customers, onDeleteCustomer, onEditCustomer }) {
 
     const columns = [
         {
@@ -14,7 +14,7 @@ export default function CustomerTable({ customers, onDeleteOwner, onEditOwner })
         },
         {
             name: 'Name',
-            selector: 'name', //Nog geen waarde voor KvK in database
+            selector: 'customername', //Nog geen waarde voor customername in database
             sortable: true,
         },
         {
@@ -24,12 +24,12 @@ export default function CustomerTable({ customers, onDeleteOwner, onEditOwner })
         },
         {
             name: 'IBAN',
-            selector: 'iban', //Nog geen waarde voor KvK in database
+            selector: 'iban', //Nog geen waarde voor iban in database
             sortable: true,
         },
         {
             name: 'CompanyCode',
-            selector: 'companyCode', //Nog geen waarde voor KvK in database
+            selector: 'companyCode', //Nog geen waarde voor companycode in database
             sortable: true,
         }
     ];
@@ -41,14 +41,14 @@ export default function CustomerTable({ customers, onDeleteOwner, onEditOwner })
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
-                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteOwner(row)}>Delete</Button>,
+                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteCustomer(row)}>Delete</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
                 width: '60px',
             }
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditOwner(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCustomer(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -58,7 +58,7 @@ export default function CustomerTable({ customers, onDeleteOwner, onEditOwner })
         }
         else if (hasPermissions(["write:user"])) {
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditOwner(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCustomer(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -74,7 +74,10 @@ export default function CustomerTable({ customers, onDeleteOwner, onEditOwner })
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
     // TODO ook filtered toepassen op andere dan customer.name, o.a. code
-    const filteredCustomers = customers.filter(customer => customer.name && customer.name.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredCustomers = customers.filter(customer => 
+        (customer.name && customer.name.toLowerCase().includes(filterText.toLowerCase())) ||
+        (customer.companyCode && customer.companyCode.toLowerCase().includes(filterText.toLowerCase())) ||
+        (customer.iban && customer.iban.toLowerCase().includes(filterText.toLowerCase())) )
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {

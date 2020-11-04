@@ -18,7 +18,7 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
         companyCode: {
             error: ''
         },
-        surname: {
+        firstname: {
             error: ''
         },
         lastname: {
@@ -35,9 +35,11 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
             setEditMode(true);
         } else {
             setEditMode(false);
-
         }
     }, [userDTO])
+
+    console.log("test userdto")
+    console.log(userDTO)
 
     useEffect(() => {
         if (userDTO) {
@@ -77,8 +79,6 @@ const submitForm = async (event) => {
 
     const result = await UserService.save(getToken(), body) 
     try {
-        console.log("result.data")
-        console.log(result.data)
         if (result.data) {
             if (userDTO) {
                 onSave(prevState => {
@@ -111,51 +111,6 @@ const submitForm = async (event) => {
         errorAlert(e);
     }
     setFetching(false);
-
-    // const result = editMode ? await UserService.update(userDTO.id, await getToken(), body) : await UserService.save(await getToken(), body)
-    // try {
-    //     console.log("result.data")
-    //     console.log(result.data)
-    //     if (result.data) {
-    //         if (userDTO) {
-    //             onSave(prevState => {
-    //                 const newList = prevState.data.map((item) => {
-    //                     if (item.id === result.data.id) {
-    //                         return result.data;
-    //                     } else {
-    //                         return item;
-    //                     }
-    //                 })
-    //                 return ({ ...prevState, data: newList })
-    //             })
-    //         } else {
-    //             onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
-    //         }
-    //         succeedAlert()
-    //     } else if (result?.error?.errors) {
-    //         result.error.errors.forEach(element => {
-    //             const { field, message } = element;
-    //             setForm(prevState => {
-    //                 let updateFieldName = form[field]
-    //                 updateFieldName.error = message;
-    //                 return { ...prevState, field: updateFieldName }
-    //             })
-    //         });
-    //     } else {
-    //         throw new Error(result.message);
-    //     }
-    // } catch (e) {
-    //     errorAlert(e);
-    // }
-    // setFetching(false);
-
-
-    //TODO send to Auth0 Management API to create user
-    //TODO retrieve Auth0 ID
-    //TODO send to RSL API to save user
-    //TODO send to RSL API including Auth0 id, start date, end date now not in db
-    //TODO empty form after submitting
-    //TODO checkbox and logic for immediate auto invite link
 }
 
     return (
@@ -164,8 +119,7 @@ const submitForm = async (event) => {
                 <div className="form-group">
                     <input
                         key={`companyCode || ${userDTO?.companyCode}`}
-                        // defaultValue={userDTO?.companyCode}
-                        // value = {this.state.value}
+                        defaultValue={userDTO?.companyCode}
                         id="companyCode"
                         type="number"
                         name="companyCode"
@@ -184,11 +138,11 @@ const submitForm = async (event) => {
 
                 <div className="form-group">
                     <input
-                        key={`surname || ${userDTO?.surname}`}
-                        defaultValue={userDTO?.surname}
-                        id="surname"
+                        key={`firstname || ${userDTO?.firstname}`}
+                        defaultValue={userDTO?.firstname}
+                        id="firstname"
                         type="text"
-                        name="surname"
+                        name="firstname"
                         maxLength="60"
                         className="form-control"
                         onChange={e => setFirstname(e.target.value)}
@@ -196,10 +150,10 @@ const submitForm = async (event) => {
                     />
                     <label
                         className="form-control-placeholder"
-                        htmlFor="surname">
-                        surname
+                        htmlFor="firstname">
+                        firstname
                     </label>
-                    {form.surname.error && <p>{form.surname.error}</p>}
+                    {form.firstname.error && <p>{form.firstname.error}</p>}
                 </div>
 
                 <div className="form-group">

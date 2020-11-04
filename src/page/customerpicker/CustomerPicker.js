@@ -29,6 +29,20 @@ export default function CustomerPicker() {
         return token;
     }, [getTokenSilently]);
 
+    const onEditCustomer = (customerDTO) => {
+        closeAllSidebars();
+        setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: true, data: customerDTO}))
+    }
+
+    const onDeleteCustomer = async (customerDTO) => {
+        let temptoken = await getToken();
+        const deleteBody = {
+            "token": temptoken,
+            "customerid": customerDTO.id
+        }
+        CustomerService.delete(deleteBody, temptoken)
+    }
+
     useEffect(() => {
         const fetchCustomers = async () => {
             setCustomers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
@@ -104,11 +118,18 @@ export default function CustomerPicker() {
                     </div>
 
                     {sidebar.showCustomerTable && 
-                        <CustomerTable customers={customers.data} />
+                            <CustomerTable customers={customers.data} 
+                            onEditCustomer={(row) => onEditCustomer(row)}
+                            onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                            customerDTO={sidebar.data}
+                        />
                     }
                     {sidebar.showCreateCustomer &&
                         <ManageCustomer 
                             getToken={() => getToken()}
+                            onEditCustomer={(row) => onEditCustomer(row)}
+                            onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                            customerDTO={sidebar.data}
                         />
                     }
                 </div>

@@ -28,6 +28,22 @@ export default function UserPicker() {
         return token;
     }, [getTokenSilently]);
 
+    const onEditUser = (userDTO) => {
+        closeAllSidebars();
+        setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
+    };
+    
+    const onDeleteUser = async (userDTO) => {
+        // closeAllSidebars();
+        // setSidebar(prevState => ({ ...prevState, showUserTable: true, showCreateUser: false, data: userDTO}))
+        let temptoken = await getToken()
+        const deleteBody = {
+            '"token"': temptoken,
+            '"userid"': userDTO.userId
+        }
+        UserService.delete(deleteBody, await getToken())
+    }
+
     useEffect(() => {
         const fetchUsers = async () => {
             setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
@@ -82,10 +98,6 @@ export default function UserPicker() {
     }
 
     return (
-        
-
-
-
         <div className="content">
             <div className="inner">
                 <div className="inner-box">
@@ -93,9 +105,6 @@ export default function UserPicker() {
                         <h4>
                                 Users
                         </h4>
-                        
-
-
                         <div hidden={sidebar.showCreateUser}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addUserHandler}> 
                             Add User
@@ -113,17 +122,21 @@ export default function UserPicker() {
                     </div>
 
                     {sidebar.showUserTable && 
-                        <UserTable users={users.data} />
+                            <UserTable users={users.data} 
+                            onEditUser={(row) => onEditUser(row)}
+                            onDeleteUser={(row) => onDeleteUser(row)}
+                            ownerDTO={sidebar.data}
+                        />
                     }
                     {sidebar.showCreateUser &&
                         <ManageUser 
                             getToken={() => getToken()}
                             handleChange={() => handleChange()}
+                            onEditUser={(row) => onEditUser(row)}
+                            onDeleteUser={(row) => onDeleteUser(row)}
+                            userDTO={sidebar.data}
                         />
                     }
-                    {/* <UserTable onEditOwner={editOwnerHandler} owners={owners.data}  */}
-                    
-                    {/* onDeleteOwner={deleteOwnerHandler} owners={owners.data} /> */}
                 </div>
             </div>
 

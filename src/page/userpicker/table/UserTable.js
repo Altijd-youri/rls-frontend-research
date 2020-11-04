@@ -4,7 +4,7 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function CompanyTable({ users, onDeleteOwner, onEditOwner }) {
+export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken }) {
 
     const columns = [
         {
@@ -24,29 +24,49 @@ export default function CompanyTable({ users, onDeleteOwner, onEditOwner }) {
         }
     ];
 
-    const getColumns = () => {
-        return columns;
-    }
-
     // const getColumns = () => {
-    //     if (hasPermissions(["write:user"])) {
-    //         const editColumn = {
-    //             cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditOwner(row)}>Edit</Button>,
-    //             allowOverflow: true,
-    //             ignoreRowClick: true,
-    //             button: true,
-    //             width: '56px',
-    //         }
-    //         return [...columns, editColumn];
-    //     } else {
-    //         return columns;
-    //     }
+    //     return columns;
     // }
+
+    const getColumns = () => {
+        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+            const deleteColumn = {
+                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '60px',
+            }
+            const editColumn = {
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '56px',
+            }
+            return [...columns, deleteColumn, editColumn];
+        }
+        else if (hasPermissions(["write:user"])) {
+            const editColumn = {
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '56px',
+            }
+            return [...columns, editColumn];
+        } else {
+            return columns;
+        }
+    }
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
-    const filteredUsers = users.filter(user => user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase()))
+    const filteredUsers = users.filter(user => 
+        (user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase())) || 
+        (user.firstname && user.firstname.toLowerCase().includes(filterText.toLowerCase())) || 
+        (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) )
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {

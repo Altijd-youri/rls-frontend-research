@@ -10,8 +10,18 @@ class CompanyService extends FetchService {
     }
 
     deleteCompany(companyCode, token) {
+        console.log('Deleteservice')
+        console.log(companyCode)
+        console.log(token)
         return super
             .fetch(`${ENDPOINTS.COMPANIES}/${companyCode}`, 'DELETE', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
+
+    update(companyCode, body, token) {
+        return super
+            .fetch(`${ENDPOINTS.COMPANIES}/${companyCode}`, 'PUT', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }

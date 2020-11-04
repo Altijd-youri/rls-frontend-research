@@ -4,7 +4,8 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
+
+export default function CompanyTable({ companies, onEditCompany, getToken, CompanyService }) {
 
     const columns = [
         {
@@ -24,23 +25,34 @@ export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
         },
         {
             name: 'Country',
-            selector: 'country_iso', // Deze waarde wordt nog niet gereturned
+            selector: 'countryIso', // Deze waarde wordt nog niet gereturned
             sortable: true,
         }
     ];
+
+    const onDeleteCompany = async (company) => {
+        await CompanyService.deleteCompany(company.code, getToken())
+        // try {
+        //     console.log(company.code)
+        //     const { error } = await CompanyService.deleteCompany(company.code, await getToken());
+        //     if (error) throw new Error(error)
+        // } catch (e) {
+        //     console.log("Failed delete request")
+        // }
+    }
 
     
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
-                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteOwner(row)}>Delete</Button>,
+                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteCompany(row)}>Delete</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
                 width: '60px',
             }
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditOwner(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCompany(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -50,7 +62,7 @@ export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
         }
         else if (hasPermissions(["write:user"])) {
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditOwner(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCompany(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -64,12 +76,14 @@ export default function CompanyTable({ owners, onDeleteOwner, onEditOwner }) {
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+
     /**
      * Onderstaande filteredCompanies. Eerste filter op naam, tweede op code, derde werkt zowel op naam als code. Kan uitgebreid worden naar andere variabelen.
      */
-    //const filteredCompanies = owners.filter(owner => owner.name && owner.name.toLowerCase().includes(filterText.toLowerCase()))
-    //const filteredCompanies = owners.filter(owner => owner.code && owner.code.toLowerCase().includes(filterText.toLowerCase()))
-    const filteredCompanies = owners.filter(owner => ((owner.code && owner.code.toLowerCase().includes(filterText.toLowerCase())) || (owner.name && owner.name.toLowerCase().includes(filterText.toLowerCase()))))
+    const filteredCompanies = companies.filter(company => 
+        (company.code && company.code.toLowerCase().includes(filterText.toLowerCase())) || 
+        (company.name && company.name.toLowerCase().includes(filterText.toLowerCase())) )
+    // const filteredCompanies = company.filter(company => ((company.companyCode && company.companyCode.toLowerCase().includes(filterText.toLowerCase() ) ) || (company.name && company.name.toLowerCase().includes(filterText.toLowerCase()))))
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {

@@ -9,18 +9,18 @@ import CompanyService from '../../api/company';
 
 export default function CompanyPicker() {
 
-    const [owners, setOwners] = useState({ data: [], isFetching: false, error: '' });
+    const [companies, setCompanies] = useState({ data: [], isFetching: false, error: '' });
     const { getTokenSilently } = useAuth0();
 
-    const initSidebar = { showManageCompany: false, data: undefined }
+    const initSidebar = { showCompanyTable: true, showManageCompany: false, data: undefined }
     const [sidebar, setSidebar] = useState(initSidebar)
 
     useEffect(() => {
         if (sidebar.data) {
-            const newObject = owners.data.find(item => item.id === sidebar.data.id);
+            const newObject = companies.data.find(item => item.id === sidebar.data.id);
             setSidebar(prevState => ({ ...prevState, data: newObject }))
         }
-    }, [owners, sidebar.data])
+    }, [companies, sidebar.data])
 
     const getToken = useCallback(async () => {
         const token = await getTokenSilently();
@@ -28,21 +28,20 @@ export default function CompanyPicker() {
     }, [getTokenSilently]);
 
     useEffect(() => {
-        const fetchOwners = async () => {
-            setOwners(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
+        const fetchCompanies = async () => {
+            setCompanies(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
             try {
                 const { data, error } = await CompanyService.getAll(await getToken());
-                // const { data, error } = await OwnerService.getAll(await getToken());
                 if (data) {
-                    setOwners(prevState => ({ ...prevState, isFetching: false, data }))
+                    setCompanies(prevState => ({ ...prevState, isFetching: false, data}))
                 } else {
                     throw new Error(error)
                 }
             } catch (e) {
-                setOwners(prevState => ({ ...prevState, isFetching: false, error: e.message }))
+                setCompanies(prevState => ({ ...prevState, isFetching: false, error: e.message }))
             }
         }
-        fetchOwners();
+        fetchCompanies();
     }, [getToken])
 
     const closeAllSidebars = () => {
@@ -51,26 +50,44 @@ export default function CompanyPicker() {
 
     const addCompanyHandler = () => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
+        setSidebar(prevState => ({ ...prevState, showCompanyTable: false, showCreateCompany: true, data: undefined }))
     }
 
-    const editOwnerHandler = (owner) => {
+    const backToCompanyTable = () => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: owner }))
+        setSidebar(prevState => ({ ...prevState, showCompanyTable: true, showCreateCompany: false, data: undefined }))
+    }
+    
+    // const onDeleteCompany = useCallback(async (company) => {
+    //     try {
+    //         const { error } = await CompanyService.deleteCompany(company.companyCode, await getToken());
+    //         if (error) throw new Error(error)
+    //     } catch (e) {
+    //         console.log("Failed delete request")
+    //     }
+    // }, [getToken]);
+
+
+
+    // const onDeleteCompany = async (company) => {
+    //     try {
+    //         const { error } = await CompanyService.deleteCompany(company.companyCode, await getToken());
+    //         if (error) throw new Error(error)
+    //     } catch (e) {
+    //         console.log("Failed delete request")
+    //     }
+    // }
+
+    const onEditCompany = async (company) => {
+        try {
+            const { error } = await CompanyService.update(company.companyCode, await getToken());
+            if (error) throw new Error(error)
+        } catch (e) {
+            console.log("Failed to update request")
+        }
     }
 
-    const deleteOwnerHandler = async (owner) => {
-            try {
-                const { error } = await CompanyService.deleteCompany(owner.companyCode ,await getToken());
-                if (error) throw new Error(error)
-            } catch (e) {
-                console.log("Failed delete request")
-            }
-
-
-    }
-
-    if (owners.isFetching) {
+    if (companies.isFetching) {
         return (
             <div className="d-flex justify-content-center align-items-center w-100" >
                 <Spinner animation="border" role="status">
@@ -80,11 +97,16 @@ export default function CompanyPicker() {
         )
     }
 
-    if (owners.error) {
+    if (companies.error) {
         return (<div className="d-flex justify-content-center align-items-center w-100">
-            Failed to fetch companies: {owners.error}
+            Failed to fetch companies: {companies.error}
         </div>)
     }
+
+    function handleChange(e) {
+        console.log(e)
+    }
+
 
     return (
         <div className="content">
@@ -93,25 +115,46 @@ export default function CompanyPicker() {
                     <div className="content-title">
                         <h4>
                             Companies
-                    </h4>
-                    {/* TODO addCompanyHandler moet naar create company page leiden */}
-                        {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addCompanyHandler}> 
+                        </h4>
+                        {/* TODO permissions controleren */}
+
+                        <div hidden={sidebar.showCreateCompany}>
+                                  {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addCompanyHandler}> 
                             Add Company
                         <i className="fas fa-plus"></i>
                         </span>}
+                        </div>
+
+                        <div hidden={sidebar.showCompanyTable}>
+                                  {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={backToCompanyTable}> 
+                            Close
+                        <i className="fas fa-times"></i>
+                        </span>}
+                        </div>
                     </div>
-                    <CompanyTable onEditOwner={editOwnerHandler} owners={owners.data} 
-                    onDeleteOwner={deleteOwnerHandler} owners={owners.data} />
+
+                    
+                    {sidebar.showCompanyTable && 
+                        <CompanyTable companies={companies.data} />
+                    }
+                    {sidebar.showCreateCompany &&
+                        <ManageCompany 
+                            getToken={() => getToken()}
+                            handleChange={() => handleChange()}
+                            onEditCompany={() => onEditCompany()}
+                            CompanyService={CompanyService}
+                        />
+                    }
                 </div>
             </div>
 
-            {sidebar.showManageCompany &&
+            {/* {sidebar.showManageCompany &&
                 <ManageCompany
                     getToken={() => getToken()}
                     onHide={closeAllSidebars}
                     onSave={setOwners}
                     ownerDTO={sidebar.data}
-                />}
+                />} */}
         </div>
     )
 }
