@@ -7,11 +7,13 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
-    // const [setState] = React.useState("")
-    const [companyCode, setCompanyCode] = useState('');
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
-    const [email, setEmail] = useState('');
+    const [companyCode, setCompanyCode] = useState('1');
+    console.log(userDTO)
+    //TODO companyCode moet uit de enviroment gehaald worden. 
+    // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
+    const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
+    const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
+    const [email, setEmail] = useState(userDTO ? userDTO.email : '');
     
 
     const initForm = {
@@ -119,7 +121,9 @@ const submitForm = async (event) => {
                 <div className="form-group">
                     <input
                         key={`companyCode || ${userDTO?.companyCode}`}
-                        defaultValue={userDTO?.companyCode}
+                        //TODO companycode moet uit de enviroment gehaald worden
+                        defaultValue={"1"}
+                        // defaultValue={userDTO?.companyCode}
                         id="companyCode"
                         type="number"
                         name="companyCode"

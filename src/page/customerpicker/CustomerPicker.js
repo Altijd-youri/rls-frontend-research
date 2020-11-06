@@ -121,6 +121,7 @@ export default function CustomerPicker() {
                             <CustomerTable customers={customers.data} 
                             onEditCustomer={(row) => onEditCustomer(row)}
                             onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                            // backToCustomerTable={(backToCustomerTable())}
                             customerDTO={sidebar.data}
                         />
                     }
@@ -129,6 +130,7 @@ export default function CustomerPicker() {
                             getToken={() => getToken()}
                             onEditCustomer={(row) => onEditCustomer(row)}
                             onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                            backToCustomerTable={() => backToCustomerTable()}
                             customerDTO={sidebar.data}
                         />
                     }

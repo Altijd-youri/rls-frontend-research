@@ -3,14 +3,14 @@ import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import CustomerService from "../../../api/customer";
 
-export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange }) {
+export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange, backToCustomerTable }) {
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(customerDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
-    const [id, setId] = useState(customerDTO.id);
-    const [customername, setCustomername] = useState(customerDTO.customername);
-    const [companyCode, setCompanyCode] = useState(customerDTO.companyCode);
-    const [iban, setIban] = useState(customerDTO.iban);
+    const [id, setId] = useState(customerDTO ? customerDTO.id : '');
+    const [customername, setCustomername] = useState(customerDTO ? customerDTO.customername : '');
+    const [companyCode, setCompanyCode] = useState(customerDTO ? customerDTO.companyCode : '');
+    const [iban, setIban] = useState(customerDTO ? customerDTO.iban : '');
 
     const initForm = {
         id: {
@@ -126,6 +126,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
         // } catch (e) {
         //     errorAlert(e);
         // }
+        backToCustomerTable();
         setFetching(false);
     }
 

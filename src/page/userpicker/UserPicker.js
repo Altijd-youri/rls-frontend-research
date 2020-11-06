@@ -34,14 +34,12 @@ export default function UserPicker() {
     };
     
     const onDeleteUser = async (userDTO) => {
-        // closeAllSidebars();
-        // setSidebar(prevState => ({ ...prevState, showUserTable: true, showCreateUser: false, data: userDTO}))
-        let temptoken = await getToken()
+        let temptoken = await getToken();
         const deleteBody = {
-            '"token"': temptoken,
-            '"userid"': userDTO.userId
+            "token": temptoken,
+            "userid": userDTO.userId
         }
-        UserService.delete(deleteBody, await getToken())
+        UserService.delete(deleteBody, temptoken)
     }
 
     useEffect(() => {
@@ -103,7 +101,7 @@ export default function UserPicker() {
                 <div className="inner-box">
                     <div className="content-title">
                         <h4>
-                                Users
+                            Users
                         </h4>
                         <div hidden={sidebar.showCreateUser}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addUserHandler}> 
@@ -125,7 +123,7 @@ export default function UserPicker() {
                             <UserTable users={users.data} 
                             onEditUser={(row) => onEditUser(row)}
                             onDeleteUser={(row) => onDeleteUser(row)}
-                            ownerDTO={sidebar.data}
+                            userDTO={sidebar.data}
                         />
                     }
                     {sidebar.showCreateUser &&

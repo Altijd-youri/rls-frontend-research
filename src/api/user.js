@@ -25,9 +25,8 @@ class UserService extends FetchService {
     }
 
     delete(body, token) {
-        console.log("user.js")
-        console.log(body)
-        return super.fetch(`${ENDPOINTS.USERS}`, 'DELETE', body, token)
+        return super
+        .fetch(`${ENDPOINTS.USERS}`, 'DELETE', token, body)
         .then((data) => super.parseJSON(data))
         .catch((error) => Promise.reject(new Error(error.message)));
     }

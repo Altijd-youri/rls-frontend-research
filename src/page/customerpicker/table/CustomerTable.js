@@ -75,7 +75,7 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
 
     // TODO ook filtered toepassen op andere dan customer.name, o.a. code
     const filteredCustomers = customers.filter(customer => 
-        (customer.name && customer.name.toLowerCase().includes(filterText.toLowerCase())) ||
+        (customer.customername && customer.customername.toLowerCase().includes(filterText.toLowerCase())) ||
         (customer.companyCode && customer.companyCode.toLowerCase().includes(filterText.toLowerCase())) ||
         (customer.iban && customer.iban.toLowerCase().includes(filterText.toLowerCase())) )
 

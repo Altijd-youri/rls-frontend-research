@@ -15,10 +15,10 @@ export default function ManageCompany({ onHide, onSave, companyDTO, getToken }) 
     // const [form, setForm] = useState(initForm);
     const [users, setUsers] = useState([]);
     const [editMode, setEditMode] = useState(companyDTO ? true : false);
-    const [id, setId] = useState('');
-    const [code, setCode] = useState('');
-    const [name, setName] = useState('');
-    const [countryIso, setCountryIso] = useState('');
+    const [id, setId] = useState(companyDTO.id);
+    const [code, setCode] = useState(companyDTO.code);
+    const [name, setName] = useState(companyDTO.name);
+    const [countryIso, setCountryIso] = useState(companyDTO.countryIso);
     
 
     const initForm = {
