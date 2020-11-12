@@ -12,14 +12,14 @@ class UserService extends FetchService {
 
     save(token, body) {
         return super
-            .fetch(`${ENDPOINTS.USERS}`, 'POST', token, body)
+            .fetch(`${ENDPOINTS.USERS}`, 'PUT', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
     update(userId, body, token) {
         return super
-        .fetch(`${ENDPOINTS.USERS}/${userId}`, 'PUT', token, body)
+        .fetch(`${ENDPOINTS.USERS}/${userId}`, 'PATCH', token, body)
         .then((data) => super.parseJSON(data))
         .catch((error) => Promise.reject(new Error(error.message)));
     }

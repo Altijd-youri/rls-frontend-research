@@ -11,14 +11,14 @@ class CustomerService extends FetchService {
 
     save(token, body) {
         return super
-            .fetch(`${ENDPOINTS.CUSTOMERS}`, 'POST', token, body)
+            .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PUT', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
     update(body, token) {
         return super
-        .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PUT', token, body)
+        .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PATCH', token, body)
         .then((data) => super.parseJSON(data))
         .catch((error) => Promise.reject(new Error(error.message)));
     }

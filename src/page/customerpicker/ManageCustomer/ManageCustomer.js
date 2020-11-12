@@ -5,8 +5,11 @@ import CustomerService from "../../../api/customer";
 
 export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange, backToCustomerTable }) {
     const [isFetching, setFetching] = useState(false);
+    // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
     const [editMode, setEditMode] = useState(customerDTO ? true : false);
+    // Set de text van de submit button van de form
     const [title, setTitle] = useState('CREATE');
+    // States voor handelen van data van customer
     const [id, setId] = useState(customerDTO ? customerDTO.id : '');
     const [customername, setCustomername] = useState(customerDTO ? customerDTO.customername : '');
     const [companyCode, setCompanyCode] = useState(customerDTO ? customerDTO.companyCode : '');
@@ -36,9 +39,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     //         setIban(customerDTO.iban)
     //     }
     // })
-
-    
-
 
     useEffect(() => {
         if (customerDTO) {
