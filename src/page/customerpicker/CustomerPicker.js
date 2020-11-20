@@ -132,6 +132,7 @@ export default function CustomerPicker() {
                             onDeleteCustomer={(row) => onDeleteCustomer(row)}
                             backToCustomerTable={() => backToCustomerTable()}
                             customerDTO={sidebar.data}
+                            onSave={setCustomers}
                         />
                     }
                 </div>

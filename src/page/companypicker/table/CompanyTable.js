@@ -41,38 +41,41 @@ export default function CompanyTable({ companies, onEditCompany, getToken, Compa
         // }
     }
 
-    
     const getColumns = () => {
-        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
-            const deleteColumn = {
-                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteCompany(row)}>Delete</Button>,
-                allowOverflow: true,
-                ignoreRowClick: true,
-                button: true,
-                width: '60px',
-            }
-            const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCompany(row)}>Edit</Button>,
-                allowOverflow: true,
-                ignoreRowClick: true,
-                button: true,
-                width: '56px',
-            }
-            return [...columns, deleteColumn, editColumn];
-        }
-        else if (hasPermissions(["write:user"])) {
-            const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCompany(row)}>Edit</Button>,
-                allowOverflow: true,
-                ignoreRowClick: true,
-                button: true,
-                width: '56px',
-            }
-            return [...columns, editColumn];
-        } else {
-            return columns;
-        }
+        return columns;
     }
+    
+    // const getColumns = () => {
+    //     if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+    //         const deleteColumn = {
+    //             cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteCompany(row)}>Delete</Button>,
+    //             allowOverflow: true,
+    //             ignoreRowClick: true,
+    //             button: true,
+    //             width: '60px',
+    //         }
+    //         const editColumn = {
+    //             cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCompany(row)}>Edit</Button>,
+    //             allowOverflow: true,
+    //             ignoreRowClick: true,
+    //             button: true,
+    //             width: '56px',
+    //         }
+    //         return [...columns, deleteColumn, editColumn];
+    //     }
+    //     else if (hasPermissions(["write:user"])) {
+    //         const editColumn = {
+    //             cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditCompany(row)}>Edit</Button>,
+    //             allowOverflow: true,
+    //             ignoreRowClick: true,
+    //             button: true,
+    //             width: '56px',
+    //         }
+    //         return [...columns, editColumn];
+    //     } else {
+    //         return columns;
+    //     }
+    // }
 
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);

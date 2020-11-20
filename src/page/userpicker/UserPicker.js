@@ -29,6 +29,7 @@ export default function UserPicker() {
     }, [getTokenSilently]);
 
     const onEditUser = (userDTO) => {
+        console.log(userDTO)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
     };
@@ -48,6 +49,7 @@ export default function UserPicker() {
             try {
                 const { data, error } = await UserService.getAll(await getToken());
                 if (data) {
+                    console.log(data)
                     setUsers(prevState => ({ ...prevState, isFetching: false, data}))
                 } else {
                     throw new Error(error)

@@ -44,19 +44,19 @@ export default function CompanyPicker() {
         fetchCompanies();
     }, [getToken])
 
-    const closeAllSidebars = () => {
-        setSidebar(initSidebar);
-    }
+    // const closeAllSidebars = () => {
+    //     setSidebar(initSidebar);
+    // }
 
-    const addCompanyHandler = () => {
-        closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showCompanyTable: false, showCreateCompany: true, data: undefined }))
-    }
+    // const addCompanyHandler = () => {
+    //     closeAllSidebars();
+    //     setSidebar(prevState => ({ ...prevState, showCompanyTable: false, showCreateCompany: true, data: undefined }))
+    // }
 
-    const backToCompanyTable = () => {
-        closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showCompanyTable: true, showCreateCompany: false, data: undefined }))
-    }
+    // const backToCompanyTable = () => {
+    //     closeAllSidebars();
+    //     setSidebar(prevState => ({ ...prevState, showCompanyTable: true, showCreateCompany: false, data: undefined }))
+    // }
     
     // const onDeleteCompany = useCallback(async (company) => {
     //     try {
@@ -118,19 +118,19 @@ export default function CompanyPicker() {
                         </h4>
                         {/* TODO permissions controleren */}
 
-                        <div hidden={sidebar.showCreateCompany}>
+                        {/* <div hidden={sidebar.showCreateCompany}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addCompanyHandler}> 
                             Add Company
                         <i className="fas fa-plus"></i>
                         </span>}
-                        </div>
+                        </div> */}
 
-                        <div hidden={sidebar.showCompanyTable}>
+                        {/* <div hidden={sidebar.showCompanyTable}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={backToCompanyTable}> 
                             Close
                         <i className="fas fa-times"></i>
                         </span>}
-                        </div>
+                        </div> */}
                     </div>
 
                     
@@ -141,7 +141,7 @@ export default function CompanyPicker() {
                         <ManageCompany 
                             getToken={() => getToken()}
                             handleChange={() => handleChange()}
-                            onEditCompany={() => onEditCompany()}
+                            // onEditCompany={() => onEditCompany()}
                             CompanyService={CompanyService}
                         />
                     }

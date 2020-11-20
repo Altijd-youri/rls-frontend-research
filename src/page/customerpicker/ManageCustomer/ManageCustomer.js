@@ -15,6 +15,11 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     const [companyCode, setCompanyCode] = useState(customerDTO ? customerDTO.companyCode : '');
     const [iban, setIban] = useState(customerDTO ? customerDTO.iban : '');
 
+    const initErrorForm = { customer: { error: '' } }
+    const [errorForm, setErrorForm] = useState(initErrorForm);
+
+    console.log(customerDTO)
+
     const initForm = {
         id: {
             error: ''
@@ -82,50 +87,31 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
         console.log(body)
         console.log(updateBody)
         const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.save(await getToken(), body);
-
-
-        // if (title === "CREATE") {
-        //     await CustomerService.save(getToken(), body)
-        // } else if (title === "EDIT") {
-        //     await CustomerService.update(body.id, getToken(), body)
-        // } else {
-        //     throw new Error(result.message);
-        // }
-
-
-        // const result = await CustomerService.save(getToken(), body)
-        // try {
-        //     if (result.data) {
-        //         if (customerDTO) {
-        //             onSave(prevState => {
-        //                 const newList = prevState.data.map((item) => {
-        //                     if (item.id === result.data.id) {
-        //                         return result.data;
-        //                     } else {
-        //                         return item;
-        //                     }
-        //                 })
-        //                 return ({ ...prevState, data: newList })
-        //             })
-        //         } else { 
-        //             onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
-        //         }
-        //         succeedAlert()
-        //     } else if (result?.error?.errors) {
-        //         result.error.errors.forEach(element => {
-        //             const { field, message } = element;
-        //             setForm(prevState => {
-        //                 let updateFieldName = form[field]
-        //                 updateFieldName.error = message;
-        //                 return { ...prevState, field: updateFieldName }
-        //             })
-        //         });
-        //     } else {
-        //         throw new Error(result.message);
-        //     }
-        // } catch (e) {
-        //     errorAlert(e);
-        // }
+        try {
+            if (result.data) {
+                if (customerDTO) {
+                    onSave(prevState => {
+                        const newList = prevState.data.map((item) => {
+                            if (item.id === result.data.id) {
+                                return result.data;
+                            } else {
+                                return item;
+                            }
+                        })
+                        return ({ ...prevState, data: newList })
+                    })
+                } else {
+                    onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
+                }
+                succeedAlert()
+            } else {
+                console.log(result.error.message)
+                throw new Error(result.error.message);
+            }
+        } catch (e) {
+            errorAlert(e);
+        }
+        
         backToCustomerTable();
         setFetching(false);
     }

@@ -7,17 +7,26 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
-    const [companyCode, setCompanyCode] = useState('1');
-    console.log(userDTO)
+    const [companyCode, setCompanyCode] = useState(userDTO ? userDTO.companyCode : '');
     //TODO companyCode moet uit de enviroment gehaald worden. 
     // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
+    
+    const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
+    const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
+    // const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : '');
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
-    
+    const [role, setRole] = useState(userDTO ? userDTO.role : '');
+
+    // console.log('test')
+    // console.log(userDTO)
 
     const initForm = {
-        companyCode: {
+        customerId: {
+            error: ''
+        },
+        userId: {
             error: ''
         },
         firstname: {
@@ -27,6 +36,9 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
             error: ''
         },
         email: {
+            error: ''
+        },
+        role: {
             error: ''
         }
     }
@@ -40,8 +52,6 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
         }
     }, [userDTO])
 
-    console.log("test userdto")
-    console.log(userDTO)
 
     useEffect(() => {
         if (userDTO) {
@@ -58,28 +68,35 @@ const submitForm = async (event) => {
     setForm(initForm);
 
     const form = event.Target;
+    // const body = {
+    //     "companyCode": companyCode,
+    //     "firstname": firstname,
+    //     "lastname": lastname,
+    //     "email": email
+    // }
+
+    // const auth0Body = {
+    //     "connection": "Username-Password-Authentication",
+    //     "email": email, 
+    //     "password": "tester123!",
+    //     "user_metadata": { 
+    //             "name" : firstname + ' ' + lastname
+    //     }, 
+    //     "email_verified": false, 
+    //     "verify_email": false, 
+    //     "app_metadata": {} 
+    // }
     const body = {
-        "companyCode": companyCode,
+        "customerId": customerId,
         "firstname": firstname,
         "lastname": lastname,
-        "email": email
+        "email": email,
+        "role": role,
+        "token": getToken()
     }
-
-    const auth0Body = {
-        "connection": "Username-Password-Authentication",
-        "email": email, 
-        "password": "tester123!",
-        "user_metadata": { 
-                "name" : firstname + ' ' + lastname
-        }, 
-        "email_verified": false, 
-        "verify_email": false, 
-        "app_metadata": {} 
-    }
-
     
 
-    const result = await UserService.save(getToken(), body) 
+    const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body) 
     try {
         if (result.data) {
             if (userDTO) {
@@ -120,24 +137,46 @@ const submitForm = async (event) => {
             <form onSubmit={submitForm} className="form-wrapper">
                 <div className="form-group">
                     <input
-                        key={`companyCode || ${userDTO?.companyCode}`}
+                        key={`userId || ${userDTO?.userId}`}
                         //TODO companycode moet uit de enviroment gehaald worden
-                        defaultValue={"1"}
+                        defaultValue={userDTO?.userId}
                         // defaultValue={userDTO?.companyCode}
-                        id="companyCode"
+                        id="userId"
                         type="number"
-                        name="companyCode"
+                        name="userId"
                         maxLength="4"
                         className="form-control"
-                        onChange={e => setCompanyCode(e.target.value)}
+                        onChange={e => setUserId(e.target.value)}
                         required
                     />
                     <label
                         className="form-control-placeholder"
-                        htmlFor="companyCode">
-                        companyCode
+                        htmlFor="userId">
+                        userId
                     </label>
-                    {form.companyCode.error && <p>{form.companyCode.error}</p>}
+                    {form.userId.error && <p>{form.userId.error}</p>}
+                </div>
+
+                <div className="form-group">
+                    <input
+                        key={`customerId || ${userDTO?.customerId}`}
+                        //TODO companycode moet uit de enviroment gehaald worden
+                        defaultValue={userDTO?.customerId}
+                        // defaultValue={'11'}
+                        id="customerId"
+                        type="number"
+                        name="customerId"
+                        maxLength="4"
+                        className="form-control"
+                        onChange={e => setCustomerId(e.target.value)}
+                        required
+                    />
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="customerId">
+                        customerId
+                    </label>
+                    {form.customerId.error && <p>{form.customerId.error}</p>}
                 </div>
 
                 <div className="form-group">
@@ -200,7 +239,25 @@ const submitForm = async (event) => {
                     {form.email.error && <p>{form.email.error}</p>}
                 </div>
 
-
+                <div className="form-group">
+                    <input
+                        key={`role || ${userDTO?.role}`}
+                        defaultValue={userDTO?.role}
+                        id="role"
+                        type="role"
+                        maxLength="60"
+                        name="role"
+                        className="form-control"
+                        onChange={e => setRole(e.target.value)}
+                        required
+                    />
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="role">
+                        role
+                    </label>
+                    {form.role.error && <p>{form.role.error}</p>}
+                </div>
 
                 <div className="btn-submit">
                     <button className="btn btn-primary" type="submit" disabled={isFetching}>
