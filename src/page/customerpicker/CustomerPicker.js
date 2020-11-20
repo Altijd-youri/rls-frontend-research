@@ -92,6 +92,7 @@ export default function CustomerPicker() {
     }
 
 
+    /** Pagina die word gereturned*/
     return (
         <div className="content">
             <div className="inner">
@@ -128,8 +129,8 @@ export default function CustomerPicker() {
                     {sidebar.showCreateCustomer &&
                         <ManageCustomer 
                             getToken={() => getToken()}
-                            onEditCustomer={(row) => onEditCustomer(row)}
-                            onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                            // onEditCustomer={(row) => onEditCustomer(row)}
+                            // onDeleteCustomer={(row) => onDeleteCustomer(row)}
                             backToCustomerTable={() => backToCustomerTable()}
                             customerDTO={sidebar.data}
                             onSave={setCustomers}

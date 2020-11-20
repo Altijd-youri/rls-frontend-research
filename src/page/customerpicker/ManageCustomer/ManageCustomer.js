@@ -34,6 +34,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             error: ''
         }
     }
+
     const [form, setForm] = useState(initForm)
 
     // useEffect(() => {
@@ -84,8 +85,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "iban": iban
         }
         
-        console.log(body)
-        console.log(updateBody)
         const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.save(await getToken(), body);
         try {
             if (result.data) {
