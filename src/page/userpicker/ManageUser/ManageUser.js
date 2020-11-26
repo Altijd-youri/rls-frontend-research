@@ -7,7 +7,7 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
-    const [companyCode, setCompanyCode] = useState(userDTO ? userDTO.companyCode : '');
+    // const [companyCode, setCompanyCode] = useState(userDTO ? userDTO.companyCode : '');
     //TODO companyCode moet uit de enviroment gehaald worden. 
     // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
     
@@ -19,14 +19,24 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
     const [role, setRole] = useState(userDTO ? userDTO.role : '');
 
-    // console.log('test')
+    // console.log('begin')
+    // console.log(userDTO.companyCode)
+    // console.log(userDTO.userId) //id van user in database
+    // console.log(userDTO.customerId) //id van customer in database
+    // console.log(userDTO.firstname) //Voornaam user
+    // console.log(userDTO.lastname) //Achternaam user
+    // console.log(userDTO.role) //Rol user
+    // console.log('eind')
+    // console.log(userDTO)
+    
+    
     // console.log(userDTO)
 
     const initForm = {
-        customerId: {
+        userId: {
             error: ''
         },
-        userId: {
+        customerId: {
             error: ''
         },
         firstname: {
@@ -46,6 +56,14 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
 
     useEffect(() => {
         if (userDTO) {
+            console.log('begin2')
+            // console.log(userDTO.companyCode)
+            console.log(userDTO.userId)
+            console.log(userDTO.customerId)
+            console.log(userDTO.firstname)
+            console.log(userDTO.lastname)
+            console.log(userDTO.role)
+            console.log('eind2')
             setEditMode(true);
         } else {
             setEditMode(false);
@@ -114,15 +132,6 @@ const submitForm = async (event) => {
                 onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
             }
             succeedAlert()
-        } else if (result?.error?.errors) {
-            result.error.errors.forEach(element => {
-                const { field, message } = element;
-                setForm(prevState => {
-                    let updateFieldName = form[field]
-                    updateFieldName.error = message;
-                    return { ...prevState, field: updateFieldName }
-                })
-            });
         } else {
             throw new Error(result.message);
         }
@@ -138,13 +147,11 @@ const submitForm = async (event) => {
                 <div className="form-group">
                     <input
                         key={`userId || ${userDTO?.userId}`}
-                        //TODO companycode moet uit de enviroment gehaald worden
                         defaultValue={userDTO?.userId}
-                        // defaultValue={userDTO?.companyCode}
                         id="userId"
-                        type="number"
+                        type="text"
                         name="userId"
-                        maxLength="4"
+                        maxLength="60"
                         className="form-control"
                         onChange={e => setUserId(e.target.value)}
                         required
@@ -160,9 +167,7 @@ const submitForm = async (event) => {
                 <div className="form-group">
                     <input
                         key={`customerId || ${userDTO?.customerId}`}
-                        //TODO companycode moet uit de enviroment gehaald worden
                         defaultValue={userDTO?.customerId}
-                        // defaultValue={'11'}
                         id="customerId"
                         type="number"
                         name="customerId"

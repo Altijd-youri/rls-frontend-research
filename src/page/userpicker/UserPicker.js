@@ -132,8 +132,8 @@ export default function UserPicker() {
                         <ManageUser 
                             getToken={() => getToken()}
                             handleChange={() => handleChange()}
-                            onEditUser={(row) => onEditUser(row)}
-                            onDeleteUser={(row) => onDeleteUser(row)}
+                            // onEditUser={(row) => onEditUser(row)}
+                            // onDeleteUser={(row) => onDeleteUser(row)}
                             userDTO={sidebar.data}
                         />
                     }

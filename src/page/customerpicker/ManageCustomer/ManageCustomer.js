@@ -18,8 +18,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     const initErrorForm = { customer: { error: '' } }
     const [errorForm, setErrorForm] = useState(initErrorForm);
 
-    console.log(customerDTO)
-
     const initForm = {
         id: {
             error: ''
@@ -36,15 +34,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     }
 
     const [form, setForm] = useState(initForm)
-
-    // useEffect(() => {
-    //     if(customerDTO) {
-    //         setId(customerDTO.id)
-    //         setCustomername(customerDTO.name)
-    //         setCompanyCode(customerDTO.companyCode)
-    //         setIban(customerDTO.iban)
-    //     }
-    // })
 
     useEffect(() => {
         if (customerDTO) {
