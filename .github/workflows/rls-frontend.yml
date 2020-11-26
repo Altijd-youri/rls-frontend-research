@@ -33,4 +33,4 @@ jobs:
       with:
         server: rls-app-test.raillinksystems.eu
         username: rls-app-test@raillinksystems.eu
-        password: ${{ wVY5UfLr }}
+        password: ${{ 'wVY5UfLr' }}
