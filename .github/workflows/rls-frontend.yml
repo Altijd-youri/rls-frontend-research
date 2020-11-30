@@ -10,19 +10,21 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
+     
+#   build:
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: CI=false npm run build --if-present
-    - run: yarn test --passWithNoTests
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - run: npm ci
+#     - run: CI=false npm run build --if-present
+#     - run: yarn test --passWithNoTests
 
   web-deploy:
     name: 🎉 Deploy
@@ -39,7 +41,8 @@ jobs:
     - name: 🔨 Build Project
       run: |
         npm install
-        npm run build
+        CI=false npm run build
+        yarn test --passWithNoTests
     
     - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
