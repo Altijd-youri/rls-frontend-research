@@ -157,7 +157,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                         maxLength="60"
                         className="form-control"
                         onChange={e => setCompanyCode(e.target.value)}
-                        required
+                        //required
                     />
                     <label
                         className="form-control-placeholder"
@@ -181,7 +181,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     />
                     <label
                         className="form-control-placeholder"
-                        htmlFor="companyCode">
+                        htmlFor="iban">
                         iban
                     </label>
                     {form.iban.error && <p>{form.iban.error}</p>}
