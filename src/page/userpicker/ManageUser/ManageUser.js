@@ -6,6 +6,7 @@ import { roles } from '../../../utils/constants';
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import LocationsService from "../../../api/locations";
+import Select from 'react-select';
 
 
 
@@ -54,7 +55,9 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
         email: {
             error: ''
         },
-        role: []
+        role: {
+            error: ''
+        }
     }
     const [form, setForm] = useState(initForm)
 
@@ -113,7 +116,7 @@ const submitForm = async (event) => {
         "lastname": lastname,
         "email": email,
         "role": role,
-        "token": getToken()
+        "token": await getToken()
     }
 
 
@@ -248,28 +251,17 @@ const submitForm = async (event) => {
                 </div>
 
                 <div className="form-group">
-                    <Typeahead
-                        clearButton
+
+                    <Select
                         id="role"
-                        labelKey={option => `${option.name}`}
-                        onChange={value => setForm(prevState => ({ ...prevState, role: value }))}
+                        defaultValue={roles[2]}
                         options={roles}
-                        placeholder="Choose a role..."
-                        selected={form.role}
-                        filterBy={['name']}
-                        required={true}
-
-                        // key={`role || ${userDTO?.role}`}
-                        // defaultValue={userDTO?.role}
-                        // id="role"
-                        // type="role"
-                        // maxLength="60"
-                        // name="role"
-                        // className="form-control"
-                        // onChange={e => setRole(e.target.value)}
-                        // required
-
+                        getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option.name}
+                        // onChange={e => console.log(e.name)}
+                        onChange={e => setRole(e.name)}
                     />
+
                     <label
                         className="form-control-placeholder"
                         htmlFor="role">
