@@ -3,7 +3,7 @@ import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import UserService from "../../../api/user";
 
-export default function ManageUser({ onHide, onSave, userDTO, getToken, handleChange }) {
+export default function ManageUser({ onHide, onSave, userDTO, getToken, handleChange, backToUserTable  }) {
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
@@ -12,8 +12,8 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
     // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
     
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
-    const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
-    // const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : '');
+    //const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
+    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : '');
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
@@ -49,22 +49,22 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
             error: ''
         },
         role: {
-            error: ''
+           error: ''
         }
     }
     const [form, setForm] = useState(initForm)
 
     useEffect(() => {
         if (userDTO) {
+            setEditMode(true);
             console.log('begin2')
             // console.log(userDTO.companyCode)
             console.log(userDTO.userId)
             console.log(userDTO.customerId)
             console.log(userDTO.firstname)
             console.log(userDTO.lastname)
-            console.log(userDTO.role)
+            //console.log(userDTO.role)
             console.log('eind2')
-            setEditMode(true);
         } else {
             setEditMode(false);
         }
@@ -110,11 +110,18 @@ const submitForm = async (event) => {
         "lastname": lastname,
         "email": email,
         "role": role,
-        "token": getToken()
+        "token": getToken.toString()
     }
     
-
-    const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body) 
+    const updateBody = {
+        "userId": userId,
+        "firstname": firstname,
+        "lastname": lastname,
+        "email": email,
+        "token": getToken().toString()
+    }
+    
+    const result = editMode ? await UserService.update(updateBody, getToken().toString()) : await UserService.save(getToken().toString(), body) 
     try {
         if (result.data) {
             if (userDTO) {
@@ -138,6 +145,8 @@ const submitForm = async (event) => {
     } catch (e) {
         errorAlert(e);
     }
+
+    //backToUserTable();
     setFetching(false);
 }
 
@@ -164,6 +173,7 @@ const submitForm = async (event) => {
                     {form.userId.error && <p>{form.userId.error}</p>}
                 </div>
 
+                {/*
                 <div className="form-group">
                     <input
                         key={`customerId || ${userDTO?.customerId}`}
@@ -182,7 +192,7 @@ const submitForm = async (event) => {
                         customerId
                     </label>
                     {form.customerId.error && <p>{form.customerId.error}</p>}
-                </div>
+                </div>*/}
 
                 <div className="form-group">
                     <input
@@ -244,6 +254,7 @@ const submitForm = async (event) => {
                     {form.email.error && <p>{form.email.error}</p>}
                 </div>
 
+                {/*
                 <div className="form-group">
                     <input
                         key={`role || ${userDTO?.role}`}
@@ -262,7 +273,7 @@ const submitForm = async (event) => {
                         role
                     </label>
                     {form.role.error && <p>{form.role.error}</p>}
-                </div>
+                </div>*/}
 
                 <div className="btn-submit">
                     <button className="btn btn-primary" type="submit" disabled={isFetching}>
