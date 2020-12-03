@@ -4,14 +4,9 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function UserTable({ users, onDeleteUser, onEditUser, getToken }) {
+export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken }) {
 
     const columns = [
-        {
-            name: 'ID',
-            selector: 'userId',
-            sortable: true,
-        },
         {
             name: 'Firstname',
             selector: 'firstname',
@@ -34,7 +29,7 @@ export default function UserTable({ users, onDeleteUser, onEditUser, getToken })
     // }
 
     const getColumns = () => {
-        if (hasPermissions(["write:user" && "delete:customer"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
                 cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,

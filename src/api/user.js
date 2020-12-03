@@ -17,9 +17,9 @@ class UserService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    update(body, token) {
+    update(userId, body, token) {
         return super
-        .fetch(`${ENDPOINTS.USERS}`, 'PATCH', token, body)
+        .fetch(`${ENDPOINTS.USERS}/${userId}`, 'PATCH', token, body)
         .then((data) => super.parseJSON(data))
         .catch((error) => Promise.reject(new Error(error.message)));
     }
