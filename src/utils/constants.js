@@ -79,3 +79,9 @@ export const ROLES_LIST = [
     { key: "Super User", value: "rol_hJSfMiZzLkHSrNkr"},
     { key: "User", value: "rol_ahcCvSG7Zn2soJfu"}
 ]
+
+export const roles = [
+    { id: "1", name: "Admin" },
+    { id: "2", name: "SuperUser" },
+    { id: "3", name: "User" }
+]

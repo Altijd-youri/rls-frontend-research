@@ -1,16 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import '../../assets/picker_create.scoped.css'
-import { succeedAlert, errorAlert } from "../../../utils/Alerts";
+import {succeedAlert, errorAlert} from "../../../utils/Alerts";
 import UserService from "../../../api/user";
+import {roles} from '../../../utils/constants';
+import {Typeahead} from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import LocationsService from "../../../api/locations";
+import Select from 'react-select';
 
-export default function ManageUser({ onHide, onSave, userDTO, getToken, handleChange }) {
+
+export default function ManageUser({onHide, onSave, userDTO, getToken, handleChange}) {
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
     // const [companyCode, setCompanyCode] = useState(userDTO ? userDTO.companyCode : '');
-    //TODO companyCode moet uit de enviroment gehaald worden. 
+    //TODO companyCode moet uit de enviroment gehaald worden.
     // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
-    
+
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
     const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
     // const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : '');
@@ -28,8 +34,8 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
     // console.log(userDTO.role) //Rol user
     // console.log('eind')
     // console.log(userDTO)
-    
-    
+
+
     // console.log(userDTO)
 
     const initForm = {
@@ -79,67 +85,66 @@ export default function ManageUser({ onHide, onSave, userDTO, getToken, handleCh
         }
     }, [userDTO])
 
-    
-const submitForm = async (event) => {
-    event.preventDefault();
-    setFetching(true);
-    setForm(initForm);
+    const submitForm = async (event) => {
+        event.preventDefault();
+        setFetching(true);
+        setForm(initForm);
 
-    const form = event.Target;
-    // const body = {
-    //     "companyCode": companyCode,
-    //     "firstname": firstname,
-    //     "lastname": lastname,
-    //     "email": email
-    // }
+        const form = event.Target;
+        // const body = {
+        //     "companyCode": companyCode,
+        //     "firstname": firstname,
+        //     "lastname": lastname,
+        //     "email": email
+        // }
 
-    // const auth0Body = {
-    //     "connection": "Username-Password-Authentication",
-    //     "email": email, 
-    //     "password": "tester123!",
-    //     "user_metadata": { 
-    //             "name" : firstname + ' ' + lastname
-    //     }, 
-    //     "email_verified": false, 
-    //     "verify_email": false, 
-    //     "app_metadata": {} 
-    // }
-    const body = {
-        "customerId": customerId,
-        "firstname": firstname,
-        "lastname": lastname,
-        "email": email,
-        "role": role,
-        "token": getToken()
-    }
-    
-
-    const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body) 
-    try {
-        if (result.data) {
-            if (userDTO) {
-                onSave(prevState => {
-                    const newList = prevState.data.map((item) => {
-                        if (item.id === result.data.id) {
-                            return result.data;
-                        } else {
-                            return item;
-                        }
-                    })
-                    return ({ ...prevState, data: newList })
-                })
-            } else {
-                onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
-            }
-            succeedAlert()
-        } else {
-            throw new Error(result.message);
+        // const auth0Body = {
+        //     "connection": "Username-Password-Authentication",
+        //     "email": email,
+        //     "password": "tester123!",
+        //     "user_metadata": {
+        //             "name" : firstname + ' ' + lastname
+        //     },
+        //     "email_verified": false,
+        //     "verify_email": false,
+        //     "app_metadata": {}
+        // }
+        const body = {
+            "customerId": customerId,
+            "firstname": firstname,
+            "lastname": lastname,
+            "email": email,
+            "role": role,
+            "token": await getToken()
         }
-    } catch (e) {
-        errorAlert(e);
+
+
+        const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
+        try {
+            if (result.data) {
+                if (userDTO) {
+                    onSave(prevState => {
+                        const newList = prevState.data.map((item) => {
+                            if (item.id === result.data.id) {
+                                return result.data;
+                            } else {
+                                return item;
+                            }
+                        })
+                        return ({...prevState, data: newList})
+                    })
+                } else {
+                    onSave(prevState => ({...prevState, data: [...prevState.data, result.data]}))
+                }
+                succeedAlert()
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (e) {
+            errorAlert(e);
+        }
+        setFetching(false);
     }
-    setFetching(false);
-}
 
     return (
         <div className="content-title">
@@ -245,21 +250,18 @@ const submitForm = async (event) => {
                 </div>
 
                 <div className="form-group">
-                    <input
-                        key={`role || ${userDTO?.role}`}
-                        defaultValue={userDTO?.role}
+
+                    <Select
                         id="role"
-                        type="role"
-                        maxLength="60"
-                        name="role"
-                        className="form-control"
-                        onChange={e => setRole(e.target.value)}
-                        required
+                        options={roles}
+                        getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option.name}
+                        onChange={e => setRole(e.name)}
                     />
+
                     <label
                         className="form-control-placeholder"
                         htmlFor="role">
-                        role
                     </label>
                     {form.role.error && <p>{form.role.error}</p>}
                 </div>
@@ -274,7 +276,7 @@ const submitForm = async (event) => {
                     </button>
                 </div>
 
-            </form> 
+            </form>
 
         </div>
     )
