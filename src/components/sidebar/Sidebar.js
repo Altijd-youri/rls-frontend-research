@@ -8,7 +8,7 @@ import { hasPermissions } from '../../utils/scopeChecker';
 
 export default function Sidebar() {
     const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
-
+    console.log(user)
     const logoutHandler = () => {
         localStorage.removeItem("scopes");
         logout();
@@ -28,6 +28,7 @@ export default function Sidebar() {
                 <ul>
                     {
                         isAuthenticated
+                        
                             ?
                             <>
                                 {hasPermissions(["read:user"]) && <li>
@@ -66,8 +67,14 @@ export default function Sidebar() {
 
             {isAuthenticated && <div className="storage">
                 <div className="title">
-                    <i className="fas fa-user"></i>
-                    {user.email}
+                    {/* <div><i className="fas fa-user"></i></div> */}
+                    <div>{user['https://any-namespace/roles']}</div>
+                    
+                </div>
+                <div className="title">
+                    <div><i className="fas fa-user"></i></div>
+                    <div>{user.email}</div>
+                    
                 </div>
             </div>}
 
