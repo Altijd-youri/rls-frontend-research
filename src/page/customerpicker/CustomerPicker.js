@@ -6,6 +6,7 @@ import { hasPermissions } from '../../utils/scopeChecker';
 import CustomerTable from './table/CustomerTable';
 import CustomerService from '../../api/customer';
 import ManageCustomer from './ManageCustomer/ManageCustomer';
+import { errorAlert } from '../../utils/Alerts';
 
 export default function CustomerPicker() {
 
@@ -39,7 +40,14 @@ export default function CustomerPicker() {
             "token": temptoken,
             "customerid": customerDTO.id
         }
-        CustomerService.delete(deleteBody, temptoken)
+
+        try {
+            const {error} = await CustomerService.delete(deleteBody, temptoken);
+            if (error) throw new Error(error)
+        } catch (e) {
+            errorAlert("Failed delete request")
+            console.log("Failed delete request")
+        }
     }
 
     useEffect(() => {

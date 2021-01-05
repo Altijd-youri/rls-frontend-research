@@ -6,6 +6,7 @@ import { hasPermissions } from '../../utils/scopeChecker';
 import UserTable from './table/UserTable';
 import UserService from '../../api/user';
 import ManageUser from './ManageUser/ManageUser';
+import { errorAlert } from '../../utils/Alerts';
 
 export default function UserPicker() {
 
@@ -40,7 +41,15 @@ export default function UserPicker() {
             "token": temptoken,
             "userid": userDTO.userId
         }
-        UserService.delete(deleteBody, temptoken)
+
+
+        try {
+            const {error} = await UserService.delete(deleteBody, temptoken);
+            if (error) throw new Error(error)
+        } catch (e) {
+            errorAlert("Failed delete request")
+            console.log("Failed delete request")
+        }
     }
 
     useEffect(() => {
