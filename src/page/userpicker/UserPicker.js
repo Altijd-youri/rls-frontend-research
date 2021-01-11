@@ -105,12 +105,12 @@ export default function UserPicker() {
                         <h4>
                             Users
                         </h4>
-                        <div hidden={sidebar.showCreateUser}>
+                        {/* <div hidden={sidebar.showCreateUser}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addUserHandler}> 
                             Add User
                         <i className="fas fa-plus"></i>
                         </span>}
-                        </div>
+                        </div> */}
 
                         <div hidden={sidebar.showUserTable}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={backToUserTable}> 

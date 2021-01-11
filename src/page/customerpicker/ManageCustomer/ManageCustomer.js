@@ -3,7 +3,7 @@ import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import CustomerService from "../../../api/customer";
 
-export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange, backToCustomerTable }) {
+export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange, backToCustomerTable, addSuperUserHandler }) {
     const [isFetching, setFetching] = useState(false);
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
     const [editMode, setEditMode] = useState(customerDTO ? true : false);
@@ -47,9 +47,9 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
 
     useEffect(() => {
         if (customerDTO) {
-            setTitle("EDIT");
+            setTitle("EDIT CUSTOMER");
         } else {
-            setTitle("CREATE");
+            setTitle("CREATE CUSTOMER");
         }
     }, [customerDTO])
 
@@ -72,6 +72,11 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "customername": customername,
             "companyCode": companyCode,
             "iban": iban
+        }
+
+        const relay = {
+            "id": null,
+            "role": 'SuperUser'
         }
         
         const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.save(await getToken(), body);
@@ -100,7 +105,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             errorAlert(e);
         }
         
-        backToCustomerTable();
+        editMode ? backToCustomerTable() : addSuperUserHandler();
         setFetching(false);
     }
 
@@ -195,6 +200,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                             : `${title}`
                         }
                     </button>
+
                 </div>
 
             </form> 
