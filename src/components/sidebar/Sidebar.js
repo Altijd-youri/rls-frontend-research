@@ -14,7 +14,6 @@ export default function Sidebar() {
         logout();
     }
 
-
     return (
         <div className="sidebar">
             <div className="logo">
