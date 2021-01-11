@@ -29,10 +29,10 @@ export default function UserPicker() {
     }, [getTokenSilently]);
 
     const onEditUser = (userDTO) => {
-        console.log(userDTO)
+        //console.log(userDTO)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
-    };
+    }
     
     const onDeleteUser = async (userDTO) => {
         let temptoken = await getToken();
@@ -93,10 +93,6 @@ export default function UserPicker() {
         </div>)
     }
 
-    function handleChange(e) {
-        console.log(e)
-    }
-
     return (
         <div className="content">
             <div className="inner">
@@ -131,10 +127,11 @@ export default function UserPicker() {
                     {sidebar.showCreateUser &&
                         <ManageUser 
                             getToken={() => getToken()}
-                            handleChange={() => handleChange()}
+                            backToUserTable={() => backToUserTable()}
                             // onEditUser={(row) => onEditUser(row)}
                             // onDeleteUser={(row) => onDeleteUser(row)}
                             userDTO={sidebar.data}
+                            onSave={setUsers}
                         />
                     }
                 </div>
