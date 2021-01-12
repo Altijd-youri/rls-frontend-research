@@ -49,7 +49,7 @@ export default function Item({ item, index, trainCompositionId, setTrainComposit
     }
 
     const getWeight = () => {
-        return (<span>{`${Math.round((item.totalWeight / 1000) * 10) / 10} T`}</span>)
+        return (<span>{`${Math.round((item.totalWeight ))} T`}</span>)
     }
 
     return (
