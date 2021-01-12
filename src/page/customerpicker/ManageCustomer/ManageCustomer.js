@@ -74,10 +74,10 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "iban": iban
         }
 
-        const relay = {
-            "id": null,
-            "role": 'SuperUser'
-        }
+        // const relay = {
+        //     "id": null,
+        //     "role": 'SuperUser'
+        // }
         
         const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.save(await getToken(), body);
         try {
@@ -97,6 +97,11 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
                 }
                 succeedAlert()
+                setFetching(false);
+                console.log(result.data.id)
+                console.log(customerDTO)
+                editMode ? backToCustomerTable() : addSuperUserHandler(result.data);
+        
             } else {
                 console.log(result.error.message)
                 throw new Error(result.error.message);
@@ -105,8 +110,8 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             errorAlert(e);
         }
         
-        editMode ? backToCustomerTable() : addSuperUserHandler();
         setFetching(false);
+
     }
 
     return (

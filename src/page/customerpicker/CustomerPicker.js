@@ -11,6 +11,8 @@ import ManageUser from '../userpicker/ManageUser/ManageUser';
 export default function CustomerPicker() {
 
     const [customers, setCustomers] = useState({ data: [], isFetching: false, error: ''});
+    
+    const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const { getTokenSilently } = useAuth0();
 
     // const initSidebar = { showCustomerTable: true, data: undefined }
@@ -31,7 +33,8 @@ export default function CustomerPicker() {
 
     const onEditCustomer = (customerDTO) => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: true, data: customerDTO}))
+        console.log(customerDTO)
+        setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO}))
     }
 
     const onDeleteCustomer = async (customerDTO) => {
@@ -75,15 +78,17 @@ export default function CustomerPicker() {
         setSidebar(prevState => ({ ...prevState, showCustomerTable: true, showCreateCustomer: false, showCreateUser: false, data: undefined}))
     }
 
-    const addSuperUserHandler = () => {
+    const addSuperUserHandler = (customerDTO) => {
         closeAllSidebars();
-        // basicInfoDTO = {
-        //     "customerId": customerId,
-        //     "role": 'SuperUser',
-        // }
-        setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: undefined}))
-        // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
+        console.log(customerDTO)
+        setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
     }
+
+    // const backToEditCustomer = (customerDTO) => {
+    //     closeAllSidebars();
+
+    //     setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO}))
+    // }
 
     if (customers.isFetching) {
         return (
@@ -142,7 +147,7 @@ export default function CustomerPicker() {
                             // onEditCustomer={(row) => onEditCustomer(row)}
                             // onDeleteCustomer={(row) => onDeleteCustomer(row)}
                             backToCustomerTable={() => backToCustomerTable()}
-                            addSuperUserHandler={() => addSuperUserHandler()}
+                            addSuperUserHandler={(customerDTO) => addSuperUserHandler(customerDTO)}
                             customerDTO={sidebar.data}
                             onSave={setCustomers}
                         />
@@ -150,6 +155,9 @@ export default function CustomerPicker() {
                     {sidebar.showCreateUser &&
                         <ManageUser 
                             getToken={() => getToken()}
+                            customerDTO={sidebar.data}
+                            onEditCustomer={(customerDTO) => onEditCustomer(customerDTO)}
+                            onSave={setUsers}
                             // handleChange={() => handleChange()}
                             // onEditUser={(row) => onEditUser(row)}
                             // onDeleteUser={(row) => onDeleteUser(row)}

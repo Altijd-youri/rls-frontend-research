@@ -134,6 +134,7 @@ export default function UserPicker() {
                             handleChange={() => handleChange()}
                             // onEditUser={(row) => onEditUser(row)}
                             // onDeleteUser={(row) => onDeleteUser(row)}
+                            onSave={setUsers}
                             userDTO={sidebar.data}
                         />
                     }
