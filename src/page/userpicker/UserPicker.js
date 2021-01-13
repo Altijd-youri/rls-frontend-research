@@ -30,10 +30,10 @@ export default function UserPicker() {
     }, [getTokenSilently]);
 
     const onEditUser = (userDTO) => {
-        console.log(userDTO)
+        //console.log(userDTO)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
-    };
+    }
     
     const onDeleteUser = async (userDTO) => {
         let temptoken = await getToken();
@@ -60,6 +60,8 @@ export default function UserPicker() {
                 if (data) {
                     console.log(data)
                     setUsers(prevState => ({ ...prevState, isFetching: false, data}))
+                    console.log("test")
+                    console.log(users)
                 } else {
                     throw new Error(error)
                 }
@@ -102,10 +104,6 @@ export default function UserPicker() {
         </div>)
     }
 
-    function handleChange(e) {
-        console.log(e)
-    }
-
     return (
         <div className="content">
             <div className="inner">
@@ -114,12 +112,12 @@ export default function UserPicker() {
                         <h4>
                             Users
                         </h4>
-                        <div hidden={sidebar.showCreateUser}>
+                        {/* <div hidden={sidebar.showCreateUser}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addUserHandler}> 
                             Add User
                         <i className="fas fa-plus"></i>
                         </span>}
-                        </div>
+                        </div> */}
 
                         <div hidden={sidebar.showUserTable}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={backToUserTable}> 
@@ -140,10 +138,12 @@ export default function UserPicker() {
                     {sidebar.showCreateUser &&
                         <ManageUser 
                             getToken={() => getToken()}
-                            handleChange={() => handleChange()}
+                            backToUserTable={() => backToUserTable()}
                             // onEditUser={(row) => onEditUser(row)}
                             // onDeleteUser={(row) => onDeleteUser(row)}
+                            onSave={setUsers}
                             userDTO={sidebar.data}
+                            onSave={setUsers}
                         />
                     }
                 </div>

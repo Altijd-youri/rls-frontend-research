@@ -21,7 +21,7 @@ function App() {
 
   const getToken = useCallback(async () => {
     const token = await getTokenSilently();
-    const scopes = JSON.parse(atob(token.split('.')[1])).scope.split(' ');
+    const scopes = JSON.parse(atob(token.split('.')[1])).permissions;
     localStorage.setItem('scopes', JSON.stringify(scopes));
     localStorage.setItem('token', token);
     setUserRoles(scopes);

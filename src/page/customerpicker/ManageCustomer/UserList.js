@@ -1,10 +1,20 @@
-import React from 'react'
-import DataTable from "react-data-table-component";
+import React, { useState, useEffect, useCallback } from 'react'
+import '../../assets/picker_create.scoped.css'
+import { succeedAlert, errorAlert } from "../../../utils/Alerts";
+import CustomerService from "../../../api/customer";
+import UserService from '../../../api/user';
+import DataTable from 'react-data-table-component';
 import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken }) {
+export default function UserList({ users, onHide, onSave, customerDTO, userDTO, getToken, onDeleteUser, onEditUser, addUserHandler }) {
+    // const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
+    const [isFetching, setFetching] = useState(false);
+    // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
+    const [editMode, setEditMode] = useState(customerDTO ? true : false);
+        // Set de text van de submit button van de form
+    // const [title, setTitle] = useState('ADD USER');
 
     const columns = [
         {
@@ -24,12 +34,8 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
         }
     ];
 
-    // const getColumns = () => {
-    //     return columns;
-    // }
-
     const getColumns = () => {
-        if (hasPermissions(["delete:user" && "update:user"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
                 cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,
@@ -46,7 +52,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
             }
             return [...columns, deleteColumn, editColumn];
         }
-        else if (hasPermissions(["update:user"])) {
+        else if (hasPermissions(["write:user"])) {
             const editColumn = {
                 cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
@@ -80,21 +86,39 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
             <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />);
     }, [filterText, resetPaginationToggle]);
 
+    const addUser = () => {
+        
+    }
     return (
-        <DataTable
-            columns={getColumns()}
-            defaultSortField='scheduledTimeAtHandover'
-            data={filteredUsers}
-            pagination
-            paginationResetDefaultPage={resetPaginationToggle}
-            subHeader
-            subHeaderComponent={subHeaderComponentMemo}
-            subHeaderAlign="right"
-            persistTableHead
-            highlightOnHover
-            noHeader={true}
-            pointerOnHover={true}
-        />
-    );
+        <div>
+            <DataTable
+                columns={getColumns()}
+                defaultSortField='scheduledTimeAtHandover'
+                // data={users}
+                data={filteredUsers}
+                pagination
+                paginationResetDefaultPage={resetPaginationToggle}
+                subHeader
+                subHeaderComponent={subHeaderComponentMemo}
+                subHeaderAlign="right"
+                persistTableHead
+                highlightOnHover
+                noHeader={true}
+                pointerOnHover={true}
+            />
+
+
+            <div className="btn-submit">
+                <button className="btn btn-primary" onClick={() => addUserHandler(customerDTO)} disabled={isFetching}>
+                    {isFetching
+                        ? (<><span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                            <span className="sr-only">Loading...</span></>)
+                        : `${'ADD USER'}`
+                    }
+                </button>
+
+            </div>
+        </div>
+    )
 
 }

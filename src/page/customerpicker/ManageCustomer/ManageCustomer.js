@@ -3,12 +3,12 @@ import '../../assets/picker_create.scoped.css'
 import { succeedAlert, errorAlert } from "../../../utils/Alerts";
 import CustomerService from "../../../api/customer";
 
-export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange, backToCustomerTable }) {
+export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, handleChange, backToCustomerTable, addSuperUserHandler }) {
     const [isFetching, setFetching] = useState(false);
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
     const [editMode, setEditMode] = useState(customerDTO ? true : false);
     // Set de text van de submit button van de form
-    const [title, setTitle] = useState('CREATE');
+    const [title, setTitle] = useState('CREATE CUSTOMER');
     // States voor handelen van data van customer
     const [id, setId] = useState(customerDTO ? customerDTO.id : '');
     const [customername, setCustomername] = useState(customerDTO ? customerDTO.customername : '');
@@ -47,9 +47,9 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
 
     useEffect(() => {
         if (customerDTO) {
-            setTitle("EDIT");
+            setTitle("EDIT CUSTOMER");
         } else {
-            setTitle("CREATE");
+            setTitle("CREATE CUSTOMER");
         }
     }, [customerDTO])
 
@@ -73,6 +73,11 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "companyCode": companyCode,
             "iban": iban
         }
+
+        // const relay = {
+        //     "id": null,
+        //     "role": 'SuperUser'
+        // }
         
         const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.save(await getToken(), body);
         try {
@@ -92,6 +97,11 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     onSave(prevState => ({ ...prevState, data: [...prevState.data, result.data] }))
                 }
                 succeedAlert()
+                setFetching(false);
+                console.log(result.data.id)
+                console.log(customerDTO)
+                editMode ? backToCustomerTable() : addSuperUserHandler(result.data);
+        
             } else {
                 console.log(result.error.message)
                 throw new Error(result.error.message);
@@ -100,8 +110,8 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             errorAlert(e);
         }
         
-        backToCustomerTable();
         setFetching(false);
+
     }
 
     return (
@@ -157,7 +167,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                         maxLength="60"
                         className="form-control"
                         onChange={e => setCompanyCode(e.target.value)}
-                        required
+                        //required
                     />
                     <label
                         className="form-control-placeholder"
@@ -181,7 +191,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     />
                     <label
                         className="form-control-placeholder"
-                        htmlFor="companyCode">
+                        htmlFor="iban">
                         iban
                     </label>
                     {form.iban.error && <p>{form.iban.error}</p>}
@@ -195,6 +205,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                             : `${title}`
                         }
                     </button>
+
                 </div>
 
             </form> 
