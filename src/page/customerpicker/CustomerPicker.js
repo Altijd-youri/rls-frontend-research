@@ -7,6 +7,7 @@ import CustomerTable from './table/CustomerTable';
 import CustomerService from '../../api/customer';
 import UserService from '../../api/user';
 import ManageCustomer from './ManageCustomer/ManageCustomer';
+import { errorAlert } from '../../utils/Alerts';
 import ManageUser from '../userpicker/ManageUser/ManageUser';
 import UserList from './ManageCustomer/UserList';
 
@@ -93,7 +94,14 @@ export default function CustomerPicker() {
             "token": temptoken,
             "customerid": customerDTO.id
         }
-        CustomerService.delete(deleteBody, temptoken)
+
+        try {
+            const {error} = await CustomerService.delete(deleteBody, temptoken);
+            if (error) throw new Error(error)
+        } catch (e) {
+            errorAlert("Failed delete request")
+            console.log("Failed delete request")
+        }
     }
 
     useEffect(() => {
