@@ -51,6 +51,8 @@ export default function UserPicker() {
                 if (data) {
                     console.log(data)
                     setUsers(prevState => ({ ...prevState, isFetching: false, data}))
+                    console.log("test")
+                    console.log(users)
                 } else {
                     throw new Error(error)
                 }

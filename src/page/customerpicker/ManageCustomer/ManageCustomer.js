@@ -8,7 +8,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
     const [editMode, setEditMode] = useState(customerDTO ? true : false);
     // Set de text van de submit button van de form
-    const [title, setTitle] = useState('CREATE');
+    const [title, setTitle] = useState('CREATE CUSTOMER');
     // States voor handelen van data van customer
     const [id, setId] = useState(customerDTO ? customerDTO.id : '');
     const [customername, setCustomername] = useState(customerDTO ? customerDTO.customername : '');
