@@ -30,10 +30,10 @@ export default function Sidebar() {
                         isAuthenticated
                             ?
                             <>
-                                {hasPermissions(["read:user"]) && <li>
+                                {hasPermissions(["read:company"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.COMPANIES}>Manage companies</NavLink>
                                 </li>}
-                                {hasPermissions(["read:user"]) && <li>
+                                {hasPermissions(["read:company"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.CUSTOMERS}>Manage customers</NavLink>
                                 </li>}
                                 {hasPermissions(["read:traction"]) && <li>

@@ -29,7 +29,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
     // }
 
     const getColumns = () => {
-        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+        if (hasPermissions(["delete:user" && "update:user"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
                 cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,
@@ -46,7 +46,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
             }
             return [...columns, deleteColumn, editColumn];
         }
-        else if (hasPermissions(["write:user"])) {
+        else if (hasPermissions(["update:user"])) {
             const editColumn = {
                 cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
