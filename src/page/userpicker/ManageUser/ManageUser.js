@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, getToken, handleChange}) {
+export default function ManageUser({onHide, onSave, userDTO, customerDTO, getToken, handleChange, onEditCustomer}) {
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
@@ -18,25 +18,14 @@ export default function ManageUser({onHide, onSave, userDTO, getToken, handleCha
     // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
 
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
-    const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
-    // const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : '');
+    // const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
+    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : (customerDTO ? customerDTO.id : ''));
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
     const [role, setRole] = useState(userDTO ? userDTO.role : '');
 
-    // console.log('begin')
-    // console.log(userDTO.companyCode)
-    // console.log(userDTO.userId) //id van user in database
-    // console.log(userDTO.customerId) //id van customer in database
-    // console.log(userDTO.firstname) //Voornaam user
-    // console.log(userDTO.lastname) //Achternaam user
-    // console.log(userDTO.role) //Rol user
-    // console.log('eind')
-    // console.log(userDTO)
-
-
-    // console.log(userDTO)
+    const [id, setId] = useState(customerDTO ? customerDTO.id : '');
 
     const initForm = {
         userId: {
@@ -137,6 +126,8 @@ export default function ManageUser({onHide, onSave, userDTO, getToken, handleCha
                     onSave(prevState => ({...prevState, data: [...prevState.data, result.data]}))
                 }
                 succeedAlert()
+                setFetching(false);
+                onEditCustomer(customerDTO)
             } else {
                 throw new Error(result.message);
             }
@@ -171,12 +162,14 @@ export default function ManageUser({onHide, onSave, userDTO, getToken, handleCha
 
                 <div className="form-group">
                     <input
-                        key={`customerId || ${userDTO?.customerId}`}
-                        defaultValue={userDTO?.customerId}
+                        key={`customerId || ${customerDTO?.id}`}
+                        defaultValue={customerDTO?.id}
+                        // key={`customerId || ${userDTO?.customerId}`}
+                        // defaultValue={userDTO?.customerId}
                         id="customerId"
                         type="number"
                         name="customerId"
-                        maxLength="4"
+                        maxLength="40"
                         className="form-control"
                         onChange={e => setCustomerId(e.target.value)}
                         required
