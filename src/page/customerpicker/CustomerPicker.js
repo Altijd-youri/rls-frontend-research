@@ -35,8 +35,31 @@ export default function CustomerPicker() {
         return token;
     }, [getTokenSilently]);
 
+    const fetchUsers = async (customerDTO) => {
+        console.log(users)
+        setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
+        try {
+            // const { data, error } = await UserService.getAll(await getToken());
+            const { data, error } = await UserService.getAllByCustomerId(customerDTO.id, await getToken());
+            console.log(data)
+            if (data) {
+                console.log(data)
+                setUsers(prevState => ({ ...prevState, isFetching: false, data}))
+                console.log(users)
+                console.log(data)
+            } else {
+                throw new Error(error)
+            }
+        } catch (e) {
+            setUsers(prevState => ({ ...prevState, isFetching: false, error: e.message }))
+        }
+    }
+
     const onEditCustomer = (customerDTO) => {
         closeAllSidebars();
+
+        fetchUsers(customerDTO);
+
         console.log(customerDTO)
         setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO}))
     }
@@ -45,8 +68,15 @@ export default function CustomerPicker() {
         console.log(userDTO)
         console.log(customerDTO)
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showUserTable: false, showCreateUser: true, showCreateUser: false, data: customerDTO, data2: userDTO}))
+        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO, data2: userDTO}))
     };
+
+    const addUserHandler = (customerDTO) => {
+        closeAllSidebars();
+        console.log(customerDTO)
+        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
+        // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
+    }
     
     const onDeleteUser = async (userDTO) => {
         let temptoken = await getToken();
@@ -177,8 +207,10 @@ export default function CustomerPicker() {
                         customerDTO={sidebar.data}
                         onEditUser={(row) => onEditUser(row)}
                         onDeleteUser={(row) => onDeleteUser(row)}
+                        addUserHandler={(customerDTO) => addUserHandler(customerDTO)}
                         userDTO={sidebar.data2}
                         getToken={() => getToken()}
+                        users={users.data}
                         />
                     }
                     {sidebar.showCreateUser &&

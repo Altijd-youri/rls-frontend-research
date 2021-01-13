@@ -8,8 +8,8 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function UserList({ onHide, onSave, customerDTO, userDTO, getToken, onDeleteUser, onEditUser }) {
-    const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
+export default function UserList({ users, onHide, onSave, customerDTO, userDTO, getToken, onDeleteUser, onEditUser, addUserHandler }) {
+    // const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const [isFetching, setFetching] = useState(false);
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
     const [editMode, setEditMode] = useState(customerDTO ? true : false);
@@ -33,57 +33,6 @@ export default function UserList({ onHide, onSave, customerDTO, userDTO, getToke
             sortable: true,
         }
     ];
-
-    // const getUsersByCustomer = (customerDTO) => {
-    //     const fetchUsers = async () => {
-    //         console.log('trying1')
-    //         setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
-    //         try {
-    //             console.log('trying2')
-    //             // const { data, error } = await UserService.getAll(await getToken());
-    //             const { data, error } = await UserService.getAllByCustomerId(customerDTO.id, await getToken());
-    //             console.log('trying3')
-    //             if (data) {
-    //                 console.log('trying4')
-    //                 console.log(data)
-    //                 console.log('trying5')
-    //                 setUsers(prevState => ({ ...prevState, isFetching: false, data}))
-    //                 console.log('trying6')
-    //             } else {
-    //                 console.log('trying7')
-    //                 throw new Error(error)
-    //             }
-    //         } catch (e) {
-    //             console.log('trying8')
-    //             setUsers(prevState => ({ ...prevState, isFetching: false, error: e.message }))
-    //         }
-    //     }
-    //     fetchUsers();
-    // }
-
-    useEffect(() => {
-        const fetchUsers = async () => {
-            console.log(users)
-            setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
-            try {
-                // const { data, error } = await UserService.getAll(await getToken());
-                const { data, error } = await UserService.getAllByCustomerId(customerDTO.id, await getToken());
-                console.log(data)
-                if (data) {
-                    console.log(data)
-                    setUsers(prevState => ({ ...prevState, isFetching: false, data}))
-                    console.log(users)
-                    console.log(data)
-                } else {
-                    throw new Error(error)
-                }
-            } catch (e) {
-                setUsers(prevState => ({ ...prevState, isFetching: false, error: e.message }))
-            }
-        }
-        fetchUsers();
-    }, [getToken])
-
 
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
@@ -120,10 +69,10 @@ export default function UserList({ onHide, onSave, customerDTO, userDTO, getToke
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
-    // const filteredUsers = users.filter(user => 
-    //     (user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase())) || 
-    //     (user.firstname && user.firstname.toLowerCase().includes(filterText.toLowerCase())) || 
-    //     (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) )
+    const filteredUsers = users.filter(user => 
+        (user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase())) || 
+        (user.firstname && user.firstname.toLowerCase().includes(filterText.toLowerCase())) || 
+        (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) )
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
@@ -138,15 +87,15 @@ export default function UserList({ onHide, onSave, customerDTO, userDTO, getToke
     }, [filterText, resetPaginationToggle]);
 
     const addUser = () => {
-
+        
     }
     return (
         <div>
             <DataTable
                 columns={getColumns()}
                 defaultSortField='scheduledTimeAtHandover'
-                data={users}
-                // data={filteredUsers}
+                // data={users}
+                data={filteredUsers}
                 pagination
                 paginationResetDefaultPage={resetPaginationToggle}
                 subHeader
@@ -160,7 +109,7 @@ export default function UserList({ onHide, onSave, customerDTO, userDTO, getToke
 
 
             <div className="btn-submit">
-                <button className="btn btn-primary" onClick={addUser} disabled={isFetching}>
+                <button className="btn btn-primary" onClick={() => addUserHandler(customerDTO)} disabled={isFetching}>
                     {isFetching
                         ? (<><span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                             <span className="sr-only">Loading...</span></>)
