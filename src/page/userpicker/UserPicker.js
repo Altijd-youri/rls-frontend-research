@@ -9,6 +9,7 @@ import ManageUser from './ManageUser/ManageUser';
 import { errorAlert } from '../../utils/Alerts';
 
 export default function UserPicker() {
+    const { isAuthenticated, user } = useAuth0();
 
     const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const { getTokenSilently } = useAuth0();
@@ -31,6 +32,9 @@ export default function UserPicker() {
 
     const onEditUser = (userDTO) => {
         //console.log(userDTO)
+        console.log(userDTO)
+        console.log('test')
+        console.log(user.email)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
     }
@@ -133,6 +137,7 @@ export default function UserPicker() {
                             onEditUser={(row) => onEditUser(row)}
                             onDeleteUser={(row) => onDeleteUser(row)}
                             userDTO={sidebar.data}
+                            user={user.email}
                         />
                     }
                     {sidebar.showCreateUser &&

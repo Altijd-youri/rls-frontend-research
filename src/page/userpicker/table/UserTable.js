@@ -4,7 +4,7 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken }) {
+export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken, user }) {
 
     const columns = [
         {
@@ -31,7 +31,8 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
     const getColumns = () => {
         if (hasPermissions(["delete:user" && "update:user"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
-                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
+                cell: row => <Button variant="outline-danger" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
+                // cell: row => <Button variant="outline-danger"  size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -81,6 +82,8 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
     }, [filterText, resetPaginationToggle]);
 
     return (
+
+        
         <DataTable
             columns={getColumns()}
             defaultSortField='scheduledTimeAtHandover'
