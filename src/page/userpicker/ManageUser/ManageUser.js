@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditCustomer}) {
+export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditCustomer, getToken }) {
 
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
@@ -52,14 +52,6 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
 
     useEffect(() => {
         if (userDTO) {
-            console.log('begin2')
-            // console.log(userDTO.companyCode)
-            console.log(userDTO.userId)
-            console.log(userDTO.customerId)
-            console.log(userDTO.firstname)
-            console.log(userDTO.lastname)
-            console.log(userDTO.role)
-            console.log('eind2')
             setEditMode(true);
         } else {
             setEditMode(false);
@@ -107,8 +99,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
             "role": role
             //"token": await getToken()
         }
-
-        const result = editMode ? await UserService.update(userId, body) : await UserService.save(body)
+        const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
         //const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
         try {
             if (result.data) {
@@ -162,7 +153,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                 </div>
 
                 <div className="form-group">
-                    <input
+                    <input readOnly
                         key={`customerId || ${customerDTO?.id}`}
                         defaultValue={customerDTO?.id}
                         // key={`customerId || ${userDTO?.customerId}`}
@@ -178,7 +169,6 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                     <label
                         className="form-control-placeholder"
                         htmlFor="customerId">
-                        customerId
                     </label>
                     {form.customerId.error && <p>{form.customerId.error}</p>}
                 </div>
