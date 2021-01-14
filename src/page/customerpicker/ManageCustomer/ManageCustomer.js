@@ -53,7 +53,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
         if (customerDTO) {
             setTitle("EDIT CUSTOMER");
         } else {
-            setTitle("CREATE CUSTOMER");
+            setTitle("CREATE AND ADD SUPERUSER");
         }
     }, [customerDTO])
 
