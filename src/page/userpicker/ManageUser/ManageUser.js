@@ -9,7 +9,8 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, customerDTO, getToken, handleChange, onEditCustomer}) {
+export default function ManageUser({onHide, onSave, userDTO, handleChange}) {
+
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
@@ -103,12 +104,12 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, getTok
             "firstname": firstname,
             "lastname": lastname,
             "email": email,
-            "role": role,
-            "token": await getToken()
+            "role": role
+            //"token": await getToken()
         }
 
-
-        const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
+        const result = editMode ? await UserService.update(userId, body) : await UserService.save(body)
+        //const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
         try {
             if (result.data) {
                 if (userDTO) {

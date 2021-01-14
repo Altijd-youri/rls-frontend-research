@@ -14,6 +14,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     const [customername, setCustomername] = useState(customerDTO ? customerDTO.customername : '');
     const [companyCode, setCompanyCode] = useState(customerDTO ? customerDTO.companyCode : '');
     const [iban, setIban] = useState(customerDTO ? customerDTO.iban : '');
+    const [kvk, setKvk] = useState(customerDTO ? customerDTO.kvk : '');
 
     const initErrorForm = { customer: { error: '' } }
     const [errorForm, setErrorForm] = useState(initErrorForm);
@@ -29,6 +30,9 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             error: ''
         },
         iban: {
+            error: ''
+        },
+        kvk: {
             error: ''
         }
     }
@@ -64,14 +68,16 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "id": "",
             "customername": customername,
             "companyCode": companyCode,
-            "iban": iban
+            "iban": iban,
+            "kvk": kvk
         }
 
         const updateBody = {
             "id": id,
             "customername": customername,
             "companyCode": companyCode,
-            "iban": iban
+            "iban": iban,
+            "kvk": kvk
         }
 
         // const relay = {
@@ -195,6 +201,26 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                         iban
                     </label>
                     {form.iban.error && <p>{form.iban.error}</p>}
+                </div>
+
+                <div className="form-group">
+                    <input
+                        key={`kvk || ${customerDTO?.kvk}`}
+                        defaultValue={customerDTO?.kvk}
+                        id="kvk"
+                        type="text"
+                        name="kvk"
+                        maxLength="60"
+                        className="form-control"
+                        onChange={e => setKvk(e.target.value)}
+                        required
+                    />
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="kvk">
+                        kvk
+                    </label>
+                    {form.kvk.error && <p>{form.kvk.error}</p>}
                 </div>
 
                 <div className="btn-submit">
