@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange}) {
+export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditCustomer}) {
 
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
