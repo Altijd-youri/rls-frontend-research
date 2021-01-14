@@ -8,7 +8,7 @@ import { hasPermissions } from '../../utils/scopeChecker';
 
 export default function Sidebar() {
     const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
-
+    console.log(user)
     const logoutHandler = () => {
         localStorage.removeItem("scopes");
         logout();
@@ -27,12 +27,13 @@ export default function Sidebar() {
                 <ul>
                     {
                         isAuthenticated
+                        
                             ?
                             <>
-                                {hasPermissions(["read:user"]) && <li>
+                                {hasPermissions(["read:company"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.COMPANIES}>Manage companies</NavLink>
                                 </li>}
-                                {hasPermissions(["read:user"]) && <li>
+                                {hasPermissions(["read:company"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.CUSTOMERS}>Manage customers</NavLink>
                                 </li>}
                                 {hasPermissions(["read:traction"]) && <li>
@@ -65,8 +66,14 @@ export default function Sidebar() {
 
             {isAuthenticated && <div className="storage">
                 <div className="title">
-                    <i className="fas fa-user"></i>
-                    {user.email}
+                    {/* <div><i className="fas fa-user"></i></div> */}
+                    <div>{user['https://any-namespace/roles']}</div>
+                    
+                </div>
+                <div className="title">
+                    <div><i className="fas fa-user"></i></div>
+                    <div>{user.email}</div>
+                    
                 </div>
             </div>}
 

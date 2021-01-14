@@ -10,6 +10,14 @@ class UserService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
+    getAllByCustomerId(customerId, token) {
+        console.log('getallbycustomerid')
+        return super
+            .fetch(`${ENDPOINTS.USERS}/customer/${customerId}`, 'GET', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
+
     save(token, body) {
         return super
             .fetch(`${ENDPOINTS.USERS}`, 'PUT', token, body)

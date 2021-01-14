@@ -6,8 +6,10 @@ import { hasPermissions } from '../../utils/scopeChecker';
 import UserTable from './table/UserTable';
 import UserService from '../../api/user';
 import ManageUser from './ManageUser/ManageUser';
+import { errorAlert } from '../../utils/Alerts';
 
 export default function UserPicker() {
+    const { isAuthenticated, user } = useAuth0();
 
     const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const { getTokenSilently } = useAuth0();
@@ -30,6 +32,9 @@ export default function UserPicker() {
 
     const onEditUser = (userDTO) => {
         //console.log(userDTO)
+        console.log(userDTO)
+        console.log('test')
+        console.log(user.email)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
     }
@@ -40,7 +45,15 @@ export default function UserPicker() {
             "token": temptoken,
             "userid": userDTO.userId
         }
-        UserService.delete(deleteBody, temptoken)
+
+
+        try {
+            const {error} = await UserService.delete(deleteBody, temptoken);
+            if (error) throw new Error(error)
+        } catch (e) {
+            errorAlert("Failed delete request")
+            console.log("Failed delete request")
+        }
     }
 
     useEffect(() => {
@@ -51,6 +64,8 @@ export default function UserPicker() {
                 if (data) {
                     console.log(data)
                     setUsers(prevState => ({ ...prevState, isFetching: false, data}))
+                    console.log("test")
+                    console.log(users)
                 } else {
                     throw new Error(error)
                 }
@@ -101,12 +116,12 @@ export default function UserPicker() {
                         <h4>
                             Users
                         </h4>
-                        <div hidden={sidebar.showCreateUser}>
+                        {/* <div hidden={sidebar.showCreateUser}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addUserHandler}> 
                             Add User
                         <i className="fas fa-plus"></i>
                         </span>}
-                        </div>
+                        </div> */}
 
                         <div hidden={sidebar.showUserTable}>
                                   {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={backToUserTable}> 
@@ -122,6 +137,7 @@ export default function UserPicker() {
                             onEditUser={(row) => onEditUser(row)}
                             onDeleteUser={(row) => onDeleteUser(row)}
                             userDTO={sidebar.data}
+                            user={user.email}
                         />
                     }
                     {sidebar.showCreateUser &&
@@ -130,6 +146,7 @@ export default function UserPicker() {
                             backToUserTable={() => backToUserTable()}
                             // onEditUser={(row) => onEditUser(row)}
                             // onDeleteUser={(row) => onDeleteUser(row)}
+                            onSave={setUsers}
                             userDTO={sidebar.data}
                             onSave={setUsers}
                         />

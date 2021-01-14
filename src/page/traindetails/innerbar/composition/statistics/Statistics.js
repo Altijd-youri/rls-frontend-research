@@ -2,6 +2,7 @@ import React from 'react'
 
 export default function Statistics({ selectedJourney }) {
 
+    //TODO naar kijken
     const calculateBrakeWeight = () => {
         return parseInt(selectedJourney.trainComposition.brakeWeight / selectedJourney.trainComposition.weight * 100, 10);
     }
@@ -22,7 +23,8 @@ export default function Statistics({ selectedJourney }) {
                             </tr>
                             <tr>
                                 <th>Train weight</th>
-                                <td>{selectedJourney.trainComposition.weight / 1000} tonnes</td>
+                                {/*/1000 verwijderd*/}
+                                <td>{selectedJourney.trainComposition.weight} tonnes</td>
                                 <th>Max. speed</th>
                                 <td>{selectedJourney.trainComposition.maxSpeed} km/h</td>
                                 <th>Exceptional gauging</th>
@@ -30,7 +32,8 @@ export default function Statistics({ selectedJourney }) {
                             </tr>
                             <tr>
                                 <th>Train length</th>
-                                <td>{selectedJourney.trainComposition.length / 100} meters</td>
+                                {/*100 verwijderd*/}
+                                <td>{selectedJourney.trainComposition.length} meters</td>
                                 <th>Max. axle weight</th>
                                 <td>{selectedJourney.trainComposition.maxAxleWeight} tonnes</td>
                             </tr>
