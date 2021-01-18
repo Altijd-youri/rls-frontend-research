@@ -16,6 +16,9 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     const [iban, setIban] = useState(customerDTO ? customerDTO.iban : '');
     const [kvk, setKvk] = useState(customerDTO ? customerDTO.kvk : '');
 
+    const [companyName, setCompanyname] = useState(customerDTO ? customerDTO.company.name : '');
+
+
     const initErrorForm = { customer: { error: '' } }
     const [errorForm, setErrorForm] = useState(initErrorForm);
 
@@ -27,6 +30,9 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             error: ''
         },
         companyCode: {
+            error: ''
+        },
+        companyName: {
             error: ''
         },
         iban: {
@@ -161,6 +167,26 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                         customername
                     </label>
                     {form.customername.error && <p>{form.customername.error}</p>}
+                </div>
+
+                <div className="form-group">
+                    <input
+                        key={`companyName || ${customerDTO?.company.name}`}
+                        defaultValue={customerDTO?.company.name}
+                        id="companyName"
+                        type="text"
+                        name="companyName"
+                        maxLength="60"
+                        className="form-control"
+                        readOnly = {true}
+                        onChange={e => setCompanyname(e.target.value)}
+                        required
+                    />
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="name">
+                    </label>
+                    {form.companyName.error && <p>{form.companyName.error}</p>}
                 </div>
 
                 <div className="form-group">
