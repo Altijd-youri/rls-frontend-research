@@ -20,7 +20,7 @@ export default function UserPicker() {
 
     useEffect(() => {
         if (sidebar.data) {
-            const newObject = users.data.find(item => item.id === sidebar.data.id);
+            const newObject = users.data.find(item => item.userId === sidebar.data.userId);
             setSidebar(prevState => ({ ...prevState, data: newObject }))
         }
     }, [users, sidebar.data])
@@ -31,10 +31,6 @@ export default function UserPicker() {
     }, [getTokenSilently]);
 
     const onEditUser = (userDTO) => {
-        //console.log(userDTO)
-        console.log(userDTO)
-        console.log('test')
-        console.log(user.email)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
     }
@@ -52,20 +48,18 @@ export default function UserPicker() {
             if (error) throw new Error(error)
         } catch (e) {
             errorAlert("Failed delete request")
-            console.log("Failed delete request")
         }
     }
 
+    // TODO getall voor welke role? getByCustomerId 
     useEffect(() => {
         const fetchUsers = async () => {
             setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
             try {
+                // const { data, error } = await UserService.getAllByCustomerId(userDTO.customer.id, await getToken());
                 const { data, error } = await UserService.getAll(await getToken());
                 if (data) {
-                    console.log(data)
                     setUsers(prevState => ({ ...prevState, isFetching: false, data}))
-                    console.log("test")
-                    console.log(users)
                 } else {
                     throw new Error(error)
                 }

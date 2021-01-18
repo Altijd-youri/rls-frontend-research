@@ -21,7 +21,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
 
     const initErrorForm = { customer: { error: '' } }
     const [errorForm, setErrorForm] = useState(initErrorForm);
-
+    console.log(customerDTO)
     const initForm = {
         id: {
             error: ''
