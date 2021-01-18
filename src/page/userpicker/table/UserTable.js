@@ -3,8 +3,9 @@ import DataTable from "react-data-table-component";
 import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
+import customers from "../../../api/customer";
 
-export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken, user }) {
+export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken, user, customer }) {
 
     const columns = [
         {
@@ -21,18 +22,19 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
             name: 'Email',
             selector: 'email', //Nog geen waarde voor KvK in database
             sortable: true,
+        },
+        {
+            name: 'Customer',
+            selector: 'customer.customername',
+            sortable: true,
         }
-    ];
 
-    // const getColumns = () => {
-    //     return columns;
-    // }
+    ];
 
     const getColumns = () => {
         if (hasPermissions(["delete:user" && "update:user"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
                 cell: row => <Button variant="outline-danger" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
-                // cell: row => <Button variant="outline-danger"  size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -67,7 +69,9 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
     const filteredUsers = users.filter(user => 
         (user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase())) || 
         (user.firstname && user.firstname.toLowerCase().includes(filterText.toLowerCase())) || 
-        (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) )
+        (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) ||
+        (user.customer.customername && user.customer.customername.toLowerCase().includes(filterText.toLowerCase()))
+    );
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {

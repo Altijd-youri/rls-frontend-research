@@ -21,6 +21,9 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
     // const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
     const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : (customerDTO ? customerDTO.id : ''));
+
+    const [customerName, setCustomerName] = useState(userDTO ? userDTO.customer.customername : (customerDTO ? customerDTO.customername : ''));
+
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
@@ -33,6 +36,9 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
             error: ''
         },
         customerId: {
+            error: ''
+        },
+        customerName: {
             error: ''
         },
         firstname: {
@@ -171,6 +177,27 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                         htmlFor="customerId">
                     </label>
                     {form.customerId.error && <p>{form.customerId.error}</p>}
+                </div>
+
+                <div className="form-group">
+                    <input readOnly
+                           key={`customerName || ${customerDTO?.customername}`}
+                           defaultValue={customerDTO?.customername}
+                        // key={`customerId || ${userDTO?.customerId}`}
+                        // defaultValue={userDTO?.customerId}
+                           id="customerName"
+                           type="text"
+                           name="customerName"
+                           maxLength="40"
+                           className="form-control"
+                           onChange={e => setCustomerName(e.target.value)}
+                           required
+                    />
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="customerName">
+                    </label>
+                    {form.customerName.error && <p>{form.customerName.error}</p>}
                 </div>
 
                 <div className="form-group">
