@@ -31,6 +31,11 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
             name: 'CompanyCode',
             selector: 'companyCode', //Nog geen waarde voor companycode in database
             sortable: true,
+        },
+        {
+            name: 'Company Name',
+            selector: 'company.name', //Nog geen waarde voor companycode in database
+            sortable: true,
         }
     ];
 
