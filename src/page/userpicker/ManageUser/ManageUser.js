@@ -21,6 +21,9 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
     // const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
     const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : (customerDTO ? customerDTO.id : ''));
+
+    const [customerName, setCustomerName] = useState(userDTO ? userDTO.customerId : (customerDTO ? customerDTO.customername : ''));
+
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
