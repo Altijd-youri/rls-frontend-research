@@ -7,7 +7,7 @@ import CustomerTable from './table/CustomerTable';
 import CustomerService from '../../api/customer';
 import UserService from '../../api/user';
 import ManageCustomer from './ManageCustomer/ManageCustomer';
-import { errorAlert } from '../../utils/Alerts';
+import { confirmAlert, errorAlert, succeedAlert } from '../../utils/Alerts';
 import ManageUser from '../userpicker/ManageUser/ManageUser';
 import UserList from './ManageCustomer/UserList';
 
@@ -80,29 +80,58 @@ export default function CustomerPicker() {
     }
     
     const onDeleteUser = async (userDTO) => {
-        let temptoken = await getToken();
-        const deleteBody = {
-            "token": temptoken,
-            "userid": userDTO.userId
-        }
-        UserService.delete(deleteBody, temptoken)
+        confirmAlert(async () => {
+            console.log(userDTO)
+            const deleteBody = {
+                "token": await getToken(),
+                "userid": userDTO.userId
+            }
+            try {
+                const result = await UserService.delete(deleteBody, await getToken());
+                // if (error) throw new Error(error)
+                console.log(result)
+                succeedAlert();
+            } catch (e) {
+                errorAlert("Failed delete request ", e.message)
+            }
+        })
     }
 
     const onDeleteCustomer = async (customerDTO) => {
-        let temptoken = await getToken();
-        const deleteBody = {
-            "token": temptoken,
-            "customerid": customerDTO.id
-        }
-
-        try {
-            const {error} = await CustomerService.delete(deleteBody, temptoken);
-            if (error) throw new Error(error)
-        } catch (e) {
-            errorAlert("Failed delete request")
-            console.log("Failed delete request")
-        }
+        confirmAlert(async () => {
+            console.log(customerDTO)
+            const deleteBody = {
+                "token": await getToken(),
+                "customerid": customerDTO.id
+            }
+            try {
+                const result = await CustomerService.delete(deleteBody, await getToken());
+                if (result.status == 202) {
+                    succeedAlert();
+                } else {
+                    errorAlert(result.error.message)
+                }
+            } catch (e) {
+                errorAlert("Failed delete request ", e.message)
+            }
+        })
     }
+
+    // const onDeleteCustomer = async (customerDTO) => {
+    //     let temptoken = await getToken();
+    //     const deleteBody = {
+    //         "token": temptoken,
+    //         "customerid": customerDTO.id
+    //     }
+
+    //     try {
+    //         const {error} = await CustomerService.delete(deleteBody, temptoken);
+    //         if (error) throw new Error(error)
+    //     } catch (e) {
+    //         errorAlert("Failed delete request")
+    //         console.log("Failed delete request")
+    //     }
+    // }
 
     useEffect(() => {
         const fetchCustomers = async () => {
