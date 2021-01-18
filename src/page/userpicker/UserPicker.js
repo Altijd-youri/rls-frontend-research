@@ -37,51 +37,25 @@ export default function UserPicker() {
     
 
     const onDeleteUser = async (userDTO) => {
-
-        console.log(userDTO)
         confirmAlert(async () => {
             console.log(userDTO)
             const deleteBody = {
                 "token": await getToken(),
                 "userid": userDTO.userId
             }
-            const result = await UserService.delete(deleteBody, await getToken());
-            console.log(result)
-            if (result.status == "202") {
-                //TODO onderstaand geeft users.map is not a function
-                // updater voor tabel is nog nodig
-                
-                // const updatedList = users.map(item => {
-                //     if (item.userId === result.data.userId) {
-                //         return result.data;
-                //     } else {
-                //         return item;
-                //     }
-                // })
-                // setUsers(updatedList);
-                succeedAlert();
-            } else {
-                errorAlert(result?.message)
-                console.log("Failed delete request ", result.message);
+            try {
+                const result = await UserService.delete(deleteBody, await getToken());
+                if (result.status == 202) {
+                    succeedAlert();
+                } else {
+                    errorAlert(result.error.message)
+                }
+            } catch (e) {
+                errorAlert("Failed delete request ", e.message)
             }
         })
     }
 
-    // const onDeleteUser = async (userDTO) => {
-    //     let temptoken = await getToken();
-    //     const deleteBody = {
-    //         "token": temptoken,
-    //         "userid": userDTO.userId
-    //     }
-
-
-    //     try {
-    //         const {error} = await UserService.delete(deleteBody, temptoken);
-    //         if (error) throw new Error(error)
-    //     } catch (e) {
-    //         errorAlert("Failed delete request")
-    //     }
-    // }
 
     // TODO getall voor welke role? getByCustomerId 
     useEffect(() => {
