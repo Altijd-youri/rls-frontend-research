@@ -31,6 +31,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
 
     const [id, setId] = useState(customerDTO ? customerDTO.id : '');
 
+    console.log("hi")
     const initForm = {
         userId: {
             error: ''
