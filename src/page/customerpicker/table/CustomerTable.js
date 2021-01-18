@@ -6,6 +6,7 @@ import { hasPermissions } from '../../../utils/scopeChecker';
 
 export default function CustomerTable({ customers, onDeleteCustomer, onEditCustomer }) {
 
+    console.log("Test")
     const columns = [
         {
             name: 'ID',
