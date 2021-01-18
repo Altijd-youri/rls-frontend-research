@@ -175,15 +175,15 @@ export default function CustomerPicker() {
                                 Customers
                         </h4>
                         
-                        <div hidden={sidebar.showCreateCustomer}>
-                                  {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={addCustomerHandler}> 
+                        <div hidden={!sidebar.showCreateCustomer && sidebar.showCreateUser}>
+                                  {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={addCustomerHandler}> 
                             Add Customer
                         <i className="fas fa-plus"></i>
                         </span>}
                         </div>
 
                         <div hidden={sidebar.showCustomerTable}>
-                                  {hasPermissions(["write:user"]) && <span className="d-flex align-items-center add-btn" onClick={backToCustomerTable}> 
+                                  {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={backToCustomerTable}> 
                             Close
                         <i className="fas fa-times"></i>
                         </span>}                  
