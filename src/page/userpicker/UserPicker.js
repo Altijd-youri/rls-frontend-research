@@ -46,6 +46,8 @@ export default function UserPicker() {
             try {
                 const result = await UserService.delete(deleteBody, await getToken());
                 if (result.status == 202) {
+                    let updatedList = users.data.filter((u) => u.userId !== userDTO.userId)
+                    setUsers({data: updatedList});
                     succeedAlert();
                 } else {
                     errorAlert(result.error.message)

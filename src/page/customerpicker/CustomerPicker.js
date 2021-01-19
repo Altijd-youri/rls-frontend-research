@@ -10,6 +10,7 @@ import ManageCustomer from './ManageCustomer/ManageCustomer';
 import { confirmAlert, errorAlert, succeedAlert } from '../../utils/Alerts';
 import ManageUser from '../userpicker/ManageUser/ManageUser';
 import UserList from './ManageCustomer/UserList';
+import trains from '../../api/trains';
 
 export default function CustomerPicker() {
 
@@ -37,17 +38,12 @@ export default function CustomerPicker() {
     }, [getTokenSilently]);
 
     const fetchUsers = async (customerDTO) => {
-        console.log(users)
         setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
         try {
             // const { data, error } = await UserService.getAll(await getToken());
             const { data, error } = await UserService.getAllByCustomerId(customerDTO.id, await getToken());
-            console.log(data)
             if (data) {
-                console.log(data)
                 setUsers(prevState => ({ ...prevState, isFetching: false, data}))
-                console.log(users)
-                console.log(data)
             } else {
                 throw new Error(error)
             }
@@ -58,39 +54,36 @@ export default function CustomerPicker() {
 
     const onEditCustomer = (customerDTO) => {
         closeAllSidebars();
-
         fetchUsers(customerDTO);
-
-        console.log(customerDTO)
         setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO}))
     }
 
     const onEditUser = (customerDTO, userDTO) => {
-        console.log(userDTO)
-        console.log(customerDTO)
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO, data2: userDTO}))
     };
 
     const addUserHandler = (customerDTO) => {
         closeAllSidebars();
-        console.log(customerDTO)
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
         // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
     }
     
     const onDeleteUser = async (userDTO) => {
         confirmAlert(async () => {
-            console.log(userDTO)
             const deleteBody = {
                 "token": await getToken(),
                 "userid": userDTO.userId
             }
             try {
                 const result = await UserService.delete(deleteBody, await getToken());
-                // if (error) throw new Error(error)
-                console.log(result)
-                succeedAlert();
+                if (result.status == 202) {
+                    let updatedList = users.data.filter((u) => u.userId !== userDTO.userId)
+                    setUsers({data: updatedList});
+                    succeedAlert();
+                } else {
+                    errorAlert(result.error.message)
+                }
             } catch (e) {
                 errorAlert("Failed delete request ", e.message)
             }
@@ -99,7 +92,6 @@ export default function CustomerPicker() {
 
     const onDeleteCustomer = async (customerDTO) => {
         confirmAlert(async () => {
-            console.log(customerDTO)
             const deleteBody = {
                 "token": await getToken(),
                 "customerid": customerDTO.id
@@ -107,6 +99,8 @@ export default function CustomerPicker() {
             try {
                 const result = await CustomerService.delete(deleteBody, await getToken());
                 if (result.status == 202) {
+                    let updatedList = customers.data.filter((c) => c.id !== customerDTO.id)
+                    setCustomers({data: updatedList});
                     succeedAlert();
                 } else {
                     errorAlert(result.error.message)
@@ -167,7 +161,6 @@ export default function CustomerPicker() {
 
     const addSuperUserHandler = (customerDTO) => {
         closeAllSidebars();
-        console.log(customerDTO)
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
     }
 
