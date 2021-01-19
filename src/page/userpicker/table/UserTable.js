@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 import customers from "../../../api/customer";
 
-export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken, user, customer }) {
+export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken, user, customer}) {
 
     const columns = [
         {
@@ -15,17 +15,22 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
         },
         {
             name: 'Lastname',
-            selector: 'lastname', //Nog geen waarde voor KvK in database
+            selector: 'lastname',
             sortable: true,
         },
         {
             name: 'Email',
-            selector: 'email', //Nog geen waarde voor KvK in database
+            selector: 'email',
             sortable: true,
         },
         {
             name: 'Customer',
             selector: 'customer.customername',
+            sortable: true,
+        },
+        {
+            name: 'Company code',
+            selector: 'customer.companyCode',
             sortable: true,
         }
 
@@ -70,6 +75,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
         (user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase())) || 
         (user.firstname && user.firstname.toLowerCase().includes(filterText.toLowerCase())) || 
         (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) ||
+        (user.customer.companyCode && user.customer.companyCode.toLowerCase().includes(filterText.toLowerCase()))
         (user.customer.customername && user.customer.customername.toLowerCase().includes(filterText.toLowerCase()))
     );
 

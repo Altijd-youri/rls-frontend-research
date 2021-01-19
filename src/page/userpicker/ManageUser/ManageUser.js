@@ -31,7 +31,6 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
 
     const [id, setId] = useState(customerDTO ? customerDTO.id : '');
 
-    console.log("hi")
     const initForm = {
         userId: {
             error: ''
@@ -161,10 +160,8 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
 
                 <div className="form-group">
                     <input readOnly
-                        key={`customerId || ${customerDTO?.id}`}
-                        defaultValue={customerDTO?.id}
-                        // key={`customerId || ${userDTO?.customerId}`}
-                        // defaultValue={userDTO?.customerId}
+                        key={`customerId || ${userDTO?.customer.id}`}
+                        defaultValue={userDTO?.customer.id}
                         id="customerId"
                         type="number"
                         name="customerId"
@@ -182,17 +179,15 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
 
                 <div className="form-group">
                     <input readOnly
-                           key={`customerName || ${customerDTO?.customername}`}
-                           defaultValue={customerDTO?.customername}
-                        // key={`customerId || ${userDTO?.customerId}`}
-                        // defaultValue={userDTO?.customerId}
-                           id="customerName"
-                           type="text"
-                           name="customerName"
-                           maxLength="40"
-                           className="form-control"
-                           onChange={e => setCustomerName(e.target.value)}
-                           required
+                        key={`customerId || ${userDTO?.customer.name}`}
+                        defaultValue={userDTO?.customer.name}
+                        id="customerName"
+                        type="text"
+                        name="customerName"
+                        maxLength="40"
+                        className="form-control"
+                        onChange={e => setCustomerName(e.target.value)}
+                        required
                     />
                     <label
                         className="form-control-placeholder"
