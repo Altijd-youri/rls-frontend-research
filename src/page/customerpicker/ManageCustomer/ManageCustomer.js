@@ -198,13 +198,12 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                         name="companyCode"
                         maxLength="60"
                         className="form-control"
+                        readOnly = {true}
                         onChange={e => setCompanyCode(e.target.value)}
-                        //required
                     />
                     <label
                         className="form-control-placeholder"
                         htmlFor="companyCode">
-                        companyCode
                     </label>
                     {form.companyCode.error && <p>{form.companyCode.error}</p>}
                 </div>
