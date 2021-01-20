@@ -31,11 +31,6 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
             name: 'Email',
             selector: 'email',
             sortable: true,
-        },
-        {
-            name: 'Customer',
-            selector: 'customer.customername',
-            sortable: true,
         }
     ];
 
