@@ -246,6 +246,7 @@ export default function CustomerPicker() {
                         onEditUser={(row) => onEditUser(row)}
                         onDeleteUser={(row) => onDeleteUser(row)}
                         addUserHandler={(customerDTO) => addUserHandler(customerDTO)}
+                        customerDTO={sidebar.data}
                         userDTO={sidebar.data2}
                         getToken={() => getToken()}
                         users={users.data}
@@ -256,6 +257,7 @@ export default function CustomerPicker() {
                             getToken={() => getToken()}
                             editUserHandler={() => editUserHandler()}
                             onSave={setUsers}
+                            customerDTO={sidebar.data}
                             userDTO={sidebar.data2}
                         />
                     }
