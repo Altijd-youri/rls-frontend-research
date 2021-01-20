@@ -24,12 +24,17 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
         },
         {
             name: 'Lastname',
-            selector: 'lastname', //Nog geen waarde voor KvK in database
+            selector: 'lastname',
             sortable: true,
         },
         {
             name: 'Email',
-            selector: 'email', //Nog geen waarde voor KvK in database
+            selector: 'email',
+            sortable: true,
+        },
+        {
+            name: 'Customer',
+            selector: 'customer.customername',
             sortable: true,
         }
     ];
