@@ -35,6 +35,10 @@ export default function UserPicker() {
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
     }
     
+    const editUserHandler = () => {
+        closeAllSidebars();
+        setSidebar(prevState => ({ ...prevState, showUserTable: true, showCreateUser: false, data: undefined}))
+    }
 
     const onDeleteUser = async (userDTO) => {
         confirmAlert(async () => {
@@ -146,11 +150,9 @@ export default function UserPicker() {
                         <ManageUser 
                             getToken={() => getToken()}
                             backToUserTable={() => backToUserTable()}
-                            // onEditUser={(row) => onEditUser(row)}
-                            // onDeleteUser={(row) => onDeleteUser(row)}
+                            editUserHandler={() => editUserHandler()}
                             onSave={setUsers}
                             userDTO={sidebar.data}
-                            onSave={setUsers}
                         />
                     }
                 </div>

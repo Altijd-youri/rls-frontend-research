@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
+export default function ManageCustomersUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
 
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
@@ -28,9 +28,10 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
     const [role, setRole] = useState(userDTO ? userDTO.role : '');
-
+    
     const [id, setId] = useState(userDTO ? userDTO.customer.id : '');
-
+    console.log(userDTO)
+    console.log(customerDTO)
     const initForm = {
         userId: {
             error: ''
