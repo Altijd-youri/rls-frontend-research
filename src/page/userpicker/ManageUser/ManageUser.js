@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
+export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler, user }) {
 
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
@@ -28,9 +28,10 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
     const [role, setRole] = useState(userDTO ? userDTO.role : '');
+    const [rolelist, setRolelist] = useState(roles)
 
     const [id, setId] = useState(userDTO ? userDTO.customer.id : '');
-
+    console.log(user)
     const initForm = {
         userId: {
             error: ''
@@ -55,6 +56,17 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
         }
     }
     const [form, setForm] = useState(initForm)
+
+    useEffect(() => {
+        console.log("roleslist")
+        console.log(user['https://any-namespace/roles'][0])
+        // console.log(roles.value(user['https://any-namespace/roles']))
+        // console.log()
+        console.log(roles)
+        console.log(roles.find((r) => r.name == (user['https://any-namespace/roles'][0])))
+        let filteredRoles = roles.filter((r) => (r.value > (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
+        console.log(filteredRoles)
+    })
 
     useEffect(() => {
         if (userDTO) {

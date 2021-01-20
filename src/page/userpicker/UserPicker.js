@@ -148,6 +148,7 @@ export default function UserPicker() {
                     }
                     {sidebar.showCreateUser &&
                         <ManageUser 
+                            user={user}
                             getToken={() => getToken()}
                             backToUserTable={() => backToUserTable()}
                             editUserHandler={() => editUserHandler()}
