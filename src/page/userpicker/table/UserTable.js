@@ -24,13 +24,8 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
             sortable: true,
         },
         {
-            name: 'Customer',
-            selector: 'customer.customername',
-            sortable: true,
-        },
-        {
-            name: 'Company code',
-            selector: 'customer.companyCode',
+            name: 'Role',
+            selector: 'role',
             sortable: true,
         }
 
@@ -75,8 +70,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
         (user.lastname && user.lastname.toLowerCase().includes(filterText.toLowerCase())) || 
         (user.firstname && user.firstname.toLowerCase().includes(filterText.toLowerCase())) || 
         (user.email && user.email.toLowerCase().includes(filterText.toLowerCase())) ||
-        (user.customer.companyCode && user.customer.companyCode.toLowerCase().includes(filterText.toLowerCase()))
-        (user.customer.customername && user.customer.customername.toLowerCase().includes(filterText.toLowerCase()))
+        (user.role && user.role.toLowerCase().includes(filterText.toLowerCase()))
     );
 
     const subHeaderComponentMemo = React.useMemo(() => {
