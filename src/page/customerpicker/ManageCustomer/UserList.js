@@ -12,7 +12,7 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
     // const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const [isFetching, setFetching] = useState(false);
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
-    const [editMode, setEditMode] = useState(customerDTO ? true : false);
+    const [editMode, setEditMode] = useState(userDTO ? true : false);
         // Set de text van de submit button van de form
     // const [title, setTitle] = useState('ADD USER');
 
@@ -24,12 +24,12 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
         },
         {
             name: 'Lastname',
-            selector: 'lastname', //Nog geen waarde voor KvK in database
+            selector: 'lastname',
             sortable: true,
         },
         {
             name: 'Email',
-            selector: 'email', //Nog geen waarde voor KvK in database
+            selector: 'email',
             sortable: true,
         }
     ];
@@ -86,9 +86,6 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
             <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />);
     }, [filterText, resetPaginationToggle]);
 
-    const addUser = () => {
-        
-    }
     return (
         <div>
             <DataTable

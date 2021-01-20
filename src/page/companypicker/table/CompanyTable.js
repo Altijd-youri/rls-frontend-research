@@ -9,11 +9,6 @@ export default function CompanyTable({ companies, onEditCompany, getToken, Compa
 
     const columns = [
         {
-            name: 'Id',
-            selector: 'id',
-            sortable: true,
-        },
-        {
             name: 'Code',
             selector: 'code', //Nog geen waarde voor KvK in database
             sortable: true,

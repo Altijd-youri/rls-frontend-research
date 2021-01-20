@@ -8,7 +8,6 @@ import { hasPermissions } from '../../utils/scopeChecker';
 
 export default function Sidebar() {
     const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
-    console.log(user)
     const logoutHandler = () => {
         localStorage.removeItem("scopes");
         logout();

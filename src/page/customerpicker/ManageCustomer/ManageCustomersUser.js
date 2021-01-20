@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
+export default function ManageCustomersUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
 
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
@@ -20,17 +20,17 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
 
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
     // const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
-    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : (userDTO ? userDTO.customer.id : ''));
-
-    const [customerName, setCustomerName] = useState(userDTO ? userDTO.customer.customername : (userDTO ? userDTO.customer.customername : ''));
+    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : (customerDTO ? customerDTO.id : ''));
+    const [customerName, setCustomerName] = useState(userDTO ? userDTO.customer.customername : (customerDTO ? customerDTO.customername : ''));
 
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
     const [lastname, setLastname] = useState(userDTO ? userDTO.lastname : '');
     const [email, setEmail] = useState(userDTO ? userDTO.email : '');
     const [role, setRole] = useState(userDTO ? userDTO.role : '');
-
-    const [id, setId] = useState(userDTO ? userDTO.customer.id : '');
-
+    
+    const [id, setId] = useState(customerDTO ? customerDTO.id : '');
+    console.log(userDTO)
+    console.log(customerDTO)
     const initForm = {
         userId: {
             error: ''

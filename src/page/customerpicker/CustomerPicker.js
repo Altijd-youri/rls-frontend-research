@@ -8,9 +8,8 @@ import CustomerService from '../../api/customer';
 import UserService from '../../api/user';
 import ManageCustomer from './ManageCustomer/ManageCustomer';
 import { confirmAlert, errorAlert, succeedAlert } from '../../utils/Alerts';
-import ManageUser from '../userpicker/ManageUser/ManageUser';
+import ManageCustomersUser from './ManageCustomer/ManageCustomersUser';
 import UserList from './ManageCustomer/UserList';
-import trains from '../../api/trains';
 
 export default function CustomerPicker() {
 
@@ -19,7 +18,6 @@ export default function CustomerPicker() {
     const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const { getTokenSilently } = useAuth0();
 
-    // const initSidebar = { showCustomerTable: true, data: undefined }
     const initSidebar = { showUserList: false, showCustomerTable: true, showCreateCustomer: false, showCreateUser: false, data: undefined, data2: undefined}
     const [sidebar, setSidebar] = useState(initSidebar)
 
@@ -52,20 +50,32 @@ export default function CustomerPicker() {
         }
     }
 
-    const onEditCustomer = (customerDTO) => {
+    const onEditCustomer = (customerDTO, userDTO) => {
         closeAllSidebars();
         fetchUsers(customerDTO);
-        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO}))
+        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO, data2: userDTO}))
     }
 
-    const onEditUser = (customerDTO, userDTO) => {
+    
+
+    const onEditUser = (userDTO) => {
+        console.log("onedituser")
+        console.log(userDTO)
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO, data2: userDTO}))
+        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data2: userDTO}))
+        console.log(sidebar)
+        setTimeout(() => {console.log(sidebar);}, 3000)
     };
+
+    const editUserHandler = () => {
+        closeAllSidebars();
+        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: undefined}))
+    }
 
     const addUserHandler = (customerDTO) => {
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
+        console.log(sidebar)
         // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
     }
     
@@ -194,10 +204,9 @@ export default function CustomerPicker() {
                 <div className="inner-box">
                     <div className="content-title">
                         <h4>
-                                Customers
+                            Customers
                         </h4>
-                        
-                        <div hidden={!sidebar.showCreateCustomer && sidebar.showCreateUser}>
+                        <div hidden={sidebar.showCreateCustomer || sidebar.showCreateUser}>
                                   {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={addCustomerHandler}> 
                             Add Customer
                         <i className="fas fa-plus"></i>
@@ -234,25 +243,22 @@ export default function CustomerPicker() {
                     }
                     {sidebar.showUserList && 
                         <UserList
-                        customerDTO={sidebar.data}
                         onEditUser={(row) => onEditUser(row)}
                         onDeleteUser={(row) => onDeleteUser(row)}
                         addUserHandler={(customerDTO) => addUserHandler(customerDTO)}
+                        customerDTO={sidebar.data}
                         userDTO={sidebar.data2}
                         getToken={() => getToken()}
                         users={users.data}
                         />
                     }
                     {sidebar.showCreateUser &&
-                        <ManageUser 
+                        <ManageCustomersUser 
                             getToken={() => getToken()}
-                            customerDTO={sidebar.data}
-                            onEditCustomer={(customerDTO) => onEditCustomer(customerDTO)}
+                            editUserHandler={() => editUserHandler()}
                             onSave={setUsers}
-                            // handleChange={() => handleChange()}
-                            // onEditUser={(row) => onEditUser(row)}
-                            // onDeleteUser={(row) => onDeleteUser(row)}
-                            // userDTO={sidebar.data}
+                            customerDTO={sidebar.data}
+                            userDTO={sidebar.data2}
                         />
                     }
                 </div>

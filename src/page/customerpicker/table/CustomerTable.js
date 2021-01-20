@@ -9,11 +9,6 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
     console.log("Test")
     const columns = [
         {
-            name: 'ID',
-            selector: 'id',
-            sortable: true,
-        },
-        {
             name: 'Name',
             selector: 'customername', //Nog geen waarde voor customername in database
             sortable: true,
