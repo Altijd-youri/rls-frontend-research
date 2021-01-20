@@ -98,6 +98,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
         //     "app_metadata": {}
         // }
         const body = {
+            "userId": userId,
             "customerId": customerId,
             "firstname": firstname,
             "lastname": lastname,
@@ -105,8 +106,8 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
             "role": role
             //"token": await getToken()
         }
+        
         const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
-        //const result = editMode ? await UserService.update(userId, body, getToken()) : await UserService.save(getToken(), body)
         try {
             if (result.data) {
                 if (userDTO) {
@@ -138,7 +139,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
     return (
         <div className="content-title">
             <form onSubmit={submitForm} className="form-wrapper">
-                <div className="form-group">
+                {/* <div className="form-group">
                     <input
                         key={`userId || ${userDTO?.userId}`}
                         defaultValue={userDTO?.userId}
@@ -156,9 +157,9 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                         userId
                     </label>
                     {form.userId.error && <p>{form.userId.error}</p>}
-                </div>
+                </div> */}
 
-                <div className="form-group">
+                {/* <div className="form-group">
                     <input readOnly
                         key={`customerId || ${userDTO?.customer.id}`}
                         defaultValue={userDTO?.customer.id}
@@ -175,7 +176,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                         htmlFor="customerId">
                     </label>
                     {form.customerId.error && <p>{form.customerId.error}</p>}
-                </div>
+                </div> */}
 
                 <div className="form-group">
                     <input readOnly
@@ -192,6 +193,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                     <label
                         className="form-control-placeholder"
                         htmlFor="customerName">
+                            Customername
                     </label>
                     {form.customerName.error && <p>{form.customerName.error}</p>}
                 </div>
@@ -211,7 +213,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                     <label
                         className="form-control-placeholder"
                         htmlFor="firstname">
-                        firstname
+                            Firstname
                     </label>
                     {form.firstname.error && <p>{form.firstname.error}</p>}
                 </div>
@@ -231,7 +233,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                     <label
                         className="form-control-placeholder"
                         htmlFor="lastname">
-                        lastname
+                            Lastname
                     </label>
                     {form.lastname.error && <p>{form.lastname.error}</p>}
                 </div>
@@ -251,7 +253,7 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
                     <label
                         className="form-control-placeholder"
                         htmlFor="email">
-                        email
+                            Email
                     </label>
                     {form.email.error && <p>{form.email.error}</p>}
                 </div>
