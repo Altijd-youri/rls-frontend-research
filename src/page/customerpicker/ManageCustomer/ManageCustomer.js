@@ -21,7 +21,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
 
     const initErrorForm = { customer: { error: '' } }
     const [errorForm, setErrorForm] = useState(initErrorForm);
-    console.log(customerDTO)
     const initForm = {
         id: {
             error: ''
@@ -48,10 +47,8 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     useEffect(() => {
         if (customerDTO) {
             setEditMode(true);
-            console.log("true")
         } else {
             setEditMode(false);
-            console.log("false")
         }
     }, [customerDTO])
 
@@ -110,12 +107,9 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                 }
                 succeedAlert()
                 setFetching(false);
-                console.log(result.data.id)
-                console.log(customerDTO)
                 editMode ? backToCustomerTable() : addSuperUserHandler(result.data);
         
             } else {
-                console.log(result.error.message)
                 throw new Error(result.error.message);
             }
         } catch (e) {
@@ -164,7 +158,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     <label
                         className="form-control-placeholder"
                         htmlFor="name">
-                        customername
+                            Customername
                     </label>
                     {form.customername.error && <p>{form.customername.error}</p>}
                 </div>
@@ -185,6 +179,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     <label
                         className="form-control-placeholder"
                         htmlFor="name">
+                            Companyname
                     </label>
                     {form.companyName.error && <p>{form.companyName.error}</p>}
                 </div>
@@ -204,7 +199,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     <label
                         className="form-control-placeholder"
                         htmlFor="companyCode">
-                        companyCode
+                            Company code
                     </label>
                     {form.companyCode.error && <p>{form.companyCode.error}</p>}
                 </div>
@@ -224,7 +219,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     <label
                         className="form-control-placeholder"
                         htmlFor="iban">
-                        iban
+                            IBAN
                     </label>
                     {form.iban.error && <p>{form.iban.error}</p>}
                 </div>
@@ -244,7 +239,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                     <label
                         className="form-control-placeholder"
                         htmlFor="kvk">
-                        kvk
+                            KvK nr.
                     </label>
                     {form.kvk.error && <p>{form.kvk.error}</p>}
                 </div>

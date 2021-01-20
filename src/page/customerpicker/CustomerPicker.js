@@ -10,7 +10,6 @@ import ManageCustomer from './ManageCustomer/ManageCustomer';
 import { confirmAlert, errorAlert, succeedAlert } from '../../utils/Alerts';
 import ManageUser from '../userpicker/ManageUser/ManageUser';
 import UserList from './ManageCustomer/UserList';
-import trains from '../../api/trains';
 
 export default function CustomerPicker() {
 
@@ -194,10 +193,9 @@ export default function CustomerPicker() {
                 <div className="inner-box">
                     <div className="content-title">
                         <h4>
-                                Customers
+                            Customers
                         </h4>
-                        
-                        <div hidden={!sidebar.showCreateCustomer && sidebar.showCreateUser}>
+                        <div hidden={sidebar.showCreateCustomer || sidebar.showCreateUser}>
                                   {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={addCustomerHandler}> 
                             Add Customer
                         <i className="fas fa-plus"></i>
