@@ -3,6 +3,7 @@ import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
 import { useAuth0 } from '../../react-auth0-spa';
 import { hasPermissions } from '../../utils/scopeChecker';
+import {roles} from '../../utils/constants';
 import UserTable from './table/UserTable';
 import UserService from '../../api/user';
 import ManageUser from './ManageUser/ManageUser';
@@ -17,6 +18,7 @@ export default function UserPicker() {
     const initSidebar = { showUserTable: true, showCreateUser: false, data: undefined }
     //const initSidebar = { showUserTable: false, showCreateUser: true, data: undefined }
     const [sidebar, setSidebar] = useState(initSidebar)
+    const [rolelist, setRolelist] = useState(roles)
 
     useEffect(() => {
         if (sidebar.data) {
@@ -30,8 +32,21 @@ export default function UserPicker() {
         return token;
     }, [getTokenSilently]);
 
+    const generateRolelist = () => {
+        console.log("roleslist")
+        console.log(user['https://any-namespace/roles'][0])
+        // console.log(roles.value(user['https://any-namespace/roles']))
+        // console.log()
+        console.log(roles)
+        console.log(roles.find((r) => r.name == (user['https://any-namespace/roles'][0])))
+        let filteredRoles = roles.filter((r) => (r.value > (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
+        setRolelist(filteredRoles)
+        console.log(filteredRoles)
+    }
+
     const onEditUser = (userDTO) => {
         closeAllSidebars();
+        generateRolelist();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: userDTO}))
     }
     
@@ -148,7 +163,7 @@ export default function UserPicker() {
                     }
                     {sidebar.showCreateUser &&
                         <ManageUser 
-                            user={user}
+                            rolelist={rolelist}
                             getToken={() => getToken()}
                             backToUserTable={() => backToUserTable()}
                             editUserHandler={() => editUserHandler()}
