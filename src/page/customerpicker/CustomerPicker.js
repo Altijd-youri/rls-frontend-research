@@ -66,7 +66,7 @@ export default function CustomerPicker() {
         // console.log()
         console.log(roles)
         console.log(roles.find((r) => r.name == (user['https://any-namespace/roles'][0])))
-        let filteredRoles = roles.filter((r) => (r.value > (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
+        let filteredRoles = roles.filter((r) => (r.value >= (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
         setRolelist(filteredRoles)
         console.log(filteredRoles)
     }
