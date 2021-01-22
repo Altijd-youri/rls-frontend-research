@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react'
 import '../../assets/picker_create.scoped.css'
 import {succeedAlert, errorAlert} from "../../../utils/Alerts";
 import UserService from "../../../api/user";
+import CustomerService from "../../../api/customer"
 import {roles} from '../../../utils/constants';
 import {Typeahead} from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
@@ -98,7 +99,7 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
         //     //"token": await getToken()
         // }
         
-        const result = editMode ? await UserService.update(await getToken(), body) : await UserService.save(await getToken(), body)
+        const result = editMode ? await UserService.update(await getToken(), body) : await CustomerService.saveUser(await getToken(), body)
         try {
             if (result.data) {
                 if (userDTO) {

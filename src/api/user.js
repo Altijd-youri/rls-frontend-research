@@ -27,16 +27,16 @@ class UserService extends FetchService {
 
     update(body, token) {
         return super
-        .fetch(`${ENDPOINTS.USERS}`, 'PATCH', token, body)
-        .then((data) => super.parseJSON(data))
-        .catch((error) => Promise.reject(new Error(error.message)));
+            .fetch(`${ENDPOINTS.USERS}`, 'PATCH', token, body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
     }
 
     delete(body, token) {
         return super
-        .fetch(`${ENDPOINTS.USERS}`, 'DELETE', token, body)
-        .then((data) => super.parseJSON(data))
-        .catch((error) => Promise.reject(new Error(error.message)));
+            .fetch(`${ENDPOINTS.USERS}`, 'DELETE', token, body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
     }
 
 }
