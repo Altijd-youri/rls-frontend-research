@@ -90,15 +90,15 @@ export default function ManageCustomersUser({onHide, onSave, userDTO, customerDT
             //"token": await getToken()
         }
 
-        const updatebody = {
-            "userId": userId,
-            "firstname": firstname,
-            "lastname": lastname,
-            "email": email
-            //"token": await getToken()
-        }
+        // const updatebody = {
+        //     "userId": userId,
+        //     "firstname": firstname,
+        //     "lastname": lastname,
+        //     "email": email
+        //     //"token": await getToken()
+        // }
         
-        const result = editMode ? await UserService.update(updatebody, getToken()) : await UserService.save(getToken(), body)
+        const result = editMode ? await UserService.update(await getToken(), body) : await UserService.save(await getToken(), body)
         try {
             if (result.data) {
                 if (userDTO) {

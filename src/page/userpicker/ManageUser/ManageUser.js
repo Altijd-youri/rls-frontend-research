@@ -90,15 +90,15 @@ export default function ManageUser({onHide, onSave, userDTO, customerDTO, handle
             //"token": await getToken()
         }
 
-        const updatebody = {
-            "userId": userId,
-            "firstname": firstname,
-            "lastname": lastname,
-            "email": email
-            //"token": await getToken()
-        }
-        
-        const result = editMode ? await UserService.update(updatebody, getToken()) : await UserService.save(getToken(), body)
+        // const updatebody = {
+        //     "userId": userId,
+        //     "firstname": firstname,
+        //     "lastname": lastname,
+        //     "email": email
+        //     //"token": await getToken()
+        // }
+        console.log(editMode)
+        const result = editMode ? await UserService.update(await getToken(), body) : await UserService.save(await getToken(), body)
         try {
             if (result.data) {
                 if (userDTO) {

@@ -193,7 +193,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
                         name="companyCode"
                         maxLength="60"
                         className="form-control"
-                        readOnly = {true}
+                        readOnly = {false}
                         onChange={e => setCompanyCode(e.target.value)}
                     />
                     <label
