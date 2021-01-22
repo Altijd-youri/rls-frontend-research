@@ -83,5 +83,6 @@ export const TRACTION_UNIT = [
 export const roles = [
     { id: "1", name: "Admin", value: 1 },
     { id: "2", name: "SuperUser", value: 2 },
-    { id: "3", name: "User", value: 3 }
+    { id: "3", name: "User", value: 3 },
+    { id: "4", name: "Developer", value: 0 }
 ]
