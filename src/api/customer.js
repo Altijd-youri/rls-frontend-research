@@ -23,7 +23,7 @@ class CustomerService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    update(body, token) {
+    update(token, body) {
         return super
             .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PATCH', token, body)
             .then((data) => super.parseJSON(data))
