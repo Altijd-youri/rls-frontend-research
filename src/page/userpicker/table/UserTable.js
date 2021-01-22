@@ -41,7 +41,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
                 width: '60px',
             }
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -51,7 +51,7 @@ export default function CompanyTable({ users, onDeleteUser, onEditUser, getToken
         }
         else if (hasPermissions(["update:user"])) {
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,

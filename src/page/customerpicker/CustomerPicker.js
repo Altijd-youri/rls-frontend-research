@@ -265,6 +265,7 @@ export default function CustomerPicker() {
                         userDTO={sidebar.data2}
                         getToken={() => getToken()}
                         users={users.data}
+                        user={user.email}
                         />
                     }
                     {sidebar.showCreateUser &&
