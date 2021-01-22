@@ -21,7 +21,7 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
 
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
     // const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
-    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customerId : (customerDTO ? customerDTO.id : ''));
+    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customer.customerId : (customerDTO ? customerDTO.id : ''));
     const [customerName, setCustomerName] = useState(userDTO ? userDTO.customer.customername : (customerDTO ? customerDTO.customername : ''));
 
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
@@ -75,6 +75,7 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
     }, [userDTO])
 
     const submitForm = async (event) => {
+        console.log(customerDTO)
         event.preventDefault();
         setFetching(true);
         setForm(initForm);
@@ -90,6 +91,8 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
             "role": role
             //"token": await getToken()
         }
+        console.log("body")
+        console.log(body)
 
         // const updatebody = {
         //     "userId": userId,
