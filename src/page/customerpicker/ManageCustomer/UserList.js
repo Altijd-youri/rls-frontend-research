@@ -8,7 +8,7 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function UserList({ users, onHide, onSave, customerDTO, userDTO, getToken, onDeleteUser, onEditUser, addUserHandler }) {
+export default function UserList({ user, users, onHide, onSave, customerDTO, userDTO, getToken, onDeleteUser, onEditUser, addUserHandler }) {
     // const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const [isFetching, setFetching] = useState(false);
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
@@ -37,14 +37,14 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
-                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
+                cell: row => <Button variant="outline-danger" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
                 width: '60px',
             }
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -54,7 +54,7 @@ export default function UserList({ users, onHide, onSave, customerDTO, userDTO, 
         }
         else if (hasPermissions(["write:user"])) {
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
