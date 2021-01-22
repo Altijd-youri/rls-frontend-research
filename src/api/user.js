@@ -25,7 +25,7 @@ class UserService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    update(body, token) {
+    update(token, body) {
         return super
             .fetch(`${ENDPOINTS.USERS}`, 'PATCH', token, body)
             .then((data) => super.parseJSON(data))
