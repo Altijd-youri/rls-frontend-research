@@ -117,12 +117,13 @@ export default function ManageUser({rolelist, onHide, onSave, userDTO, customerD
                 if (userDTO) {
                     onSave(prevState => {
                         const newList = prevState.data.map((item) => {
-                            if (item.id === result.data.id) {
+                            if (item.userId === result.data.userId) {
                                 return result.data;
                             } else {
                                 return item;
                             }
                         })
+                        //console.log("The first user = " + newList[4].firstname);
                         return ({...prevState, data: newList})
                     })
                 } else {
