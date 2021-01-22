@@ -9,18 +9,25 @@ class CustomerService extends FetchService {
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
-    save(token, body) {
+    saveCustomer(token, body) {
         return super
             .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PUT', token, body)
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
 
+    saveUser(token, body) {
+        return super
+            .fetch(`${ENDPOINTS.CUSTOMERS}/users`, 'PUT', token, body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
+
     update(body, token) {
         return super
-        .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PATCH', token, body)
-        .then((data) => super.parseJSON(data))
-        .catch((error) => Promise.reject(new Error(error.message)));
+            .fetch(`${ENDPOINTS.CUSTOMERS}`, 'PATCH', token, body)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
     }
 
     delete(body, token) {

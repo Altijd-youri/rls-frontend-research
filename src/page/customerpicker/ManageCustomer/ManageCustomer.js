@@ -88,7 +88,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
         //     "role": 'SuperUser'
         // }
         
-        const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.save(await getToken(), body);
+        const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.saveCustomer(await getToken(), body);
         try {
             if (result.data) {
                 if (customerDTO) {
