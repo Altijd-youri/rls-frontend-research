@@ -35,16 +35,16 @@ export default function UserList({ user, users, onHide, onSave, customerDTO, use
     ];
 
     const getColumns = () => {
-        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+        if (hasPermissions(["write:user" && "update:user"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
             const deleteColumn = {
-                cell: row => <Button variant="outline-danger" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} onClick={() => onDeleteUser(row)}>Delete</Button>,
+                cell: row => <Button variant="outline-danger" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
-                width: '60px',
+                width: '70px',
             }
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} onClick={() => onEditUser(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
@@ -54,7 +54,7 @@ export default function UserList({ user, users, onHide, onSave, customerDTO, use
         }
         else if (hasPermissions(["write:user"])) {
             const editColumn = {
-                cell: row => <Button variant="outline-secondary" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} onClick={() => onEditUser(row)}>Edit</Button>,
+                cell: row => <Button variant="outline-secondary" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onEditUser(row)}>Edit</Button>,
                 allowOverflow: true,
                 ignoreRowClick: true,
                 button: true,
