@@ -123,7 +123,6 @@ export default function ManageUser({rolelist, onHide, onSave, userDTO, customerD
                                 return item;
                             }
                         })
-                        //console.log("The first user = " + newList[4].firstname);
                         return ({...prevState, data: newList})
                     })
                 } else {
