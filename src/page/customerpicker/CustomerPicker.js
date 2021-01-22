@@ -5,6 +5,7 @@ import { useAuth0 } from '../../react-auth0-spa';
 import { hasPermissions } from '../../utils/scopeChecker';
 import CustomerTable from './table/CustomerTable';
 import CustomerService from '../../api/customer';
+import {roles} from '../../utils/constants';
 import UserService from '../../api/user';
 import ManageCustomer from './ManageCustomer/ManageCustomer';
 import { confirmAlert, errorAlert, succeedAlert } from '../../utils/Alerts';
@@ -12,6 +13,7 @@ import ManageCustomersUser from './ManageCustomer/ManageCustomersUser';
 import UserList from './ManageCustomer/UserList';
 
 export default function CustomerPicker() {
+    const { isAuthenticated, user } = useAuth0();
 
     const [customers, setCustomers] = useState({ data: [], isFetching: false, error: ''});
     
@@ -20,6 +22,7 @@ export default function CustomerPicker() {
 
     const initSidebar = { showUserList: false, showCustomerTable: true, showCreateCustomer: false, showCreateUser: false, data: undefined, data2: undefined}
     const [sidebar, setSidebar] = useState(initSidebar)
+    const [rolelist, setRolelist] = useState(roles)
 
     useEffect(() => {
         if (sidebar.data) {
@@ -56,11 +59,22 @@ export default function CustomerPicker() {
         setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO, data2: userDTO}))
     }
 
-    
+    const generateRolelist = () => {
+        console.log("roleslist")
+        console.log(user['https://any-namespace/roles'][0])
+        // console.log(roles.value(user['https://any-namespace/roles']))
+        // console.log()
+        console.log(roles)
+        console.log(roles.find((r) => r.name == (user['https://any-namespace/roles'][0])))
+        let filteredRoles = roles.filter((r) => (r.value > (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
+        setRolelist(filteredRoles)
+        console.log(filteredRoles)
+    }
 
     const onEditUser = (userDTO) => {
         console.log("onedituser")
         console.log(userDTO)
+        generateRolelist();
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data2: userDTO}))
         console.log(sidebar)
@@ -73,6 +87,7 @@ export default function CustomerPicker() {
     }
 
     const addUserHandler = (customerDTO) => {
+        generateRolelist();
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
         console.log(sidebar)
@@ -254,6 +269,7 @@ export default function CustomerPicker() {
                     }
                     {sidebar.showCreateUser &&
                         <ManageCustomersUser 
+                            rolelist={rolelist}
                             getToken={() => getToken()}
                             editUserHandler={() => editUserHandler()}
                             onSave={setUsers}

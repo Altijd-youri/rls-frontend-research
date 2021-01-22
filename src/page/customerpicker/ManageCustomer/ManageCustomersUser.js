@@ -9,7 +9,7 @@ import LocationsService from "../../../api/locations";
 import Select from 'react-select';
 
 
-export default function ManageCustomersUser({onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
+export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO, customerDTO, handleChange, onEditUser, getToken, editUserHandler }) {
 
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
@@ -55,7 +55,7 @@ export default function ManageCustomersUser({onHide, onSave, userDTO, customerDT
         }
     }
     const [form, setForm] = useState(initForm)
-
+    console.log(rolelist)
     useEffect(() => {
         if (userDTO) {
             setEditMode(true);
@@ -253,7 +253,7 @@ export default function ManageCustomersUser({onHide, onSave, userDTO, customerDT
 
                     <Select
                         id="role"
-                        options={roles}
+                        options={rolelist}
                         getOptionLabel={(option) => option.name}
                         getOptionValue={(option) => option.name}
                         onChange={e => setRole(e.name)}
