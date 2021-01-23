@@ -108,7 +108,7 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
                 if (userDTO) {
                     onSave(prevState => {
                         const newList = prevState.data.map((item) => {
-                            if (item.id === result.data.id) {
+                            if (item.userId === result.data.userId) {
                                 return result.data;
                             } else {
                                 return item;
