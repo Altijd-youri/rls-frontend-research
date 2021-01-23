@@ -77,7 +77,6 @@ export default function WagonTable({ wagons, onEditWagon, onDeleteWagon }) {
             highlightOnHover
             noHeader={true}
             pointerOnHover={true}
-        // onRowClicked={(row) => history.push(`train/${row.id}/details`)}
         />
     );
 }

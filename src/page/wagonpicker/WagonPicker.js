@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
 import WagonService from '../../api/wagon';
 import WagonTable from './table/WagonTable';
 import ManageWagon from './manageWagon/ManageWagon';
-import { useAuth0 } from '../../react-auth0-spa';
-import { hasPermissions } from '../../utils/scopeChecker';
+import {useAuth0} from '../../react-auth0-spa';
+import {hasPermissions} from '../../utils/scopeChecker';
 import {confirmAlert, errorAlert, succeedAlert} from "../../utils/Alerts";
 import UserService from "../../api/user";
 import EditTrain from "../trainpicker/editTrain/EditTrain";
 import CustomerTable from "../customerpicker/table/CustomerTable";
 import ManageTraction from "../tractionpicker/manageTraction/ManageTraction";
+import wagon from "../../api/wagon";
+
 export default function WagonPicker() {
     const [wagons, setWagons] = useState({data: [], isFetching: false, error: ''});
     const {getTokenSilently} = useAuth0();
@@ -117,19 +119,19 @@ export default function WagonPicker() {
                             onDeleteWagon={(row) => onDeleteWagon(row)}
                 />}
                 {sidebar.showCreateWagon &&
-                    <ManageWagon
-                        getToken={() => getToken()}
-                        onHide={closeAllSidebars}
-                        onSave={setWagons}
-                        wagonDTO={sidebar.data}
-                    />}
+                <ManageWagon
+                    getToken={() => getToken()}
+                    onHide={closeAllSidebars}
+                    onSave={setWagons}
+                    wagonDTO={sidebar.data}
+                />}
                 {sidebar.showEditWagon &&
-                    <WagonTable>
-                        getToken={() => getToken()}
-                        onHide={closeAllSidebars}
-                        wagons = {wagons.data}
-                    </WagonTable>}
-            </div>
+                <WagonTable>
+                    getToken={() => getToken()}
+                    onHide={closeAllSidebars}
+                    wagons = {wagons.data}
+                </WagonTable>}
         </div>
-    )
+</div>
+)
 }

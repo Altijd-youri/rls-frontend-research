@@ -61,10 +61,12 @@ export default function TrainPicker() {
             try {
                 const result = await TrainService.deleteTrain(train.id, await getToken());
                 if (result.data.response.status === 200) {
+
                     //TODO refresh pagina bij deleten van een train
 
                     // let updatedList = trains.data.filter((u) => u.id !== train.id)
                     // setTrains({data: updatedList});
+
                     succeedAlert();
                 } else {
                     errorAlert(result.error.message)
@@ -98,7 +100,6 @@ export default function TrainPicker() {
                 succeedAlert();
             } else {
                 errorAlert(result?.message)
-                console.log("Failed! ", result.message);
             }
         })
     }
@@ -121,7 +122,6 @@ export default function TrainPicker() {
 
     return (
         <div className="content">
-
             <Innerbar
                 isLoading={isLoading}
                 onCreateTrain={createTrainHandler}
