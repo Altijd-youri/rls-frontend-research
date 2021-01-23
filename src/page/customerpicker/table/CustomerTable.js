@@ -35,9 +35,6 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
         }
     ];
 
-    // const getColumns = () => {
-    //     return columns
-    // }
 
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat

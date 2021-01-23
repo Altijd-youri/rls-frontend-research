@@ -4,7 +4,7 @@ import FilterComponent from './FilterComponent';
 import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
-export default function WagonTable({ wagons, onEditWagon }) {
+export default function WagonTable({ wagons, onEditWagon, onDeleteWagon }) {
 
     const columns = [
         {
@@ -26,6 +26,14 @@ export default function WagonTable({ wagons, onEditWagon }) {
 
     const getColumns = () => {
         if (hasPermissions(["write:wagon"])) {
+            const deleteColumn = {
+                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteWagon(row)}>Delete</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '60px',
+            }
+
             const editColumn = {
                 cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditWagon(row)}>Edit</Button>,
                 allowOverflow: true,
@@ -33,7 +41,7 @@ export default function WagonTable({ wagons, onEditWagon }) {
                 button: true,
                 width: '56px',
             }
-            return [...columns, editColumn];
+            return [...columns,deleteColumn, editColumn];
         } else {
             return columns;
         }
