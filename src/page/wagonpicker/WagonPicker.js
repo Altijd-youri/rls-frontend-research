@@ -10,6 +10,7 @@ import {confirmAlert, errorAlert, succeedAlert} from "../../utils/Alerts";
 import UserService from "../../api/user";
 import EditTrain from "../trainpicker/editTrain/EditTrain";
 import CustomerTable from "../customerpicker/table/CustomerTable";
+import ManageTraction from "../tractionpicker/manageTraction/ManageTraction";
 export default function WagonPicker() {
     const [wagons, setWagons] = useState({data: [], isFetching: false, error: ''});
     const {getTokenSilently} = useAuth0();
@@ -64,7 +65,6 @@ export default function WagonPicker() {
                     let updatedList = wagons.data.filter((u) => u.id !== wagon.id)
                     setWagons({data: updatedList});
                 } else {
-                    console.log("Status code: " + result.status)
                     errorAlert(result.error.message)
                 }
             } catch (e) {
@@ -125,9 +125,8 @@ export default function WagonPicker() {
                 {sidebar.showEditWagon &&
                     <WagonTable>
                         getToken={() => getToken()}
-                        onEditWagon = {editWagonHandler()}
+                        onHide={closeAllSidebars}
                         wagons = {wagons.data}
-
                     </WagonTable>}
             </div>
         </div>

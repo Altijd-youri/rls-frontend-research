@@ -22,6 +22,12 @@ class TractionService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error)));
     }
+    deleteTraction(tractionId, token) {
+        return super
+            .fetch(`${ENDPOINTS.TRACTIONS}/${tractionId}`, 'DELETE', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 }
 
 export default new TractionService();

@@ -6,12 +6,19 @@ import TractionTable from './table/TractionTable';
 import ManageTraction from './manageTraction/ManageTraction';
 import { useAuth0 } from '../../react-auth0-spa';
 import { hasPermissions } from '../../utils/scopeChecker';
+import WagonTable from "../wagonpicker/table/WagonTable";
+import {confirmAlert, errorAlert} from "../../utils/Alerts";
+import WagonService from "../../api/wagon";
 
 export default function TrainPicker() {
     const [tractions, setTractions] = useState({ data: [], isFetching: false, error: '' });
     const { getTokenSilently } = useAuth0();
 
-    const initSidebar = { showManageTraction: false, data: undefined }
+    const initSidebar = { showManageTraction: false,
+                        showTractionTable: true,
+                        showCreateTraction: false,
+                        data: undefined
+                        }
     const [sidebar, setSidebar] = useState(initSidebar)
 
     const getToken = useCallback(async () => {
@@ -45,6 +52,23 @@ export default function TrainPicker() {
         if (traction) {
             setSidebar(prevState => ({ ...prevState, data: traction, showManageTraction: true }))
         }
+    }
+
+    const onDeleteTraction = (traction) => {
+        confirmAlert(async () => {
+            try {
+                const result = await TractionService.deleteTraction(traction.id, await getToken());
+
+                if (result.data.response.status === 200) {
+                    let updatedList = tractions.data.filter((u) => u.id !== traction.id)
+                    setTractions({data: updatedList});
+                } else {
+                    errorAlert(result.error.message)
+                }
+            } catch (e) {
+                errorAlert("Failed delete request ", e.message)
+            }
+        })
     }
 
     const createTractionHandler = () => {
@@ -81,9 +105,7 @@ export default function TrainPicker() {
                         <i className="fas fa-plus"></i>
                         </span>}
                     </div>
-                    <TractionTable onEditTraction={editTractionHandler} tractions={tractions.data} />
                 </div>
-            </div>
 
             {sidebar.showManageTraction &&
                 <ManageTraction
@@ -92,6 +114,18 @@ export default function TrainPicker() {
                     onSave={setTractions}
                     tractionDTO={sidebar.data}
                 />}
+
+            {sidebar.showTractionTable &&
+                <TractionTable
+                    getToken={() => getToken()}
+                    onEditTraction={(row) => editTractionHandler(row)}
+                    onDeleteTraction={(row) => onDeleteTraction(row)}
+                    tractions= {tractions.data}
+                />
+
+            }
+
+        </div>
         </div>
     )
 }
