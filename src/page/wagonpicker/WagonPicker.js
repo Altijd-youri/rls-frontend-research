@@ -59,11 +59,10 @@ export default function WagonPicker() {
         confirmAlert(async () => {
             try {
                 const result = await WagonService.deleteWagon(wagon.id, await getToken());
-                if (result.status == 200) {
-                    console.log("I came here")
+
+                if (result.data.response.status === 200) {
                     let updatedList = wagons.data.filter((u) => u.id !== wagon.id)
                     setWagons({data: updatedList});
-                    succeedAlert();
                 } else {
                     console.log("Status code: " + result.status)
                     errorAlert(result.error.message)
