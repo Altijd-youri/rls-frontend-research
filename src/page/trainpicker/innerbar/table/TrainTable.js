@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../../utils/scopeChecker';
 
 
-export default function TrainTable({ trains, onEditTrain, sendTcm }) {
+export default function TrainTable({ trains, onEditTrain, onDeleteTrain, sendTcm }) {
 
     const getStatusColor = (train) => {
         if (train) {
@@ -58,6 +58,13 @@ export default function TrainTable({ trains, onEditTrain, sendTcm }) {
             width: '56px',
         }
 
+        const deleteColumn = {
+            cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteTrain(row)}>Delete</Button>,
+            allowOverflow: true,
+            ignoreRowClick: true,
+            button: true,
+            width: '60px',
+        }
         const editColumn = {
             cell: row => <Button
                 variant="outline-secondary"
@@ -73,7 +80,7 @@ export default function TrainTable({ trains, onEditTrain, sendTcm }) {
             width: '56px'
         }
         if (hasPermissions(["send:traincompositionmessage"])) {
-            return [...columns, tcmColumn, editColumn];
+            return [...columns, tcmColumn, deleteColumn, editColumn];
         } else {
             return [...columns, editColumn];
         }

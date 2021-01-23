@@ -64,6 +64,7 @@ export default function WagonPicker() {
                 if (result.data.response.status === 200) {
                     let updatedList = wagons.data.filter((u) => u.id !== wagon.id)
                     setWagons({data: updatedList});
+                    succeedAlert();
                 } else {
                     errorAlert(result.error.message)
                 }

@@ -3,7 +3,7 @@ import './Inner.scoped.css'
 import TrainTable from './table/TrainTable'
 import { hasPermissions } from '../../../utils/scopeChecker'
 
-export default function Innerbar({ onCreateTrain, onEditTrain, trains, sendTcm }) {
+export default function Innerbar({ onCreateTrain, onEditTrain, onDeleteTrain, trains, sendTcm }) {
 
     return (
         <div className="inner">
@@ -18,7 +18,7 @@ export default function Innerbar({ onCreateTrain, onEditTrain, trains, sendTcm }
                         <i className="fas fa-plus"></i>
                         </span>}
                 </div>
-                <TrainTable onEditTrain={onEditTrain} trains={trains} sendTcm={sendTcm} />
+                <TrainTable onEditTrain={onEditTrain} onDeleteTrain={onDeleteTrain} trains={trains} sendTcm={sendTcm} />
             </div>
         </div>
     )

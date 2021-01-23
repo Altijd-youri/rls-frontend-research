@@ -7,7 +7,7 @@ import ManageTraction from './manageTraction/ManageTraction';
 import { useAuth0 } from '../../react-auth0-spa';
 import { hasPermissions } from '../../utils/scopeChecker';
 import WagonTable from "../wagonpicker/table/WagonTable";
-import {confirmAlert, errorAlert} from "../../utils/Alerts";
+import {confirmAlert, errorAlert, succeedAlert} from "../../utils/Alerts";
 import WagonService from "../../api/wagon";
 
 export default function TrainPicker() {
@@ -62,6 +62,7 @@ export default function TrainPicker() {
                 if (result.data.response.status === 200) {
                     let updatedList = tractions.data.filter((u) => u.id !== traction.id)
                     setTractions({data: updatedList});
+                    succeedAlert();
                 } else {
                     errorAlert(result.error.message)
                 }

@@ -36,6 +36,12 @@ class TrainService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+    deleteTrain(trainId, token) {
+        return super
+            .fetch(`${ENDPOINTS.TRAINS}/${trainId}`, 'DELETE', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 
     saveJourney(trainid, body, token) {
         return super

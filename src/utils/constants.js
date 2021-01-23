@@ -73,13 +73,6 @@ export const TRACTION_UNIT = [
     { key: 4, value: "On track machine or infrastructure inspection vehicle" },
 ]
 
-
-// export const ROLES_LIST = [
-//     { key: "Admin", value: "rol_d4Mv3mbPOK459ClU"},
-//     { key: "Super User", value: "rol_hJSfMiZzLkHSrNkr"},
-//     { key: "User", value: "rol_ahcCvSG7Zn2soJfu"}
-// ]
-
 export const roles = [
     { id: "1", name: "Admin", value: 1 },
     { id: "2", name: "SuperUser", value: 2 },

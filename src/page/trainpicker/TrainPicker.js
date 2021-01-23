@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import TrainService from '../../api/trains';
 import { useAuth0 } from '../../react-auth0-spa';
 import { errorAlert, succeedAlert, confirmAlert } from '../../utils/Alerts'
+import TractionService from "../../api/tractions";
 
 export default function TrainPicker() {
     const [showCreateTrain, setShowCreateTrain] = useState(false);
@@ -53,6 +54,25 @@ export default function TrainPicker() {
             setSelectedTrain(train);
             setShowEditTrain(true);
         }
+    }
+
+    const onDeleteTrain = (train) => {
+        confirmAlert(async () => {
+            try {
+                const result = await TrainService.deleteTrain(train.id, await getToken());
+                if (result.data.response.status === 200) {
+                    //TODO refresh pagina bij deleten van een train
+
+                    // let updatedList = trains.data.filter((u) => u.id !== train.id)
+                    // setTrains({data: updatedList});
+                    succeedAlert();
+                } else {
+                    errorAlert(result.error.message)
+                }
+            } catch (e) {
+                errorAlert("Failed delete request ", e.message)
+            }
+        })
     }
 
     function createTrainHandler() {
@@ -108,6 +128,7 @@ export default function TrainPicker() {
                 onEditTrain={editTrainHandler}
                 trains={trains}
                 sendTcm={sendTcm}
+                onDeleteTrain={(row) => onDeleteTrain(row)}
             />
 
             {showCreateTrain &&
