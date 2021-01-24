@@ -106,7 +106,9 @@ export default function TrainPicker() {
                         <i className="fas fa-plus"></i>
                         </span>}
                     </div>
+                    <TractionTable onEditTraction={(row) => editTractionHandler(row)} onDeleteTraction={(row) => onDeleteTraction(row)} tractions={tractions.data}/>
                 </div>
+            </div>
 
             {sidebar.showManageTraction &&
                 <ManageTraction
@@ -115,18 +117,6 @@ export default function TrainPicker() {
                     onSave={setTractions}
                     tractionDTO={sidebar.data}
                 />}
-
-            {sidebar.showTractionTable &&
-                <TractionTable
-                    getToken={() => getToken()}
-                    onEditTraction={(row) => editTractionHandler(row)}
-                    onDeleteTraction={(row) => onDeleteTraction(row)}
-                    tractions= {tractions.data}
-                />
-
-            }
-
-        </div>
         </div>
     )
 }

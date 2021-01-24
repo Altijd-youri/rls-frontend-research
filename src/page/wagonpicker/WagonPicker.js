@@ -111,13 +111,9 @@ export default function WagonPicker() {
                         <i className="fas fa-plus"></i>
                         </span>}
                     </div>
+                    <WagonTable onEditWagon={editWagonHandler} onDeleteWagon={(row) => onDeleteWagon(row)} wagons={wagons.data} />
                 </div>
-
-                {sidebar.showWagonTable &&
-                <WagonTable wagons={wagons.data}
-                            onEditWagon={(row) => editWagonHandler(row)}
-                            onDeleteWagon={(row) => onDeleteWagon(row)}
-                />}
+            </div>
                 {sidebar.showCreateWagon &&
                 <ManageWagon
                     getToken={() => getToken()}
@@ -131,7 +127,6 @@ export default function WagonPicker() {
                     onHide={closeAllSidebars}
                     wagons = {wagons.data}
                 </WagonTable>}
-        </div>
 </div>
 )
 }

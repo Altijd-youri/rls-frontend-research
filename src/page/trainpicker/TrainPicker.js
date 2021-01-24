@@ -15,7 +15,7 @@ export default function TrainPicker() {
     const [selectedTrain, setSelectedTrain] = useState();
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [trains, setTrains] = useState([]);
+    const [trains, setTrains] = useState({data: [], isFetching: false, error: ''});
     const { getTokenSilently } = useAuth0();
 
     const getToken = useCallback(async () => {
@@ -60,18 +60,25 @@ export default function TrainPicker() {
         confirmAlert(async () => {
             try {
                 const result = await TrainService.deleteTrain(train.id, await getToken());
-                if (result.data.response.status === 200) {
+                if (result.data) {
+                    console.log(result)
+                    console.log(result.data.id)
+                    const updatedList = trains.map(item => {
+                        if (item.id !== result.data.id) {
+                            return result.data;
+                        } else{
+                            return item;
+                        }
+                    })
 
-                    //TODO refresh pagina bij deleten van een train
-
-                    // let updatedList = trains.data.filter((u) => u.id !== train.id)
-                    // setTrains({data: updatedList});
-
+                    setTrains(updatedList);
                     succeedAlert();
                 } else {
-                    errorAlert(result.error.message)
+                    errorAlert(result?.message)
                 }
-            } catch (e) {
+            }
+                catch (e) {
+                console.log(e);
                 errorAlert("Failed delete request ", e.message)
             }
         })
@@ -145,6 +152,7 @@ export default function TrainPicker() {
                     train={selectedTrain}
                     onHide={() => setShowEditTrain(false)}
                     onUpdateTrain={updateTrain}
+                    onDeleteTrain={(row) => onDeleteTrain(row)}
                 />}
         </div>
     )
