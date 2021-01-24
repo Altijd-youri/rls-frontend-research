@@ -60,25 +60,14 @@ export default function CustomerPicker() {
     }
 
     const generateRolelist = () => {
-        console.log("roleslist")
-        console.log(user['https://any-namespace/roles'][0])
-        // console.log(roles.value(user['https://any-namespace/roles']))
-        // console.log()
-        console.log(roles)
-        console.log(roles.find((r) => r.name == (user['https://any-namespace/roles'][0])))
         let filteredRoles = roles.filter((r) => (r.value >= (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
         setRolelist(filteredRoles)
-        console.log(filteredRoles)
     }
 
     const onEditUser = (userDTO) => {
-        console.log("onedituser")
-        console.log(userDTO)
         generateRolelist();
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data2: userDTO}))
-        console.log(sidebar)
-        setTimeout(() => {console.log(sidebar);}, 3000)
     };
 
     const editUserHandler = () => {
@@ -90,7 +79,6 @@ export default function CustomerPicker() {
         generateRolelist();
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
-        console.log(sidebar)
         // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
     }
     
@@ -180,8 +168,15 @@ export default function CustomerPicker() {
     }
 
     const backToCustomerTable = () => {
+        console.log("backToCustomerTable")
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: true, showCreateCustomer: false, showCreateUser: false, data: undefined}))
+    }
+
+    const backToEditCustomer = (customerDTO) => {
+        console.log("backToEditCustomer")
+        closeAllSidebars();
+        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: undefined}))
     }
 
     const addSuperUserHandler = (customerDTO) => {
@@ -229,7 +224,7 @@ export default function CustomerPicker() {
                         </div>
 
                         <div hidden={sidebar.showCustomerTable}>
-                                  {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={backToCustomerTable}> 
+                                  {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={(sidebar.showCreateCustomer ? backToCustomerTable : backToEditCustomer)}> 
                             Close
                         <i className="fas fa-times"></i>
                         </span>}                  
@@ -251,6 +246,7 @@ export default function CustomerPicker() {
                             // onEditCustomer={(row) => onEditCustomer(row)}
                             // onDeleteCustomer={(row) => onDeleteCustomer(row)}
                             backToCustomerTable={() => backToCustomerTable()}
+                            backToEditCustomer={(customerDTO) => backToEditCustomer(customerDTO)}
                             addSuperUserHandler={(customerDTO) => addSuperUserHandler(customerDTO)}
                             customerDTO={sidebar.data}
                             onSave={setCustomers}
