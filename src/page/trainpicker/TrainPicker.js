@@ -61,24 +61,14 @@ export default function TrainPicker() {
             try {
                 const result = await TrainService.deleteTrain(train.id, await getToken());
                 if (result.data) {
-                    console.log(result)
-                    console.log(result.data.id)
-                    const updatedList = trains.map(item => {
-                        if (item.id !== result.data.id) {
-                            return result.data;
-                        } else{
-                            return item;
-                        }
-                    })
-
-                    setTrains(updatedList);
+                    let newTrainsList = trains.filter((t) => t.id !== train.id);
+                    setTrains(newTrainsList);
                     succeedAlert();
                 } else {
                     errorAlert(result?.message)
                 }
             }
                 catch (e) {
-                console.log(e);
                 errorAlert("Failed delete request ", e.message)
             }
         })
