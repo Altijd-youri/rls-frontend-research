@@ -22,6 +22,13 @@ class WagonService extends FetchService {
             .then((data) => super.parseJSON(data))
             .catch((error) => Promise.reject(new Error(error.message)));
     }
+
+    deleteWagon(wagonId, token) {
+        return super
+            .fetch(`${ENDPOINTS.WAGONS}/${wagonId}`, 'DELETE', token)
+            .then((data) => super.parseJSON(data))
+            .catch((error) => Promise.reject(new Error(error.message)));
+    }
 }
 
 export default new WagonService();

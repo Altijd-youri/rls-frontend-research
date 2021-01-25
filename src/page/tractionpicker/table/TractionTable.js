@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
 
-export default function TractionTable({ tractions, onEditTraction }) {
+export default function TractionTable({ tractions, onEditTraction, onDeleteTraction }) {
 
     const columns = [
         {
@@ -27,6 +27,14 @@ export default function TractionTable({ tractions, onEditTraction }) {
 
     const getColumns = () => {
         if (hasPermissions(["write:traction"])) {
+            const deleteColumn = {
+                cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteTraction(row)}>Delete</Button>,
+                allowOverflow: true,
+                ignoreRowClick: true,
+                button: true,
+                width: '60px',
+            }
+
             const editColumn = {
                 cell: row => <Button variant="outline-secondary" size="sm" onClick={() => onEditTraction(row)}>Edit</Button>,
                 allowOverflow: true,
@@ -34,7 +42,7 @@ export default function TractionTable({ tractions, onEditTraction }) {
                 button: true,
                 width: '56px',
             }
-            return [...columns, editColumn];
+            return [...columns, deleteColumn, editColumn];
         } else {
             return columns;
         }
@@ -70,7 +78,6 @@ export default function TractionTable({ tractions, onEditTraction }) {
             highlightOnHover
             noHeader={true}
             pointerOnHover={true}
-        // onRowClicked={(row) => history.push(`train/${row.id}/details`)}
         />
     );
 }

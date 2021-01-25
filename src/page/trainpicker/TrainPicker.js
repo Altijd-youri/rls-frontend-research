@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import TrainService from '../../api/trains';
 import { useAuth0 } from '../../react-auth0-spa';
 import { errorAlert, succeedAlert, confirmAlert } from '../../utils/Alerts'
+import TractionService from "../../api/tractions";
 
 export default function TrainPicker() {
     const [showCreateTrain, setShowCreateTrain] = useState(false);
@@ -14,7 +15,7 @@ export default function TrainPicker() {
     const [selectedTrain, setSelectedTrain] = useState();
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [trains, setTrains] = useState([]);
+    const [trains, setTrains] = useState({data: [], isFetching: false, error: ''});
     const { getTokenSilently } = useAuth0();
 
     const getToken = useCallback(async () => {
@@ -55,6 +56,24 @@ export default function TrainPicker() {
         }
     }
 
+    const onDeleteTrain = (train) => {
+        confirmAlert(async () => {
+            try {
+                const result = await TrainService.deleteTrain(train.id, await getToken());
+                if (result.data) {
+                    let newTrainsList = trains.filter((t) => t.id !== train.id);
+                    setTrains(newTrainsList);
+                    succeedAlert();
+                } else {
+                    errorAlert(result?.message)
+                }
+            }
+                catch (e) {
+                errorAlert("Failed delete request ", e.message)
+            }
+        })
+    }
+
     function createTrainHandler() {
         if (showEditTrain) {
             setShowEditTrain(false);
@@ -78,7 +97,6 @@ export default function TrainPicker() {
                 succeedAlert();
             } else {
                 errorAlert(result?.message)
-                console.log("Failed! ", result.message);
             }
         })
     }
@@ -101,13 +119,13 @@ export default function TrainPicker() {
 
     return (
         <div className="content">
-
             <Innerbar
                 isLoading={isLoading}
                 onCreateTrain={createTrainHandler}
                 onEditTrain={editTrainHandler}
                 trains={trains}
                 sendTcm={sendTcm}
+                onDeleteTrain={(row) => onDeleteTrain(row)}
             />
 
             {showCreateTrain &&
@@ -124,6 +142,7 @@ export default function TrainPicker() {
                     train={selectedTrain}
                     onHide={() => setShowEditTrain(false)}
                     onUpdateTrain={updateTrain}
+                    onDeleteTrain={(row) => onDeleteTrain(row)}
                 />}
         </div>
     )

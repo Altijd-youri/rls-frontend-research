@@ -1,36 +1,42 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import '../assets/picker.scoped.css'
 import Spinner from 'react-bootstrap/Spinner'
-import { useAuth0 } from '../../react-auth0-spa';
-import { hasPermissions } from '../../utils/scopeChecker';
+import {useAuth0} from '../../react-auth0-spa';
+import {hasPermissions} from '../../utils/scopeChecker';
 import CustomerTable from './table/CustomerTable';
 import CustomerService from '../../api/customer';
 import {roles} from '../../utils/constants';
 import UserService from '../../api/user';
 import ManageCustomer from './ManageCustomer/ManageCustomer';
-import { confirmAlert, errorAlert, succeedAlert } from '../../utils/Alerts';
+import {confirmAlert, errorAlert, succeedAlert} from '../../utils/Alerts';
 import ManageCustomersUser from './ManageCustomer/ManageCustomersUser';
 import UserList from './ManageCustomer/UserList';
 
 export default function CustomerPicker() {
-    const { isAuthenticated, user } = useAuth0();
+    const {isAuthenticated, user} = useAuth0();
 
-    const [customers, setCustomers] = useState({ data: [], isFetching: false, error: ''});
-    
-    const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
-    const { getTokenSilently } = useAuth0();
+    const [customers, setCustomers] = useState({data: [], isFetching: false, error: ''});
 
-    const initSidebar = { showUserList: false, showCustomerTable: true, showCreateCustomer: false, showCreateUser: false, data: undefined, data2: undefined}
+    const [users, setUsers] = useState({data: [], isFetching: false, error: ''});
+    const {getTokenSilently} = useAuth0();
+
+    const initSidebar = {
+        showUserList: false,
+        showCustomerTable: true,
+        showCreateCustomer: false,
+        showCreateUser: false,
+        data: undefined,
+        data2: undefined
+    }
     const [sidebar, setSidebar] = useState(initSidebar)
     const [rolelist, setRolelist] = useState(roles)
 
     useEffect(() => {
         if (sidebar.data) {
             const newObject = customers.data.find(item => item.id === sidebar.data.id);
-            setSidebar(prevState => ({ ...prevState, data: newObject }))
+            setSidebar(prevState => ({...prevState, data: newObject}))
         }
     }, [customers, sidebar.data])
-
 
 
     const getToken = useCallback(async () => {
@@ -39,24 +45,31 @@ export default function CustomerPicker() {
     }, [getTokenSilently]);
 
     const fetchUsers = async (customerDTO) => {
-        setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
+        setUsers(prevState => ({...prevState, isFetching: true, data: [], error: ''}))
         try {
-            // const { data, error } = await UserService.getAll(await getToken());
-            const { data, error } = await UserService.getAllByCustomerId(customerDTO.id, await getToken());
+            const {data, error} = await UserService.getAllByCustomerId(customerDTO.id, await getToken());
             if (data) {
-                setUsers(prevState => ({ ...prevState, isFetching: false, data}))
+                setUsers(prevState => ({...prevState, isFetching: false, data}))
             } else {
                 throw new Error(error)
             }
         } catch (e) {
-            setUsers(prevState => ({ ...prevState, isFetching: false, error: e.message }))
+            setUsers(prevState => ({...prevState, isFetching: false, error: e.message}))
         }
     }
 
     const onEditCustomer = (customerDTO, userDTO) => {
         closeAllSidebars();
         fetchUsers(customerDTO);
-        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO, data2: userDTO}))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: true,
+            showCustomerTable: false,
+            showCreateCustomer: true,
+            showCreateUser: false,
+            data: customerDTO,
+            data2: userDTO
+        }))
     }
 
     const generateRolelist = () => {
@@ -67,21 +80,44 @@ export default function CustomerPicker() {
     const onEditUser = (userDTO) => {
         generateRolelist();
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data2: userDTO}))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: false,
+            showCustomerTable: false,
+            showCreateCustomer: false,
+            showCreateUser: true,
+            data2: userDTO
+        }))
+        setTimeout(() => {
+            console.log(sidebar);
+        }, 3000)
     };
 
     const editUserHandler = () => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: undefined}))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: true,
+            showCustomerTable: false,
+            showCreateCustomer: true,
+            showCreateUser: false,
+            data: undefined
+        }))
     }
 
     const addUserHandler = (customerDTO) => {
         generateRolelist();
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
-        // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: false,
+            showCustomerTable: false,
+            showCreateCustomer: false,
+            showCreateUser: true,
+            data: customerDTO
+        }))
     }
-    
+
     const onDeleteUser = async (userDTO) => {
         confirmAlert(async () => {
             const deleteBody = {
@@ -124,34 +160,18 @@ export default function CustomerPicker() {
         })
     }
 
-    // const onDeleteCustomer = async (customerDTO) => {
-    //     let temptoken = await getToken();
-    //     const deleteBody = {
-    //         "token": temptoken,
-    //         "customerid": customerDTO.id
-    //     }
-
-    //     try {
-    //         const {error} = await CustomerService.delete(deleteBody, temptoken);
-    //         if (error) throw new Error(error)
-    //     } catch (e) {
-    //         errorAlert("Failed delete request")
-    //         console.log("Failed delete request")
-    //     }
-    // }
-
     useEffect(() => {
         const fetchCustomers = async () => {
-            setCustomers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
+            setCustomers(prevState => ({...prevState, isFetching: true, data: [], error: ''}))
             try {
-                const { data, error } = await CustomerService.getAll(await getToken());
+                const {data, error} = await CustomerService.getAll(await getToken());
                 if (data) {
-                    setCustomers(prevState => ({ ...prevState, isFetching: false, data}))
+                    setCustomers(prevState => ({...prevState, isFetching: false, data}))
                 } else {
                     throw new Error(error)
                 }
             } catch (e) {
-                setCustomers(prevState => ({ ...prevState, isFetching: false, error: e.message }))
+                setCustomers(prevState => ({...prevState, isFetching: false, error: e.message}))
             }
         }
         fetchCustomers();
@@ -163,14 +183,27 @@ export default function CustomerPicker() {
 
     const addCustomerHandler = () => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: undefined}))
-        // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: false,
+            showCustomerTable: false,
+            showCreateCustomer: true,
+            showCreateUser: false,
+            data: undefined
+        }))
     }
 
     const backToCustomerTable = () => {
         console.log("backToCustomerTable")
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: true, showCreateCustomer: false, showCreateUser: false, data: undefined}))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: false,
+            showCustomerTable: true,
+            showCreateCustomer: false,
+            showCreateUser: false,
+            data: undefined
+        }))
     }
 
     const backToEditCustomer = (customerDTO) => {
@@ -181,22 +214,23 @@ export default function CustomerPicker() {
 
     const addSuperUserHandler = (customerDTO) => {
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: false, showCustomerTable: false, showCreateCustomer: false, showCreateUser: true, data: customerDTO}))
+        setSidebar(prevState => ({
+            ...prevState,
+            showUserList: false,
+            showCustomerTable: false,
+            showCreateCustomer: false,
+            showCreateUser: true,
+            data: customerDTO
+        }))
     }
-
-    // const backToEditCustomer = (customerDTO) => {
-    //     closeAllSidebars();
-
-    //     setSidebar(prevState => ({ ...prevState, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: customerDTO}))
-    // }
 
     if (customers.isFetching) {
         return (
-            <div className="d-flex justify-content-center align-items-center w-100" >
+            <div className="d-flex justify-content-center align-items-center w-100">
                 <Spinner animation="border" role="status">
                     <span className="sr-only">Loading customers...</span>
                 </Spinner>
-            </div >
+            </div>
         )
     }
 
@@ -217,43 +251,41 @@ export default function CustomerPicker() {
                             Customers
                         </h4>
                         <div hidden={sidebar.showCreateCustomer || sidebar.showCreateUser}>
-                                  {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={addCustomerHandler}> 
+                            {hasPermissions(["write:company"]) &&
+                            <span className="d-flex align-items-center add-btn" onClick={addCustomerHandler}>
                             Add Customer
                         <i className="fas fa-plus"></i>
                         </span>}
                         </div>
 
                         <div hidden={sidebar.showCustomerTable}>
-                                  {hasPermissions(["write:company"]) && <span className="d-flex align-items-center add-btn" onClick={(sidebar.showCreateCustomer ? backToCustomerTable : backToEditCustomer)}> 
+                            {hasPermissions(["write:company"]) &&
+                            <span className="d-flex align-items-center add-btn" onClick={backToCustomerTable}>
                             Close
                         <i className="fas fa-times"></i>
-                        </span>}                  
+                        </span>}
                         </div>
 
                     </div>
 
-                    {sidebar.showCustomerTable && 
-                            <CustomerTable customers={customers.data} 
-                            onEditCustomer={(row) => onEditCustomer(row)}
-                            onDeleteCustomer={(row) => onDeleteCustomer(row)}
-                            // backToCustomerTable={(backToCustomerTable())}
-                            customerDTO={sidebar.data}
-                        />
+                    {sidebar.showCustomerTable &&
+                    <CustomerTable customers={customers.data}
+                                   onEditCustomer={(row) => onEditCustomer(row)}
+                                   onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                                   customerDTO={sidebar.data}
+                    />
                     }
                     {sidebar.showCreateCustomer &&
-                        <ManageCustomer 
-                            getToken={() => getToken()}
-                            // onEditCustomer={(row) => onEditCustomer(row)}
-                            // onDeleteCustomer={(row) => onDeleteCustomer(row)}
-                            backToCustomerTable={() => backToCustomerTable()}
-                            backToEditCustomer={(customerDTO) => backToEditCustomer(customerDTO)}
-                            addSuperUserHandler={(customerDTO) => addSuperUserHandler(customerDTO)}
-                            customerDTO={sidebar.data}
-                            onSave={setCustomers}
-                        />
+                    <ManageCustomer
+                        getToken={() => getToken()}
+                        backToCustomerTable={() => backToCustomerTable()}
+                        addSuperUserHandler={(customerDTO) => addSuperUserHandler(customerDTO)}
+                        customerDTO={sidebar.data}
+                        onSave={setCustomers}
+                    />
                     }
-                    {sidebar.showUserList && 
-                        <UserList
+                    {sidebar.showUserList &&
+                    <UserList
                         onEditUser={(row) => onEditUser(row)}
                         onDeleteUser={(row) => onDeleteUser(row)}
                         addUserHandler={(customerDTO) => addUserHandler(customerDTO)}
@@ -262,17 +294,17 @@ export default function CustomerPicker() {
                         getToken={() => getToken()}
                         users={users.data}
                         user={user.email}
-                        />
+                    />
                     }
                     {sidebar.showCreateUser &&
-                        <ManageCustomersUser 
-                            rolelist={rolelist}
-                            getToken={() => getToken()}
-                            editUserHandler={() => editUserHandler()}
-                            onSave={setUsers}
-                            customerDTO={sidebar.data}
-                            userDTO={sidebar.data2}
-                        />
+                    <ManageCustomersUser
+                        rolelist={rolelist}
+                        getToken={() => getToken()}
+                        editUserHandler={() => editUserHandler()}
+                        onSave={setUsers}
+                        customerDTO={sidebar.data}
+                        userDTO={sidebar.data2}
+                    />
                     }
                 </div>
             </div>
