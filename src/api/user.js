@@ -11,7 +11,6 @@ class UserService extends FetchService {
     }
 
     getAllByCustomerId(customerId, token) {
-        console.log('getallbycustomerid')
         return super
             .fetch(`${ENDPOINTS.USERS}/customer/${customerId}`, 'GET', token)
             .then((data) => super.parseJSON(data))

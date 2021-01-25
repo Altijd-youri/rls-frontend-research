@@ -16,7 +16,6 @@ export default function UserPicker() {
     const { getTokenSilently } = useAuth0();
 
     const initSidebar = { showUserTable: true, showCreateUser: false, data: undefined }
-    //const initSidebar = { showUserTable: false, showCreateUser: true, data: undefined }
     const [sidebar, setSidebar] = useState(initSidebar)
     const [rolelist, setRolelist] = useState(roles)
 
@@ -33,15 +32,8 @@ export default function UserPicker() {
     }, [getTokenSilently]);
 
     const generateRolelist = () => {
-        console.log("roleslist")
-        console.log(user['https://any-namespace/roles'][0])
-        // console.log(roles.value(user['https://any-namespace/roles']))
-        // console.log()
-        console.log(roles)
-        console.log(roles.find((r) => r.name == (user['https://any-namespace/roles'][0])))
         let filteredRoles = roles.filter((r) => (r.value >= (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
         setRolelist(filteredRoles)
-        console.log(filteredRoles)
     }
 
     const onEditUser = (userDTO) => {
@@ -57,7 +49,6 @@ export default function UserPicker() {
 
     const onDeleteUser = async (userDTO) => {
         confirmAlert(async () => {
-            console.log(userDTO)
             const deleteBody = {
                 "token": await getToken(),
                 "userid": userDTO.userId
@@ -83,7 +74,6 @@ export default function UserPicker() {
         const fetchUsers = async () => {
             setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))
             try {
-                // const { data, error } = await UserService.getAllByCustomerId(userDTO.customer.id, await getToken());
                 const { data, error } = await UserService.getAll(await getToken());
                 if (data) {
                     setUsers(prevState => ({ ...prevState, isFetching: false, data}))
@@ -106,7 +96,6 @@ export default function UserPicker() {
         generateRolelist();
         closeAllSidebars();
         setSidebar(prevState => ({ ...prevState, showUserTable: false, showCreateUser: true, data: undefined}))
-        // setSidebar(prevState => ({ ...prevState, showManageCompany: true, data: undefined }))
     }
 
     const backToUserTable = () => {
@@ -174,14 +163,6 @@ export default function UserPicker() {
                     }
                 </div>
             </div>
-
-            {/* {sidebar.showManageCompany &&
-                <ManageCompany
-                    getToken={() => getToken()}
-                    onHide={closeAllSidebars}
-                    onSave={setOwners}
-                    ownerDTO={sidebar.data}
-                />} */}
         </div>
     )
 }

@@ -6,38 +6,37 @@ import { hasPermissions } from '../../../utils/scopeChecker';
 
 export default function CustomerTable({ customers, onDeleteCustomer, onEditCustomer }) {
 
-    console.log("Test")
     const columns = [
         {
             name: 'Name',
-            selector: 'customername', //Nog geen waarde voor customername in database
+            selector: 'customername', 
             sortable: true,
         },
         {
             name: 'KvK',
-            selector: 'kvk', //Nog geen waarde voor KvK in database
+            selector: 'kvk', 
             sortable: true,
         },
         {
             name: 'IBAN',
-            selector: 'iban', //Nog geen waarde voor iban in database
+            selector: 'iban', 
             sortable: true,
         },
         {
             name: 'CompanyCode',
-            selector: 'companyCode', //Nog geen waarde voor companycode in database
+            selector: 'companyCode', 
             sortable: true,
         },
         {
             name: 'Company Name',
-            selector: 'company.name', //Nog geen waarde voor companycode in database
+            selector: 'company.name', 
             sortable: true,
         }
     ];
 
 
     const getColumns = () => {
-        if (hasPermissions(["write:user" && "delete:rollingstock"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+        if (hasPermissions(["write:user" && "delete:user"])) { 
             const deleteColumn = {
                 cell: row => <Button variant="outline-danger" size="sm" onClick={() => onDeleteCustomer(row)}>Delete</Button>,
                 allowOverflow: true,
@@ -71,7 +70,6 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
-    // TODO ook filtered toepassen op andere dan customer.name, o.a. code
     const filteredCustomers = customers.filter(customer => 
         (customer.customername && customer.customername.toLowerCase().includes(filterText.toLowerCase())) ||
         (customer.companyCode && customer.companyCode.toLowerCase().includes(filterText.toLowerCase())) ||

@@ -15,12 +15,8 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
     const [isFetching, setFetching] = useState(false);
     const [editMode, setEditMode] = useState(userDTO ? true : false);
     const [title, setTitle] = useState('CREATE');
-    // const [companyCode, setCompanyCode] = useState(userDTO ? userDTO.companyCode : '');
-    //TODO companyCode moet uit de enviroment gehaald worden.
-    // const [companyCode, setCompanyCode] = useState(userDTO.companyCode);
 
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
-    // const [customerId, setCustomerId] = useState(userDTO ? '2' : '3');
     const [customerId, setCustomerId] = useState(userDTO ? userDTO.customer.customerId : (customerDTO ? customerDTO.id : ''));
     const [customerName, setCustomerName] = useState(userDTO ? userDTO.customer.customername : (customerDTO ? customerDTO.customername : ''));
 
@@ -30,8 +26,6 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
     const [role, setRole] = useState(userDTO ? userDTO.role : '');
     
     const [id, setId] = useState(customerDTO ? customerDTO.id : '');
-    console.log(userDTO)
-    console.log(customerDTO)
     const initForm = {
         userId: {
             error: ''
@@ -56,7 +50,6 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
         }
     }
     const [form, setForm] = useState(initForm)
-    console.log(rolelist)
     useEffect(() => {
         if (userDTO) {
             setEditMode(true);
@@ -75,7 +68,6 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
     }, [userDTO])
 
     const submitForm = async (event) => {
-        console.log(customerDTO)
         event.preventDefault();
         setFetching(true);
         setForm(initForm);
@@ -89,18 +81,7 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
             "lastname": lastname,
             "email": email,
             "role": role
-            //"token": await getToken()
         }
-        console.log("body")
-        console.log(body)
-
-        // const updatebody = {
-        //     "userId": userId,
-        //     "firstname": firstname,
-        //     "lastname": lastname,
-        //     "email": email
-        //     //"token": await getToken()
-        // }
         
         const result = editMode ? await UserService.update(await getToken(), body) : await CustomerService.saveUser(await getToken(), body)
         try {
@@ -134,44 +115,6 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
     return (
         <div className="content-title">
             <form onSubmit={submitForm} className="form-wrapper">
-                {/* <div className="form-group">
-                    <input
-                        key={`userId || ${userDTO?.userId}`}
-                        defaultValue={userDTO?.userId}
-                        id="userId"
-                        type="text"
-                        name="userId"
-                        maxLength="60"
-                        className="form-control"
-                        onChange={e => setUserId(e.target.value)}
-                        required
-                    />
-                    <label
-                        className="form-control-placeholder"
-                        htmlFor="userId">
-                        userId
-                    </label>
-                    {form.userId.error && <p>{form.userId.error}</p>}
-                </div> */}
-
-                {/* <div className="form-group">
-                    <input readOnly
-                        key={`customerId || ${userDTO?.customer.id}`}
-                        defaultValue={userDTO?.customer.id}
-                        id="customerId"
-                        type="number"
-                        name="customerId"
-                        maxLength="40"
-                        className="form-control"
-                        onChange={e => setCustomerId(e.target.value)}
-                        required
-                    />
-                    <label
-                        className="form-control-placeholder"
-                        htmlFor="customerId">
-                    </label>
-                    {form.customerId.error && <p>{form.customerId.error}</p>}
-                </div> */}
 
                 <div className="form-group">
                     <input readOnly

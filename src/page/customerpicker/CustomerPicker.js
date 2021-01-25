@@ -88,10 +88,7 @@ export default function CustomerPicker() {
             showCreateUser: true,
             data2: userDTO
         }))
-        setTimeout(() => {
-            console.log(sidebar);
-        }, 3000)
-    };
+    }
 
     const editUserHandler = () => {
         closeAllSidebars();
@@ -194,7 +191,6 @@ export default function CustomerPicker() {
     }
 
     const backToCustomerTable = () => {
-        console.log("backToCustomerTable")
         closeAllSidebars();
         setSidebar(prevState => ({
             ...prevState,
@@ -207,9 +203,15 @@ export default function CustomerPicker() {
     }
 
     const backToEditCustomer = (customerDTO) => {
-        console.log("backToEditCustomer")
         closeAllSidebars();
-        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: undefined}))
+        setSidebar(prevState => ({ 
+            ...prevState, 
+            showUserList: true, 
+            showCustomerTable: false, 
+            showCreateCustomer: true, 
+            showCreateUser: false, 
+            data: undefined
+        }))
     }
 
     const addSuperUserHandler = (customerDTO) => {
@@ -260,7 +262,7 @@ export default function CustomerPicker() {
 
                         <div hidden={sidebar.showCustomerTable}>
                             {hasPermissions(["write:company"]) &&
-                            <span className="d-flex align-items-center add-btn" onClick={backToCustomerTable}>
+                            <span className="d-flex align-items-center add-btn" onClick={(sidebar.showCreateCustomer ? backToCustomerTable : backToEditCustomer)}>
                             Close
                         <i className="fas fa-times"></i>
                         </span>}
@@ -269,15 +271,17 @@ export default function CustomerPicker() {
                     </div>
 
                     {sidebar.showCustomerTable &&
-                    <CustomerTable customers={customers.data}
-                                   onEditCustomer={(row) => onEditCustomer(row)}
-                                   onDeleteCustomer={(row) => onDeleteCustomer(row)}
-                                   customerDTO={sidebar.data}
+                    <CustomerTable 
+                        customers={customers.data}
+                        onEditCustomer={(row) => onEditCustomer(row)}
+                        onDeleteCustomer={(row) => onDeleteCustomer(row)}
+                        customerDTO={sidebar.data}
                     />
                     }
                     {sidebar.showCreateCustomer &&
                     <ManageCustomer
                         getToken={() => getToken()}
+                        backToEditCustomer={(customerDTO) => backToEditCustomer(customerDTO)}
                         backToCustomerTable={() => backToCustomerTable()}
                         addSuperUserHandler={(customerDTO) => addSuperUserHandler(customerDTO)}
                         customerDTO={sidebar.data}
