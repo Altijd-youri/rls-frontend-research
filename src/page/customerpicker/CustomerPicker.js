@@ -194,6 +194,7 @@ export default function CustomerPicker() {
     }
 
     const backToCustomerTable = () => {
+        console.log("backToCustomerTable")
         closeAllSidebars();
         setSidebar(prevState => ({
             ...prevState,
@@ -203,6 +204,12 @@ export default function CustomerPicker() {
             showCreateUser: false,
             data: undefined
         }))
+    }
+
+    const backToEditCustomer = (customerDTO) => {
+        console.log("backToEditCustomer")
+        closeAllSidebars();
+        setSidebar(prevState => ({ ...prevState, showUserList: true, showCustomerTable: false, showCreateCustomer: true, showCreateUser: false, data: undefined}))
     }
 
     const addSuperUserHandler = (customerDTO) => {
