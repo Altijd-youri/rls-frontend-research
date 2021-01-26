@@ -213,7 +213,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
                         key={`numberFreight || ${wagonDTO?.numberFreight}`}
                         defaultValue={wagonDTO?.numberFreight}
                         id="numberFreight"
-                        type="text"
+                        type="number"
                         name="numberFreight"
                         maxLength="12"
                         className="form-control"
