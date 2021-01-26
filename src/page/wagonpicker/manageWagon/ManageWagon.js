@@ -61,7 +61,7 @@ export default function ManageWagon({ onHide, onSave, wagonDTO, getToken }) {
             maxSpeed: params.get('maxSpeed'),
             numberFreight: params.get('numberFreight'),
             numberOfAxles: params.get('numberOfAxles'),
-            typeName: params.get('typeName'),
+            typeName: params.get('tyoeName'),
             weightEmpty: params.get('weightEmpty')
         }
 
