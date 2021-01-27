@@ -9,12 +9,10 @@ import Button from 'react-bootstrap/Button'
 import { hasPermissions } from '../../../utils/scopeChecker';
 
 export default function UserList({ user, users, onHide, onSave, customerDTO, userDTO, getToken, onDeleteUser, onEditUser, addUserHandler }) {
-    // const [users, setUsers] = useState({ data: [], isFetching: false, error: '' });
     const [isFetching, setFetching] = useState(false);
     // State gebruikt voor de form om onderscheid te maken tussen het creëren van een nieuwe customer of het aanpassen van een bestaande
     const [editMode, setEditMode] = useState(userDTO ? true : false);
-        // Set de text van de submit button van de form
-    // const [title, setTitle] = useState('ADD USER');
+
 
     const columns = [
         {
@@ -35,7 +33,7 @@ export default function UserList({ user, users, onHide, onSave, customerDTO, use
     ];
 
     const getColumns = () => {
-        if (hasPermissions(["write:user" && "update:user"])) { // TODO delete:rollingstock moet aangepast worden naar een scope die delete customer toestaat
+        if (hasPermissions(["write:user" && "update:user"])) { 
             const deleteColumn = {
                 cell: row => <Button variant="outline-danger" size="sm" style={{visibility: (row.email == user) ? 'hidden' : 'visible'}} size="sm" onClick={() => onDeleteUser(row)}>Delete</Button>,
                 allowOverflow: true,

@@ -19,6 +19,9 @@ function App() {
   const { loading, getTokenSilently, isAuthenticated } = useAuth0();
   const [userRoles, setUserRoles] = useState([]);
 
+  /**
+   * Zet de permissions uit auth0 token in localStorage var scopes.
+   */
   const getToken = useCallback(async () => {
     const token = await getTokenSilently();
     const scopes = JSON.parse(atob(token.split('.')[1])).permissions;

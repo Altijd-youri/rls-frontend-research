@@ -25,6 +25,9 @@ export default function Sidebar() {
             <nav className="menu">
                 <ul>
                     {
+                        /** Boolean isAuthenticated. Only show routing options in sidebar if isAuthenticated is true
+                         * if false show Login
+                         */
                         isAuthenticated
                         
                             ?
@@ -62,10 +65,11 @@ export default function Sidebar() {
 
                 </ul>
             </nav>
-
-            {isAuthenticated && <div className="storage">
+            
+            
+            {/** If isAthenticated is true show role and email in sidebar */
+            isAuthenticated && <div className="storage">
                 <div className="title">
-                    {/* <div><i className="fas fa-user"></i></div> */}
                     <div>{user['https://any-namespace/roles']}</div>
                     
                 </div>

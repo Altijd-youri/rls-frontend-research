@@ -27,6 +27,7 @@ export default function CompanyPicker() {
         return token;
     }, [getTokenSilently]);
 
+    /** Fetch list of companies and set in companies data */
     useEffect(() => {
         const fetchCompanies = async () => {
             setCompanies(prevState => ({ ...prevState, isFetching: true, data: [], error: '' }))
@@ -43,15 +44,6 @@ export default function CompanyPicker() {
         }
         fetchCompanies();
     }, [getToken])
-
-    const onEditCompany = async (company) => {
-        try {
-            const { error } = await CompanyService.update(company.companyCode, await getToken());
-            if (error) throw new Error(error)
-        } catch (e) {
-            console.log("Failed to update request")
-        }
-    }
 
     if (companies.isFetching) {
         return (
@@ -92,7 +84,6 @@ export default function CompanyPicker() {
                         <ManageCompany 
                             getToken={() => getToken()}
                             handleChange={() => handleChange()}
-                            // onEditCompany={() => onEditCompany()}
                             CompanyService={CompanyService}
                         />
                     }

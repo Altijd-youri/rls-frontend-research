@@ -34,7 +34,9 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
         }
     ];
 
-
+    /**
+     * insert de columns en op basis van de permissions die de user in de auth0 token heeft worden delete/edit knoppen toegevoegd per rij 
+     */
     const getColumns = () => {
         if (hasPermissions(["write:user" && "delete:user"])) { 
             const deleteColumn = {
@@ -70,6 +72,9 @@ export default function CustomerTable({ customers, onDeleteCustomer, onEditCusto
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
+    /**
+     * filter voor table contents
+     */
     const filteredCustomers = customers.filter(customer => 
         (customer.customername && customer.customername.toLowerCase().includes(filterText.toLowerCase())) ||
         (customer.companyCode && customer.companyCode.toLowerCase().includes(filterText.toLowerCase())) ||

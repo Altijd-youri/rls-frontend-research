@@ -83,6 +83,9 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
             "role": role
         }
         
+        /**
+         * ternary functie op basis can editmode bepalen of het een update of create actie is
+         */
         const result = editMode ? await UserService.update(await getToken(), body) : await CustomerService.saveUser(await getToken(), body)
         try {
             if (result.data) {

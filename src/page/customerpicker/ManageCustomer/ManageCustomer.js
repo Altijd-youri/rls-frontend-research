@@ -82,11 +82,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "iban": iban,
             "kvk": kvk
         }
-
-        // const relay = {
-        //     "id": null,
-        //     "role": 'SuperUser'
-        // }
         
         const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.saveCustomer(await getToken(), body);
         try {
@@ -123,25 +118,6 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
     return (
         <div className="content-title">
             <form onSubmit={submitForm} className="form-wrapper">
-                {/* <div className="form-group">
-                    <input
-                        key={`id || ${customerDTO?.id}`}
-                        defaultValue={customerDTO?.id}
-                        id="id"
-                        type="number"
-                        name="id"
-                        maxLength="4"
-                        className="form-control"
-                        onChange={e => setId(e.target.value)}
-                        required
-                    />
-                    <label
-                        className="form-control-placeholder"
-                        htmlFor="id">
-                        id
-                    </label>
-                    {form.id.error && <p>{form.id.error}</p>}
-                </div> */}
 
                 <div className="form-group">
                     <input

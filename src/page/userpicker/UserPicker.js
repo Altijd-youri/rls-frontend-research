@@ -31,6 +31,10 @@ export default function UserPicker() {
         return token;
     }, [getTokenSilently]);
 
+    /**
+     * rolelist genereren waarbij op basis van de rol van de ingelogde persoon een lijst word gemaakt
+     * van de rollen die deze persoon kan aanmaken in een create/edit user formulier 
+     */
     const generateRolelist = () => {
         let filteredRoles = roles.filter((r) => (r.value >= (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
         setRolelist(filteredRoles)
@@ -56,6 +60,9 @@ export default function UserPicker() {
             try {
                 const result = await UserService.delete(deleteBody, await getToken());
                 if (result.status == 202) {
+                    /**
+                     * update functie van lijst users zodat usertable update na delete actie
+                     */
                     let updatedList = users.data.filter((u) => u.userId !== userDTO.userId)
                     setUsers({data: updatedList});
                     succeedAlert();
@@ -69,7 +76,7 @@ export default function UserPicker() {
     }
 
 
-    // TODO getall voor welke role? getByCustomerId 
+    
     useEffect(() => {
         const fetchUsers = async () => {
             setUsers(prevState => ({ ...prevState, isFetching: true, data: [], error: ''}))

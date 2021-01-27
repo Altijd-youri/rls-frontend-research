@@ -20,6 +20,10 @@ export default function CustomerPicker() {
     const [users, setUsers] = useState({data: [], isFetching: false, error: ''});
     const {getTokenSilently} = useAuth0();
 
+    /**
+     * Booleans to regulate which components show up on tab Manage Customer
+     * data & data2 to handle userDTO and customerDTO objects
+     */
     const initSidebar = {
         showUserList: false,
         showCustomerTable: true,
@@ -58,6 +62,15 @@ export default function CustomerPicker() {
         }
     }
 
+    const generateRolelist = () => {
+        let filteredRoles = roles.filter((r) => (r.value >= (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
+        setRolelist(filteredRoles)
+    }   
+
+    /**
+     * Method to setting form to updating the customer
+     * input customerDTO comes from row in customer table via edit button.
+     */
     const onEditCustomer = (customerDTO, userDTO) => {
         closeAllSidebars();
         fetchUsers(customerDTO);
@@ -72,11 +85,10 @@ export default function CustomerPicker() {
         }))
     }
 
-    const generateRolelist = () => {
-        let filteredRoles = roles.filter((r) => (r.value >= (roles.find((r) => r.name == (user['https://any-namespace/roles'][0])).value)))
-        setRolelist(filteredRoles)
-    }
-
+    /**
+     * Method to setting form to updating user from a customer
+     * input userDTO comes from row in userlist show in edit customer view via edit button.
+     */
     const onEditUser = (userDTO) => {
         generateRolelist();
         closeAllSidebars();
@@ -90,6 +102,10 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * 
+     * 
+     */
     const editUserHandler = () => {
         closeAllSidebars();
         setSidebar(prevState => ({
@@ -102,6 +118,11 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * Method to add user to customer
+     * set customerDTO as customer.id is necessary to create user and add to customer
+     * leads to showCreateUser
+     */
     const addUserHandler = (customerDTO) => {
         generateRolelist();
         closeAllSidebars();
@@ -115,6 +136,11 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * Method to delete user
+     * input userDTO as userDTO.userId is needed for delete request
+     * updatelist to update te list used in the userlist table
+     */
     const onDeleteUser = async (userDTO) => {
         confirmAlert(async () => {
             const deleteBody = {
@@ -136,6 +162,11 @@ export default function CustomerPicker() {
         })
     }
 
+    /**
+     * Method to delete customer
+     * input userDTO as customer.id is needed for delete request
+     * updatelist to update te list used in the customerTable
+     */
     const onDeleteCustomer = async (customerDTO) => {
         confirmAlert(async () => {
             const deleteBody = {
@@ -157,6 +188,9 @@ export default function CustomerPicker() {
         })
     }
 
+    /**
+     * getall methode die een lijst van customers laad op laden van pagina
+     */
     useEffect(() => {
         const fetchCustomers = async () => {
             setCustomers(prevState => ({...prevState, isFetching: true, data: [], error: ''}))
@@ -178,6 +212,9 @@ export default function CustomerPicker() {
         setSidebar(initSidebar);
     }
 
+    /**
+     * 
+     */
     const addCustomerHandler = () => {
         closeAllSidebars();
         setSidebar(prevState => ({
@@ -190,6 +227,12 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * methode die gebruik word bij de close button
+     * terug naar CustomerTable
+     * 
+     * backToCustomerTable en backToEditCustomer worden gebruikt in een ternary functie
+     */
     const backToCustomerTable = () => {
         closeAllSidebars();
         setSidebar(prevState => ({
@@ -202,6 +245,14 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * methode die gebruik word bij de close button
+     * terug naar ManageCustomer  
+     * 
+     * backToCustomerTable en backToEditCustomer worden gebruikt in een ternary functie
+     * 
+     * @param {*} customerDTO 
+     */
     const backToEditCustomer = (customerDTO) => {
         closeAllSidebars();
         setSidebar(prevState => ({ 
@@ -214,6 +265,13 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * Als er in een edit customer window op add user word gedrukt word deze functie gebruikt 
+     * Deze leid naar een user create pagina waar customerId al prefilled is door de 
+     * meegegeven customerDTO
+     * 
+     * @param {*} customerDTO 
+     */
     const addSuperUserHandler = (customerDTO) => {
         closeAllSidebars();
         setSidebar(prevState => ({
@@ -226,6 +284,9 @@ export default function CustomerPicker() {
         }))
     }
 
+    /**
+     * Laad icoon
+     */
     if (customers.isFetching) {
         return (
             <div className="d-flex justify-content-center align-items-center w-100">
@@ -243,7 +304,6 @@ export default function CustomerPicker() {
     }
 
 
-    /** Pagina die word gereturned*/
     return (
         <div className="content">
             <div className="inner">

@@ -25,7 +25,7 @@ export default function CompanyTable({ companies, onEditCompany, getToken, Compa
         }
     ];
 
-
+    
     const getColumns = () => {
         return columns;
     }
@@ -39,7 +39,6 @@ export default function CompanyTable({ companies, onEditCompany, getToken, Compa
     const filteredCompanies = companies.filter(company => 
         (company.code && company.code.toLowerCase().includes(filterText.toLowerCase())) || 
         (company.name && company.name.toLowerCase().includes(filterText.toLowerCase())) )
-    // const filteredCompanies = company.filter(company => ((company.companyCode && company.companyCode.toLowerCase().includes(filterText.toLowerCase() ) ) || (company.name && company.name.toLowerCase().includes(filterText.toLowerCase()))))
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
