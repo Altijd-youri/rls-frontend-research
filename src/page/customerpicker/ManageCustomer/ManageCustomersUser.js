@@ -17,7 +17,7 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
     const [title, setTitle] = useState('CREATE');
 
     const [userId, setUserId] = useState(userDTO ? userDTO.userId : '');
-    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customer.customerId : (customerDTO ? customerDTO.id : ''));
+    const [customerId, setCustomerId] = useState(userDTO ? userDTO.customer.id : (customerDTO ? customerDTO.id : ''));
     const [customerName, setCustomerName] = useState(userDTO ? userDTO.customer.customername : (customerDTO ? customerDTO.customername : ''));
 
     const [firstname, setFirstname] = useState(userDTO ? userDTO.firstname : '');
