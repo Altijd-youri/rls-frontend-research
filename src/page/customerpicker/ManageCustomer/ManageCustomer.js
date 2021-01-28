@@ -83,7 +83,7 @@ export default function ManageCustomer({ onHide, onSave, customerDTO, getToken, 
             "kvk": kvk
         }
         
-        const result = editMode ? await CustomerService.update(updateBody, await getToken()) : await CustomerService.saveCustomer(await getToken(), body);
+        const result = editMode ? await CustomerService.update(await getToken(), updateBody) : await CustomerService.saveCustomer(await getToken(), body);
         try {
             if (result.data) {
                 if (customerDTO) {
