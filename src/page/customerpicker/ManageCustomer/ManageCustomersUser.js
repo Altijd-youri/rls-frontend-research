@@ -76,7 +76,8 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
         console.log(userDTO)
         const body = {
             "userId": userId,
-            "customerId": userDTO.customer.id,
+            "customerId": customerId,
+            // "customerId": userDTO.customer.id,
             "firstname": firstname,
             "lastname": lastname,
             "email": email,
