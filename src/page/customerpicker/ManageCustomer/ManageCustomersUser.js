@@ -73,10 +73,10 @@ export default function ManageCustomersUser({ rolelist, onHide, onSave, userDTO,
         setForm(initForm);
 
         const form = event.Target;
-
+        console.log(userDTO)
         const body = {
             "userId": userId,
-            "customerId": customerId,
+            "customerId": userDTO.customer.id,
             "firstname": firstname,
             "lastname": lastname,
             "email": email,
