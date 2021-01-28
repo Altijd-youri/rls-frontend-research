@@ -1,4 +1,4 @@
-# Raillinksystems Frontend
+# RailLinkSystems Frontend
 
 Dit is de officiële frontend applicatie van Raillinksystems.
 
