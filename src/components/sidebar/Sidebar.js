@@ -44,7 +44,7 @@ export default function Sidebar() {
                                 {hasPermissions(["read:train"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.TRAINS}>Manage trains</NavLink>
                                 </li>}
-                                {hasPermissions(["read:user"]) && <li>
+                                {hasPermissions(["read:superuser"]) && <li>
                                     <NavLink activeClassName="active" to={PATH.USERS}>Manage users</NavLink>
                                 </li>}
                                 {hasPermissions(["read:wagon"]) && <li>
