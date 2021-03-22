@@ -38,4 +38,3 @@ jobs:
           - src
         local-dir: build/
         server-dir: public_html/
-        dry-run: true
