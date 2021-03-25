@@ -19,10 +19,23 @@ jobs:
       uses: actions/setup-node@v2-beta
       with:
         node-version: ${{ matrix.node-version }}
-      
+
+    - name: npm cache
+      id: npm-cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install Project
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      run: |
+         npm install
+
     - name: Build Project
       run: |
-        npm install
         CI=false npm run build
         yarn test --passWithNoTests
     
