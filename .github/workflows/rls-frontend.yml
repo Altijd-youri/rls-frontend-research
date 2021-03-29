@@ -34,10 +34,13 @@ jobs:
       run: |
          npm install
 
+    - name: Test project
+      run: |
+        npm test
+
     - name: Build Project
       run: |
         CI=false npm run build
-        yarn test --passWithNoTests
     
     - name: Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
