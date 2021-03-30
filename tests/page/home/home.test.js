@@ -15,5 +15,5 @@ test("Sample Test to show that testing with Jest integrates with the pipeline.",
     let resultOfAction = true
 
     //Assert
-    expect(resultOfAction).toBe(false)
+    expect(resultOfAction).toBe(true)
 })
