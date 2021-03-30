@@ -33,7 +33,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "jest"
+    "test": "jest --ci"
   },
   "browserslist": {
     "production": [
