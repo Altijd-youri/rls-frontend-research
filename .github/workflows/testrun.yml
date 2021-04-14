@@ -1,0 +1,38 @@
+name: Research CD Pipeline
+
+on:
+  push:
+    branches: [ feature* ]
+  pull_request:
+    branches: [ feature* ]
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v2.3.2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: npm cache
+        id: npm-cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ GITHUB_REF }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ GITHUB_REF }}-node-
+
+      - name: Install Project
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: |
+          npm install
+
+      - name: Test project
+        run: |
+          npm test
