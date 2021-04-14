@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Build on MasterV2
 
 on:
   push:
@@ -23,9 +23,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-${{ GITHUB_REF }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ $GITHUB_REF }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ GITHUB_REF }}-node-
+            ${{ runner.os }}-${{ $GITHUB_REF }}-node-
 
       - name: Install Project
         if: steps.npm-cache.outputs.cache-hit != 'true'
@@ -34,7 +34,7 @@ jobs:
 
       - name: Test project
         run: |
-          npm test
+          npm test --passWithNoTests
 
       - name: Build Project
         run: |
