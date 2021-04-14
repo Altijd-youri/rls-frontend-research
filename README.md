@@ -7,6 +7,16 @@ Om de applicatie lokaal te runnen dien je het volgende commando uit te voeren:
 $ npm start
 ```
 
+## Ontwikkelomgeving opzetten
+### 1. Environment
+Maak een kopie van `.env.production`, noem dit bestand `.env.local` of `.env.production.local`. 
+Zet in dit bestand de juiste configuraties voor de lokale omgeving, zoals hieronder is weergegeven:
+```
+REACT_APP_ENDPOINT=http://localhost:5000
+```
+### 2. Backend
+Clone ook het backend repository en start de backend, dit kan vooralsnog door de applicatie uit te voeren in Intellij IDE o.i.d.
+
 # Git Strategie
 ## Feature branches
 **Naam conventie:** `feature-{issuenummer}`.  
