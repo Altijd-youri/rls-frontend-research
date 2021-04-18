@@ -16,7 +16,19 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
+const theme = createMuiTheme({
+    overrides: {
+      MuiTimelineItem: {
+        missingOppositeContent: {
+          "&:before": {
+            display: "none"
+          }
+        }
+      }
+    }
+  });
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -123,13 +135,15 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
             </div>
 
             <div style={{ overflow: "auto" }} className="partcontainer">
-            <Timeline align="left">
-                {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
-                {
-                    createPart( getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
-                }
-                {/* {createPart("part2 create", true, false, "Add destination", () => { })} */}
-                </Timeline>
+                <ThemeProvider theme={theme}>
+                    <Timeline align="left">
+                        {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
+                        {
+                            createPart( getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
+                        }
+                        {/* {createPart("part2 create", true, false, "Add destination", () => { })} */}
+                    </Timeline>
+                </ThemeProvider>
             </div>
         </>
     )
