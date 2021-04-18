@@ -1,10 +1,41 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import './JourneysPicker.css';
 import './JourneysPicker.scss';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 import { hasPermissions } from '../../../../../utils/scopeChecker';
+import { makeStyles } from '@material-ui/core/styles';
+import Timeline from '@material-ui/lab/Timeline';
+import TimelineItem from '@material-ui/lab/TimelineItem';
+import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
+import TimelineConnector from '@material-ui/lab/TimelineConnector';
+import TimelineContent from '@material-ui/lab/TimelineContent';
+import TimelineDot from '@material-ui/lab/TimelineDot';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+      padding: '6px 16px',
+    },
+    secondaryTail: {
+      backgroundColor: theme.palette.secondary.main,
+    },root: {
+        width: '100%',
+      },
+      heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+      },
+  }));
+  
 
 export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler }) {
+    const classes = useStyles();
     const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
 
     useEffect(() => {
@@ -25,39 +56,48 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
         return destination ?? train?.transferPoint
     }
 
-    function createPart(className, incoming, outcoming, text, onClick) {
-        let firstLine = text;
-        let secondLine;
-        if (firstLine.length > 24) {
-            secondLine = firstLine.slice(24, 48);
-            firstLine = firstLine.slice(0, 24);
-        }
-        let path = "M0,72";
-        if (incoming) {
-            path += " L24,36";
-        }
-        path += " L0,0 L250,0";
-        if (outcoming) {
-            path += " L274,36";
-        }
-        path += " L250,72 L0,72 Z";
-        return <svg className={className} width="275px" height="72px" viewBox="0 0 275 72" version="1.2"
-            xmlns="http://www.w3.org/2000/svg" onClick={onClick}>
-            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                <path d={path} id="Combined-Shape" />
-            </g>
-            <text fill="black" x="40" y={secondLine !== undefined ? '28' : '40'}>{firstLine}
-                <tspan x="40" y="52">{secondLine}</tspan></text>
-        </svg>
+    function createPart(text, onClick) {
+        return(
+            <TimelineItem>
+                <TimelineSeparator>
+                <TimelineDot/>
+                <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                <Paper elevation={3} className={classes.paper}>
+                    <Typography variant="h6" component="h1">
+                    {text}
+                    </Typography>
+                    <Typography>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                            onClick ={onClick}
+                        >
+                            <Typography className={classes.heading}>composition</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                        
+                            </Typography>
+                        </AccordionDetails>
+                        </Accordion>
+                    </Typography>
+                </Paper>
+                </TimelineContent>
+            </TimelineItem>
+        )
     }
 
     function renderPart(journey, index) {
-        let className = "part2";
-        if (selectedJourney && journey.id === selectedJourney.id) {
-            className += " selected";
-        }
+        // let className = "part2";
+        // if (selectedJourney && journey.id === selectedJourney.id) {
+        //     className += " selected";
+        // }
         return <Fragment key={index}>
-            {createPart(className, index !== 0, index !== -2, getDepartureName(journey), () => selectedJourneyHandler(journey))}
+            {createPart( getDepartureName(journey), () => selectedJourneyHandler(journey))}
         </Fragment>
     }
 
@@ -83,11 +123,13 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
             </div>
 
             <div style={{ overflow: "auto" }} className="partcontainer">
+            <Timeline align="left">
                 {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
                 {
-                    createPart("part2 create", trainWithSortedJourneys.journeySections.length !== 0, trainWithSortedJourneys.journeySections.length === 0, getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
+                    createPart( getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
                 }
                 {/* {createPart("part2 create", true, false, "Add destination", () => { })} */}
+                </Timeline>
             </div>
         </>
     )
