@@ -2,13 +2,14 @@ import React from 'react'
 import { TRAIN_TYPES } from '../../../utils/constants'
 import './Innerbar.scoped.css';
 import JourneysPicker from "./journeys/journeyspicker/JourneysPicker";
-import Composition from './composition/Composition';
+// import Composition from './composition/Composition';
 
 export default function Innerbar({
     train, setShowCreateJourney, setShowEditJourney,
     selectedJourney, setSelectedJourney,
     setShowCreateTraction, setShowCreateWagon,
-    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
+    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken 
+}) {
 
 
     return (
@@ -29,11 +30,6 @@ export default function Innerbar({
                     setShowEditJourney={setShowEditJourney}
                     selectedJourney={selectedJourney}
                     selectedJourneyHandler={setSelectedJourney}
-                />
-            </div>
-
-            <div style={{ marginBottom: "30px" }} className="td-journeyspicker">
-                <Composition
                     getToken={getToken}
                     train={train}
                     selectedJourney={selectedJourney}
@@ -45,6 +41,20 @@ export default function Innerbar({
                     fetchTrain={fetchTrain}
                 />
             </div>
+
+            {/* <div style={{ marginBottom: "30px" }} className="td-journeyspicker">
+                <Composition
+                    getToken={getToken}
+                    train={train}
+                    selectedJourney={selectedJourney}
+                    setShowCreateTraction={setShowCreateTraction}
+                    setShowCreateWagon={setShowCreateWagon}
+                    setTrain={setTrain}
+                    setJourneyAndTrainHandler={setJourneyAndTrainHandler}
+                    showEditMode={showEditMode}
+                    fetchTrain={fetchTrain}
+                />
+            </div> */}
 
         </div >
     )

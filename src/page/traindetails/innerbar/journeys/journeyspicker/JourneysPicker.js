@@ -1,6 +1,7 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import './JourneysPicker.css';
 import './JourneysPicker.scss';
+import Composition from '../../composition/Composition';
 import Button from 'react-bootstrap/Button';
 import { hasPermissions } from '../../../../../utils/scopeChecker';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,6 +18,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
 
 const theme = createMuiTheme({
     overrides: {
@@ -46,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler }) {
+export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler,setShowCreateTraction, setShowCreateWagon,
+    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
     const classes = useStyles();
     const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
 
@@ -76,10 +79,10 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                 <TimelineConnector />
                 </TimelineSeparator>
                 <TimelineContent>
-                <Paper elevation={3} className={classes.paper}>
-                    <Typography variant="h6" component="h1">
+                {/* <Paper elevation={3} className={classes.paper}> */}
+                    {/* <Typography variant="h6" component="h1">
                     {text}
-                    </Typography>
+                    </Typography> */}
                     <Typography>
                     <Accordion>
                         <AccordionSummary
@@ -88,16 +91,28 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                             id="panel1a-header"
                             onClick ={onClick}
                         >
-                            <Typography className={classes.heading}>composition</Typography>
+                            <Typography variant="h6" component="h1">
+                            {text}
+                            </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography>
-                        
+                            <Composition
+                                getToken={getToken}
+                                train={train}
+                                selectedJourney={selectedJourney}
+                                setShowCreateTraction={setShowCreateTraction}
+                                setShowCreateWagon={setShowCreateWagon}
+                                setTrain={setTrain}
+                                setJourneyAndTrainHandler={setJourneyAndTrainHandler}
+                                showEditMode={showEditMode}
+                                fetchTrain={fetchTrain}
+                            />
                             </Typography>
                         </AccordionDetails>
                         </Accordion>
                     </Typography>
-                </Paper>
+                {/* </Paper> */}
                 </TimelineContent>
             </TimelineItem>
         )
