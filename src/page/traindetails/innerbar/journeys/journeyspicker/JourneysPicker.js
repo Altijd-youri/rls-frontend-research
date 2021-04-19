@@ -1,6 +1,5 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import './JourneysPicker.css';
-import './JourneysPicker.scss';
 import Composition from '../../composition/Composition';
 import Button from 'react-bootstrap/Button';
 import { hasPermissions } from '../../../../../utils/scopeChecker';
@@ -18,6 +17,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container'
 
 
 const theme = createMuiTheme({
@@ -96,7 +96,7 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                        <Container maxWidth="ln">
                             <Composition
                                 getToken={getToken}
                                 train={train}
@@ -108,7 +108,7 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                                 showEditMode={showEditMode}
                                 fetchTrain={fetchTrain}
                             />
-                            </Typography>
+                            </Container>
                         </AccordionDetails>
                         </Accordion>
                     </Typography>
