@@ -56,6 +56,9 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
         typeName: {
             error: ''
         },
+        maxSpeed: {
+            error: ''
+        },
         weight: {
             error: ''
         }
@@ -79,6 +82,7 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
             numberOfAxles: params.get('numberOfAxles'),
             typeName: params.get('typeName'),
             weight: params.get('weight'),
+            maxSpeed: params.get('maxSpeed'),
             tractionType: `${powerSupply}${tractionUnit}`
         }
 
@@ -343,6 +347,25 @@ export default function ManageTraction({ onHide, onSave, tractionDTO, getToken }
                         Weight (in tonnes)
                     </label>
                     {form.weight.error && <p>{form.weight.error}</p>}
+                </div>
+
+                <div className="form-group">
+                    <input
+                        key={`Maxspeed || ${tractionDTO?.maxSpeed}`}
+                        defaultValue={tractionDTO?.maxSpeed}
+                        id="maxSpeed"
+                        type="number"
+                        name="maxSpeed"
+                        maxLength="3"
+                        className="form-control"
+                        required
+                    />
+                    <label
+                        className="form-control-placeholder"
+                        htmlFor="maxSpeed">
+                        Max speed in km/h
+                    </label>
+                    {form.maxSpeed.error && <p>{form.maxSpeed.error}</p>}
                 </div>
 
                 <div className="btn-submit">
