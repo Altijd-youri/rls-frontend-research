@@ -1,53 +1,43 @@
 import React from 'react'
 import './Statistics.css';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
 import {Box, Tooltip} from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    table: {
-        minWidth: 300,
-      },
-  }));
-
-  function labelIcon(type, description) {
-      let icon = <Tooltip title={description}><i class="fas fa-question-circle"></i></Tooltip>
-
-      switch (type) {
-          case "speed":
-              icon = <Tooltip title={description}><i className="fas fa-tachometer-alt"></i></Tooltip>
-              break
-          case "weight":
-              icon = <Tooltip title={description}><i className="fas fa-weight-hanging"></i></Tooltip>
-              break;
-          case "length":
-              icon = <Tooltip title={description}><i className="fas fa-arrows-alt-h"></i></Tooltip>
-              break
-          case "brake":
-              icon = <Tooltip title={description}><i className="fas fa-unlink"></i></Tooltip>
-              break
-          case "count":
-              icon = <Tooltip title={description}><i className="fas fa-train"></i></Tooltip>
-              break
-          case "axel":
-              icon = <Tooltip title={description}><i className="fas fa-dumbbell"></i></Tooltip>
-              break
-          case "danger":
-              icon = <Tooltip title={description}><i className="fas fa-exclamation-triangle"></i></Tooltip>
-              break
-          case "gauge":
-              icon = <Tooltip title={description}><i className="fas fa-ring"></i></Tooltip>
-              break
-          default:
-              break
-      }
-      return icon
-  }
-
 export default function Statistics({ selectedJourney }) {
+
+    const labelIcon =  (type, description) => {
+        let icon = <Tooltip title={description}><i class="fas fa-question-circle"></i></Tooltip>
+
+        switch (type) {
+            case "speed":
+                icon = <Tooltip title={description}><i className="fas fa-tachometer-alt"></i></Tooltip>
+                break
+            case "weight":
+                icon = <Tooltip title={description}><i className="fas fa-weight-hanging"></i></Tooltip>
+                break;
+            case "length":
+                icon = <Tooltip title={description}><i className="fas fa-arrows-alt-h"></i></Tooltip>
+                break
+            case "brake":
+                icon = <Tooltip title={description}><i className="fas fa-unlink"></i></Tooltip>
+                break
+            case "count":
+                icon = <Tooltip title={description}><i className="fas fa-train"></i></Tooltip>
+                break
+            case "axel":
+                icon = <Tooltip title={description}><i className="fas fa-dumbbell"></i></Tooltip>
+                break
+            case "danger":
+                icon = <Tooltip title={description}><i className="fas fa-exclamation-triangle"></i></Tooltip>
+                break
+            case "gauge":
+                icon = <Tooltip title={description}><i className="fas fa-ring"></i></Tooltip>
+                break
+            default:
+                break
+        }
+        return icon
+    }
 
     const calculateBrakeWeight = () => {
         let brakeWeight = selectedJourney.trainComposition.brakeWeight
@@ -77,8 +67,6 @@ export default function Statistics({ selectedJourney }) {
             {label: labelIcon("danger","Dangerous goods onboard"), value: ""}
         )
     }
-
-    const classes = useStyles();
 
     return (
         <>
