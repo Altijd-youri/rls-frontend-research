@@ -45,9 +45,6 @@ export default function Composition({ selectedJourney, createTractionHandler, se
 
             {selectedJourney &&
                 <>
-                    <div style={{ clear: "both" }}>
-                        <Statistics selectedJourney={selectedJourney} />
-                    </div>
                     <DnD
                         getToken={getToken}
                         showEditMode={showEditMode}
@@ -55,6 +52,9 @@ export default function Composition({ selectedJourney, createTractionHandler, se
                         setTrainCompositionHandler={setTrainCompositionHandler}
                         fetchTrain={fetchTrain}
                     />
+                    <div style={{ clear: "both" }}>
+                        <Statistics selectedJourney={selectedJourney} />
+                    </div>
                 </>
             }
 
