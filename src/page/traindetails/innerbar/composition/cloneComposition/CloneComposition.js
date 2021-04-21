@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
+import Button from '@material-ui/core/Button'
 import JourneySectionService from '../../../../../api/journeysections'
 import { errorAlert, succeedAlert } from '../../../../../utils/Alerts'
 
@@ -51,8 +51,8 @@ export default function CloneComposition({ selectedJourney, setTrain, getToken }
                 <Button
                     disabled={isCopied()}
                     className="mr-2"
-                    variant="outline-secondary"
-                    size="sm"
+                    size="small"
+                    variant="outlined"
                     onClick={copiedJourneySectionUrlHandler}>
                     {isCopied() ? "COPIED!" : "COPY COMPOSITION"}
                 </Button>
@@ -62,8 +62,8 @@ export default function CloneComposition({ selectedJourney, setTrain, getToken }
                 isCloneable() &&
                 <Button
                     className="mr-2"
-                    variant="outline-secondary"
-                    size="sm"
+                    variant="outlined"
+                    size="small"
                     onClick={cloneComposition}>
                     PASTE COMPOSITION
                 </Button>

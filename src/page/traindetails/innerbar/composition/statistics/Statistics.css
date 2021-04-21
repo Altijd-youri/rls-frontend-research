@@ -1,0 +1,12 @@
+.info-item {
+    font-size: 20px;
+    line-height: 24px;
+    vertical-align: middle;
+}
+
+.info-item > span {
+    margin-left: 10px;
+    font-size: 16px;
+    line-height: 24px;
+    vertical-align: middle;
+}
