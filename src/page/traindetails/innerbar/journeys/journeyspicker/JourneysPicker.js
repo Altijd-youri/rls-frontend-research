@@ -18,6 +18,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container'
+import CreateTraction from '../../composition/createTraction/CreateTraction';
 
 
 const theme = createMuiTheme({
@@ -48,10 +49,11 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-export default function JourneysPicker({ train, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler,setShowCreateTraction, setShowCreateWagon,
-    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
+export default function JourneysPicker({ train, setShowCreateWagon, setShowCreateJourney, setShowEditJourney, selectedJourney, selectedJourneyHandler,
+    setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken, createTractionHandler }) {
     const classes = useStyles();
     const [trainWithSortedJourneys, setTrainWithSortedJourneys] = useState(train);
+
 
     useEffect(() => {
         let listOfJourneys = train?.journeySections;
@@ -71,8 +73,9 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
         return destination ?? train?.transferPoint
     }
 
-    function createPart(text, onClick) {
+    function createPart(text, onClick, journey) {
         return(
+            <div>
             <TimelineItem>
                 <TimelineSeparator>
                 <TimelineDot/>
@@ -84,7 +87,7 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                     {text}
                     </Typography> */}
                     <Typography>
-                    <Accordion>
+                    <Accordion disabled={journey === null}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -100,8 +103,8 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                             <Composition
                                 getToken={getToken}
                                 train={train}
-                                selectedJourney={selectedJourney}
-                                setShowCreateTraction={setShowCreateTraction}
+                                selectedJourney={journey}
+                                createTractionHandler={(journey) => createTractionHandler(journey)}
                                 setShowCreateWagon={setShowCreateWagon}
                                 setTrain={setTrain}
                                 setJourneyAndTrainHandler={setJourneyAndTrainHandler}
@@ -113,8 +116,15 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                         </Accordion>
                     </Typography>
                 {/* </Paper> */}
+            {/* {showCreateTraction && <CreateTraction
+                    getToken={() => getToken()}
+                    onHide={() => setShowCreateTraction(false)}
+                    selectedJourney={journey}
+                    
+                />} */}
                 </TimelineContent>
             </TimelineItem>
+            </div>
         )
     }
 
@@ -123,8 +133,9 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
         // if (selectedJourney && journey.id === selectedJourney.id) {
         //     className += " selected";
         // }
+        console.log('Journey:', journey)
         return <Fragment key={index}>
-            {createPart( getDepartureName(journey), () => selectedJourneyHandler(journey))}
+            {createPart( getDepartureName(journey), () => selectedJourneyHandler(journey), journey)}
         </Fragment>
     }
 
@@ -154,11 +165,13 @@ export default function JourneysPicker({ train, setShowCreateJourney, setShowEdi
                     <Timeline align="left">
                         {trainWithSortedJourneys.journeySections.map((journey, index) => renderPart(journey, index))}
                         {
-                            createPart( getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { })
+                            createPart( getDestinationName(trainWithSortedJourneys.journeySections[trainWithSortedJourneys.journeySections.length - 1]), () => { }, null)
                         }
+                        
                         {/* {createPart("part2 create", true, false, "Add destination", () => { })} */}
                     </Timeline>
                 </ThemeProvider>
+                
             </div>
         </>
     )

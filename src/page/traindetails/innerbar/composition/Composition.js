@@ -5,7 +5,7 @@ import DnD from './draggable/DnD'
 import CloneComposition from './cloneComposition/CloneComposition'
 import { hasPermissions } from '../../../../utils/scopeChecker'
 
-export default function Composition({ selectedJourney, setShowCreateTraction, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
+export default function Composition({ selectedJourney, createTractionHandler, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
 
     const setTrainCompositionHandler = (stockId) => {
         const { trainComposition } = selectedJourney
@@ -30,7 +30,7 @@ export default function Composition({ selectedJourney, setShowCreateTraction, se
                             className="mr-2"
                             variant="outline-secondary"
                             size="sm"
-                            onClick={setShowCreateTraction}>
+                            onClick={() => createTractionHandler(selectedJourney)}>
                             ADD TRACTION
                         </Button>
                         <Button
