@@ -2,7 +2,7 @@ import React from 'react'
 import './Statistics.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
-import {Tooltip} from "@material-ui/core";
+import {Box, Tooltip} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -83,23 +83,26 @@ export default function Statistics({ selectedJourney }) {
     return (
         <>
         {selectedJourney?.trainComposition ?
-            <Grid container spacing={1}>
-                {information.map((row) => (
-                    <Grid container
-                          direction="row"
-                          justify="space-between"
-                          alignItems="center"
-                          className="icon-table">
-                        {row.map((item) => (
-                            <div align="center" className="info-item">
-                                {item.label}
-                                <span>{item.value}</span>
-                            </div>
-                        ))}
-                    </Grid>
-                ))}
-            </Grid>
-            : <div className="d-flex justify-content-center align-items-center mt-5 mb-5">Please select a journey</div>
+            <Box display="block" px={3}>
+                <Grid container spacing={1}>
+                    {information.map((row) => (
+                        <Grid container
+                              direction="row"
+                              justify="space-between"
+                              alignItems="center"
+                              className="icon-table">
+                            {row.map((item) => (
+                                <Box align="center" className="info-item" px={1} pb={1} pt={2}>
+                                    {item.label}
+                                    <span>{item.value}</span>
+                                </Box>
+                            ))}
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+            :
+            <Box display="flex" flexDirection="row" justifyContent="center" px={3} py={1}>Composition information unavailable.</Box>
         }
         </>
     )

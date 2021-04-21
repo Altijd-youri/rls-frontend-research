@@ -1,9 +1,11 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
+import './Composition.css';
 import Statistics from './statistics/Statistics'
 import DnD from './draggable/DnD'
 import CloneComposition from './cloneComposition/CloneComposition'
 import { hasPermissions } from '../../../../utils/scopeChecker'
+import {Box} from "@material-ui/core";
 
 export default function Composition({ selectedJourney, createTractionHandler, setShowCreateWagon, setTrain, setJourneyAndTrainHandler, showEditMode, fetchTrain, getToken }) {
 
@@ -17,9 +19,10 @@ export default function Composition({ selectedJourney, createTractionHandler, se
 
     return (
         <>
-            <div className="jp-header d-flex align-items-center justify-content-between pl-4 pr-4">
+            {/*<div className="jp-header d-flex align-items-center justify-content-between pl-3 pr-3">*/}
+            <Box className="composition-header" display="flex" flexDirection="row" justifyContent="center" px={3}>
                 <h5>Composition</h5>
-                {selectedJourney && <div className="d-flex justify-content-center align-items-center">
+                {selectedJourney && <Box flexGrow={1} display="flex" flexDirection="row" justifyContent="flex-end">
                     {hasPermissions(["write:traincomposition"]) && <CloneComposition
                         getToken={getToken}
                         selectedJourney={selectedJourney}
@@ -41,8 +44,8 @@ export default function Composition({ selectedJourney, createTractionHandler, se
                             ADD WAGON
                         </Button>
                     </>}
-                </div>}
-            </div>
+                </Box>}
+            </Box>
 
             {selectedJourney &&
                 <>

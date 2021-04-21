@@ -1,0 +1,7 @@
+.composition-header {
+    padding: 5px 0px;
+}
+
+.composition-header > div > button {
+    white-space: nowrap;
+}
