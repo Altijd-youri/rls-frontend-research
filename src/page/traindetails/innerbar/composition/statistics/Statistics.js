@@ -50,7 +50,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Statistics({ selectedJourney }) {
 
     const calculateBrakeWeight = () => {
-        return parseInt(selectedJourney.trainComposition.brakeWeight / selectedJourney.trainComposition.weight * 100, 10);
+        let brakeWeight = selectedJourney.trainComposition.brakeWeight
+        let weight = selectedJourney.trainComposition.weight
+        let percentage = (brakeWeight > 0 && weight > 0) ? brakeWeight / weight * 100 : 0
+        return parseInt(percentage, 10)
     }
 
     const information = [

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from 'react-bootstrap/Button'
+import Button from '@material-ui/core/Button'
 import Statistics from './statistics/Statistics'
 import DnD from './draggable/DnD'
 import CloneComposition from './cloneComposition/CloneComposition'
@@ -17,7 +17,7 @@ export default function Composition({ selectedJourney, createTractionHandler, se
 
     return (
         <>
-            <div className="jp-header d-flex w-100 align-items-center justify-content-between pl-4 pr-4">
+            <div className="jp-header d-flex align-items-center justify-content-between pl-4 pr-4">
                 <h5>Composition</h5>
                 {selectedJourney && <div className="d-flex justify-content-center align-items-center">
                     {hasPermissions(["write:traincomposition"]) && <CloneComposition
@@ -28,14 +28,15 @@ export default function Composition({ selectedJourney, createTractionHandler, se
                     {hasPermissions(["write:rollingstock"]) && <>
                         <Button
                             className="mr-2"
-                            variant="outline-secondary"
-                            size="sm"
+                            variant="outlined"
+                            size="small"
                             onClick={() => createTractionHandler(selectedJourney)}>
                             ADD TRACTION
                         </Button>
                         <Button
-                            variant="outline-secondary"
-                            size="sm"
+                            className="mr-2"
+                            variant="outlined"
+                            size="small"
                             onClick={setShowCreateWagon}>
                             ADD WAGON
                         </Button>

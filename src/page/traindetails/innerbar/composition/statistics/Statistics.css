@@ -1,20 +1,16 @@
 .icon-table {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 1.5rem;
 }
 
 .info-item {
-    padding: 5px 15px;
+    padding: 5px 10px;
     font-size: 20px;
     line-height: 24px;
     vertical-align: middle;
 }
 
-.info-item :first-child, .info-item :last-child {
-    margin-left: 15px;
-}
-
 .info-item > span {
+    margin-left: 10px;
     font-size: 16px;
     line-height: 24px;
     vertical-align: middle;
